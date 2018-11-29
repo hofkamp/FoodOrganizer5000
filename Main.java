@@ -652,6 +652,7 @@ public class Main extends Application {
 		TableView table = new TableView();
 		table.setEditable(true);
 		TableColumn mealColumn = new TableColumn("Meals");
+		mealColumn.setMinWidth(300);
 		mealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		table.getColumns().add(mealColumn);
 		table.setTranslateX(75);
@@ -775,11 +776,15 @@ public class Main extends Application {
 		TableView table2 = new TableView();
 		table2.setEditable(true);
 		TableColumn foodCol = new TableColumn("Food");
+		foodCol.setMinWidth(200);
+		foodCol.setMaxWidth(200);
 		TableColumn calCol = new TableColumn("Calories (cal)");
 		TableColumn carbCol = new TableColumn ("Carbohydrates (g)");
 		TableColumn proCol = new TableColumn ("Protein (g)");
 		TableColumn fatCol = new TableColumn ("Fat (g)");
 		TableColumn fibCol = new TableColumn ("Fiber (g)");
+		fibCol.setMinWidth(100);
+		fibCol.setMaxWidth(100);
 		table2.getColumns().addAll(foodCol, calCol, carbCol, proCol, fatCol, fibCol);
 		table2.setTranslateX(100);
 		table2.setTranslateY(150);
@@ -996,13 +1001,13 @@ public class Main extends Application {
 		//Scene homeScreen = new Scene(homeLayout, 900, 600);
 		primaryStage.setScene(homeScreen);
 		
-		////////////////// CSS STUFF FML///////////////////
+		////////////////// CSS STUFF ///////////////////
 		homeScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
 		foodScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
 		queryScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
 		addScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
 		mealScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
-		exitBtn.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		
 		
 		/////////////////END ALL THIS STUFF////////////
 		primaryStage.show();
