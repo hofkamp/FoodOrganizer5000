@@ -1,0 +1,31 @@
+
+
+.root{
+	 -fx-background-color: #354653;
+}
+
+.root .label {
+   -fx-text-fill: white;
+}
+.root .button {
+   -fx-background-color: salmon;
+   -fx-text-fill: black;
+
+}
+.root .toggle-button{
+  -fx-base: green;
+}
+.foodScreen{
+	-fx-background-color: green;
+}
+.queryScreen{
+	-fx-background-color: green;
+}
+.addScreen{
+	-fx-background-color: green;
+}
+.mealScreen{
+	-fx-background-color: green;
+}
+
+

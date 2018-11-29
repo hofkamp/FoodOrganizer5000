@@ -1,0 +1,1011 @@
+
+import java.util.ArrayList;
+
+import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.value.ChangeListener;
+
+public class Main extends Application {
+	MealItem temp = new MealItem();
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
+	public void start(Stage primaryStage) throws Exception {
+		primaryStage.setTitle("Food Organizer 5000");
+		BorderPane borderPane = new BorderPane();
+		DropShadow shadow = new DropShadow();
+		StackPane homeLayout = new StackPane();
+		StackPane foodLayout = new StackPane();
+		StackPane mealLayout = new StackPane();
+		StackPane queryLayout = new StackPane();
+		StackPane addLayout = new StackPane();
+		Scene homeScreen = new Scene(homeLayout, 900, 600);
+		Scene foodScreen = new Scene(foodLayout, 900, 600);
+		Scene mealScreen = new Scene(mealLayout, 900, 600);
+		Scene queryScreen = new Scene(queryLayout, 900, 600);
+		Scene addScreen = new Scene(addLayout, 900, 600);
+		///////TEMP VARIABLES//////////////
+		ObservableList testFoodArray = FXCollections.observableArrayList();
+		FoodItem carrot = new FoodItem();
+		carrot.setName("Carrot");
+		carrot.setCal(10);
+		carrot.setCarb(5);
+		carrot.setFat(0);
+		carrot.setPro(2);
+		carrot.setFib(0);
+		
+		FoodItem lettuce = new FoodItem();
+		lettuce.setName("Lettuce");
+		lettuce.setCal(10);
+		lettuce.setCarb(4);
+		lettuce.setFib(3);
+		lettuce.setPro(3);
+		lettuce.setFat(1);
+		
+		FoodItem broccoli = new FoodItem();
+		broccoli.setName("Broccoli");
+		broccoli.setCal(15);
+		broccoli.setCarb(7);
+		broccoli.setFat(8);
+		broccoli.setFib(5);
+		broccoli.setPro(2);
+		
+		testFoodArray.addAll(carrot, lettuce, broccoli);
+		
+		ObservableList testMealArray =  FXCollections.observableArrayList();
+		MealItem salad = new MealItem();
+		salad.setName("Salad");
+		salad.setCal(10);
+		salad.setCarb(5);
+		salad.setFat(0);
+		salad.setFib(7);
+		salad.setPro(2);
+		ArrayList tester = new ArrayList();
+		tester.add("carrot");
+		tester.add("lettuce");
+		tester.add("broccoli");
+		salad.setIngr(tester);
+		testMealArray.add(salad);
+		
+		
+		//////////////////// QUERY LAYOUT////////////////////////
+		
+		Label leftText = new Label("Search by nutritional facts:");
+		  Label rightText = new Label("Search for a food item:");
+		  leftText.setFont(Font.font("Arial", 30));
+		  rightText.setFont(Font.font("Arial", 30));
+		  leftText.setTranslateY(-150);
+		  leftText.setTranslateX(40);
+		  rightText.setTranslateX(-40);
+		  rightText.setTranslateY(-150);
+		  queryLayout.getChildren().add(leftText);
+		  queryLayout.getChildren().add(rightText);
+		  queryLayout.setAlignment(leftText, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(rightText, Pos.CENTER_RIGHT);
+		  
+		  TextField foodField = new TextField();
+		  foodField.setMaxSize(300, 30);
+		  foodField.setTranslateY(-90);
+		  foodField.setTranslateX(-40);
+		  queryLayout.getChildren().add(foodField);
+		  queryLayout.setAlignment(foodField, Pos.CENTER_RIGHT);
+		  
+		  Label calQ = new Label("Calories (cal):");
+		  TextField calorieF = new TextField();
+		  calorieF.setMaxSize(75, 30);
+		  calorieF.setTranslateX(290);
+		  calorieF.setTranslateY(-90);
+		  calQ.setFont(Font.font("Arial", 20));
+		  calQ.setTranslateY(-95);
+		  calQ.setTranslateX(40);
+		  ToggleGroup calGroup = new ToggleGroup();
+		  RadioButton calB = new RadioButton("Below");
+		  calB.setToggleGroup(calGroup);
+		  calB.setSelected(true);
+		  calB.setTranslateX(190);
+		  calB.setTranslateY(-95);
+		  calB.setStyle("-fx-text-fill: white");
+		  RadioButton calA = new RadioButton("Above");
+		  calA.setToggleGroup(calGroup);
+		  calA.setTranslateX(190);
+		  calA.setTranslateY(-75);
+		  calA.setStyle("-fx-text-fill: white");
+		  queryLayout.getChildren().add(calQ);
+		  queryLayout.getChildren().add(calB);
+		  queryLayout.getChildren().add(calA);
+		  queryLayout.getChildren().add(calorieF);
+		  queryLayout.setAlignment(calQ, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(calB, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(calA, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(calorieF, Pos.CENTER_LEFT);
+		  
+		  Label proQ= new Label("Protein (g):");
+		  TextField proteinF = new TextField();
+		  proteinF.setMaxSize(75, 30);
+		  proteinF.setTranslateX(290);
+		  proteinF.setTranslateY(-35);
+		  proQ.setFont(Font.font("Arial", 20));
+		  proQ.setTranslateX(40);
+		  proQ.setTranslateY(-40);
+		  ToggleGroup proGroup = new ToggleGroup();
+		  RadioButton proB = new RadioButton("Below");
+		  proB.setToggleGroup(proGroup);
+		  proB.setSelected(true);
+		  proB.setTranslateX(190);
+		  proB.setTranslateY(-40);
+		  proB.setStyle("-fx-text-fill: white");
+		  RadioButton proA = new RadioButton("Above");
+		  proA.setToggleGroup(proGroup);
+		  proA.setTranslateX(190);
+		  proA.setTranslateY(-20);
+		  proA.setStyle("-fx-text-fill: white");
+		  queryLayout.getChildren().add(proQ);
+		  queryLayout.getChildren().add(proB);
+		  queryLayout.getChildren().add(proA);
+		  queryLayout.getChildren().add(proteinF);
+		  queryLayout.setAlignment(proQ, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(proB, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(proA, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(proteinF, Pos.CENTER_LEFT);
+		  
+		  Label carQ = new Label("Carbs (g):");
+		  TextField carF = new TextField();
+		  carF.setMaxSize(75, 30);
+		  carF.setTranslateX(290);
+		  carF.setTranslateY(20);
+		  carQ.setFont(Font.font("Arial", 20));
+		  carQ.setTranslateX(40);
+		  carQ.setTranslateY(15);
+		  ToggleGroup carGroup = new ToggleGroup();
+		  RadioButton carB = new RadioButton("Below");
+		  carB.setToggleGroup(carGroup);
+		  carB.setSelected(true);
+		  carB.setTranslateX(190);
+		  carB.setTranslateY(15);
+		  carB.setStyle("-fx-text-fill: white");
+		  RadioButton carA = new RadioButton("Above");
+		  carA.setToggleGroup(carGroup);
+		  carA.setTranslateX(190);
+		  carA.setTranslateY(35);
+		  carA.setStyle("-fx-text-fill: white");
+		  queryLayout.getChildren().add(carQ);
+		  queryLayout.getChildren().add(carB);
+		  queryLayout.getChildren().add(carA);
+		  queryLayout.getChildren().add(carF);
+		  queryLayout.setAlignment(carQ, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(carB, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(carA, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(carF, Pos.CENTER_LEFT);
+		  
+		  Label fatQ = new Label("Fat (g):");
+		  TextField fatF1 = new TextField();
+		  fatF1.setMaxSize(75, 30);
+		  fatF1.setTranslateX(290);
+		  fatF1.setTranslateY(75);
+		  fatQ.setFont(Font.font("Arial", 20));
+		  fatQ.setTranslateX(40);
+		  fatQ.setTranslateY(70);
+		  ToggleGroup fatGroup = new ToggleGroup();
+		  RadioButton fatB = new RadioButton("Below");
+		  fatB.setToggleGroup(fatGroup);
+		  fatB.setSelected(true);
+		  fatB.setTranslateX(190);
+		  fatB.setTranslateY(70);
+		  fatB.setStyle("-fx-text-fill: white");
+		  RadioButton fatA = new RadioButton("Above");
+		  fatA.setToggleGroup(fatGroup);
+		  fatA.setTranslateX(190);
+		  fatA.setTranslateY(90);
+		  fatA.setStyle("-fx-text-fill: white");
+		  queryLayout.getChildren().add(fatQ);
+		  queryLayout.getChildren().add(fatB);
+		  queryLayout.getChildren().add(fatA);
+		  queryLayout.getChildren().add(fatF1);
+		  queryLayout.setAlignment(fatQ, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(fatB, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(fatA, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(fatF1, Pos.CENTER_LEFT);
+		  
+		  Label fibQ = new Label("Fiber (g):");
+		  TextField fibF1 = new TextField();
+		  fibF1.setMaxSize(75, 30);
+		  fibF1.setTranslateX(290);
+		  fibF1.setTranslateY(135);
+		  fibQ.setFont(Font.font("Arial", 20));
+		  fibQ.setTranslateX(40);
+		  fibQ.setTranslateY(125);
+		  ToggleGroup fibGroup = new ToggleGroup();
+		  RadioButton fibB = new RadioButton("Below");
+		  fibB.setToggleGroup(fibGroup);
+		  fibB.setSelected(true);
+		  fibB.setTranslateX(190);
+		  fibB.setTranslateY(125);
+		  fibB.setStyle("-fx-text-fill: white");
+		  RadioButton fibA = new RadioButton("Above");
+		  fibA.setToggleGroup(fibGroup);
+		  fibA.setTranslateX(190);
+		  fibA.setTranslateY(145);
+		  fibA.setStyle("-fx-text-fill: white");
+
+		  queryLayout.getChildren().add(fibQ);
+		  queryLayout.getChildren().add(fibB);
+		  queryLayout.getChildren().add(fibA);
+		  queryLayout.getChildren().add(fibF1);
+		  queryLayout.setAlignment(fibQ, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(fibB, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(fibA, Pos.CENTER_LEFT);
+		  queryLayout.setAlignment(fibF1, Pos.CENTER_LEFT);
+		  
+		  
+		  //food list button 
+		  Button foodBtn3 = new Button("Food List");
+		  foodBtn3.setOnAction(new EventHandler<ActionEvent>() {
+		   public void handle(ActionEvent event) {
+		    primaryStage.setScene(foodScreen);
+		   }
+		  });
+		  foodBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		   foodBtn3.setEffect(shadow);
+		  });
+		  foodBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		   foodBtn3.setEffect(null);
+		  });
+		  foodBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		  foodBtn3.setTranslateX(-10);
+		  foodBtn3.setTranslateY(10);
+		  foodBtn3.setMinSize(150, 150 / 2);
+		  foodBtn3.setMaxSize(150, 150 / 2);
+		  queryLayout.getChildren().add(foodBtn3);
+		  queryLayout.setAlignment(foodBtn3, Pos.TOP_RIGHT);
+		  // add food button
+		  Button addBtn3 = new Button("Add Food");
+		  addBtn3.setOnAction(new EventHandler<ActionEvent>() {
+		   public void handle(ActionEvent event) {
+		    primaryStage.setScene(addScreen);
+		   }
+		  });
+		  addBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		   addBtn3.setEffect(shadow);
+		  });
+		  addBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		   addBtn3.setEffect(null);
+		  });
+		  addBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		  addBtn3.setTranslateX(-165);
+		  addBtn3.setTranslateY(10);
+		  addBtn3.setMinSize(150, 150 / 2);
+		  addBtn3.setMaxSize(150, 150 / 2);
+		  queryLayout.getChildren().add(addBtn3);
+		  queryLayout.setAlignment(addBtn3, Pos.TOP_RIGHT);
+		  // meal list button
+		  Button mealBtn4 = new Button("Meal List");
+		  mealBtn4.setOnAction(new EventHandler<ActionEvent>() {
+		   public void handle(ActionEvent event) {
+		    primaryStage.setScene(mealScreen);
+		   }
+		  });
+		  mealBtn4.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		   mealBtn4.setEffect(shadow);
+		  });
+		  mealBtn4.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		   mealBtn4.setEffect(null);
+		  });
+		  mealBtn4.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		  mealBtn4.setTranslateX(-320);
+		  mealBtn4.setTranslateY(10);
+		  mealBtn4.setMinSize(150, 150 / 2);
+		  mealBtn4.setMaxSize(150, 150 / 2);
+		  queryLayout.getChildren().add(mealBtn4);
+		  queryLayout.setAlignment(mealBtn4, Pos.TOP_RIGHT);
+		  // home button
+		  Button homeBtn3 = new Button("Go Back");
+		  homeBtn3.setOnAction(new EventHandler<ActionEvent>() {
+		   public void handle(ActionEvent event) {
+		    primaryStage.setScene(homeScreen);
+		   }
+		  });
+		  homeBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		   homeBtn3.setEffect(shadow);
+		  });
+		  homeBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		   homeBtn3.setEffect(null);
+		  });
+		  homeBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		  homeBtn3.setTranslateX(-475);
+		  homeBtn3.setTranslateY(10);
+		  homeBtn3.setMinSize(150, 150 / 2);
+		  homeBtn3.setMaxSize(150, 150 / 2);
+		  queryLayout.getChildren().add(homeBtn3);
+		  queryLayout.setAlignment(homeBtn3, Pos.TOP_RIGHT);
+		  // title
+		  Label title4 = new Label("Query");
+		  title4.setFont(Font.font("Cambria", 50));
+		  title4.setTranslateX(50);
+		  title4.setTranslateY(20);
+
+		  queryLayout.getChildren().add(title4);
+		  queryLayout.setAlignment(title4, Pos.TOP_LEFT);
+		//////////////////// ADD FOOD LAYOUT/////////////////////
+		//file name input
+		Label fileName = new Label("File Name:");
+		TextField fileF = new TextField();
+		fileF.setMaxSize(400, 50);
+		fileF.setTranslateX(175);
+		fileF.setTranslateY(-100);
+		fileName.setTranslateY(-100);
+		fileName.setTranslateX(10);
+		fileName.setFont(Font.font("Arial", 30));
+		addLayout.getChildren().add(fileF);
+		addLayout.setAlignment(fileF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(fileName);
+		addLayout.setAlignment(fileName, Pos.CENTER_LEFT);
+		
+		//random OR text box for aesthetic
+		Label ORText = new Label("OR");
+		ORText.setFont(Font.font("Arial", 40));
+		ORText.setTranslateY(-40);
+		addLayout.getChildren().add(ORText);
+		addLayout.setAlignment(ORText, Pos.CENTER);
+		
+		//food name input
+		Label foodName = new Label("Food Name:");
+		TextField foodF = new TextField();
+		foodF.setMaxSize(250, 40);
+		foodF.setTranslateX(225);
+		foodF.setTranslateY(10);
+		foodName.setTranslateY(10);
+		foodName.setTranslateX(10);
+		foodName.setFont(Font.font("Arial", 25));
+		addLayout.getChildren().add(foodF);
+		addLayout.setAlignment(foodF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(foodName);
+		addLayout.setAlignment(foodName, Pos.CENTER_LEFT);
+		
+		//carb number input
+		Label carbNum = new Label("Carbohydrates(g):");
+		TextField carbF = new TextField();
+		carbF.setMaxSize(250, 40);
+		carbF.setTranslateX(225);
+		carbF.setTranslateY(70);
+		carbNum.setTranslateY(70);
+		carbNum.setTranslateX(10);
+		carbNum.setFont(Font.font("Arial", 25));
+		addLayout.getChildren().add(carbF);
+		addLayout.setAlignment(carbF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(carbNum);
+		addLayout.setAlignment(carbNum, Pos.CENTER_LEFT);
+		
+		//calorie num input
+		Label calNum = new Label("Calories:");
+		TextField calF = new TextField();
+		calF.setMaxSize(250, 40);
+		calF.setTranslateX(225);
+		calF.setTranslateY(130);
+		calNum.setTranslateY(130);
+		calNum.setTranslateX(10);
+		calNum.setFont(Font.font("Arial", 25));
+		addLayout.getChildren().add(calF);
+		addLayout.setAlignment(calF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(calNum);
+		addLayout.setAlignment(calNum, Pos.CENTER_LEFT);
+		
+		//fat num input
+		Label fatNum = new Label("Fat(g):");
+		TextField fatF = new TextField();
+		fatF.setMaxSize(250, 40);
+		fatF.setTranslateX(620);
+		fatF.setTranslateY(10);
+		fatNum.setTranslateY(10);
+		fatNum.setTranslateX(500);
+		fatNum.setFont(Font.font("Arial", 25));
+		addLayout.getChildren().add(fatF);
+		addLayout.setAlignment(fatF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(fatNum);
+		addLayout.setAlignment(fatNum, Pos.CENTER_LEFT);
+		
+		//protein num input
+		Label proNum = new Label("Protein(g):");
+		TextField proF = new TextField();
+		proF.setMaxSize(250, 40);
+		proF.setTranslateX(620);
+		proF.setTranslateY(70);
+		proNum.setTranslateY(70);
+		proNum.setTranslateX(500);
+		proNum.setFont(Font.font("Arial", 25));
+		addLayout.getChildren().add(proF);
+		addLayout.setAlignment(proF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(proNum);
+		addLayout.setAlignment(proNum, Pos.CENTER_LEFT);
+		
+		//fiber num input
+		Label fibNum = new Label("Fiber(g):");
+		TextField fibF = new TextField();
+		fibF.setMaxSize(250, 40);
+		fibF.setTranslateX(620);
+		fibF.setTranslateY(130);
+		fibNum.setTranslateY(130);
+		fibNum.setTranslateX(500);
+		fibNum.setFont(Font.font("Arial", 25));
+		addLayout.getChildren().add(fibF);
+		addLayout.setAlignment(fibF, Pos.CENTER_LEFT);
+		addLayout.getChildren().add(fibNum);
+		addLayout.setAlignment(fibNum, Pos.CENTER_LEFT);
+		
+		//enter button
+		Button entrBtn = new Button("ENTER");
+		//TODO: ADD ACTION ONCE OTHER METHODS IMPLEMENTED
+		//TODO: for this button to work, either text has to be entered into 
+		//the file name input or the multiple food inputs. not both, only the one or all the others
+		//or maybe just make throw an error lol 
+		entrBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) ->{
+			entrBtn.setEffect(shadow);
+		});
+		entrBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) ->{
+			entrBtn.setEffect(null);
+		});
+		entrBtn.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
+		entrBtn.setMinSize(300, 75);
+		entrBtn.setTranslateY(-25);
+		addLayout.getChildren().add(entrBtn);
+		addLayout.setAlignment(entrBtn, Pos.BOTTOM_CENTER);
+		
+		//food list button
+		Button foodBtn2 = new Button("Food List");
+		foodBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(foodScreen);
+			}
+		});
+		foodBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			foodBtn2.setEffect(shadow);
+		});
+		foodBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			foodBtn2.setEffect(null);
+		});
+		foodBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		foodBtn2.setTranslateX(-10);
+		foodBtn2.setTranslateY(10);
+		foodBtn2.setMinSize(150, 150 / 2);
+		foodBtn2.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(foodBtn2);
+		addLayout.setAlignment(foodBtn2, Pos.TOP_RIGHT);
+
+		// query button
+		Button queryBtn3 = new Button("Query");
+		queryBtn3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(queryScreen);
+			}
+		});
+		queryBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			queryBtn3.setEffect(shadow);
+		});
+		queryBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			queryBtn3.setEffect(null);
+		});
+		queryBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		queryBtn3.setTranslateX(-165);
+		queryBtn3.setTranslateY(10);
+		queryBtn3.setMinSize(150, 150 / 2);
+		queryBtn3.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(queryBtn3);
+		addLayout.setAlignment(queryBtn3, Pos.TOP_RIGHT);
+
+		// meal list button
+		Button mealBtn3 = new Button("Meal List");
+		mealBtn3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(mealScreen);
+			}
+		});
+		mealBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			mealBtn3.setEffect(shadow);
+		});
+		mealBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			mealBtn3.setEffect(null);
+		});
+		mealBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		mealBtn3.setTranslateX(-320);
+		mealBtn3.setTranslateY(10);
+		mealBtn3.setMinSize(150, 150 / 2);
+		mealBtn3.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(mealBtn3);
+		addLayout.setAlignment(mealBtn3, Pos.TOP_RIGHT);
+
+		// home button
+		Button homeBtn2 = new Button("Go Back");
+		homeBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(homeScreen);
+			}
+		});
+		homeBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			homeBtn2.setEffect(shadow);
+		});
+		homeBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			homeBtn2.setEffect(null);
+		});
+		homeBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		homeBtn2.setTranslateX(-475);
+		homeBtn2.setTranslateY(10);
+		homeBtn2.setMinSize(150, 150 / 2);
+		homeBtn2.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(homeBtn2);
+		addLayout.setAlignment(homeBtn2, Pos.TOP_RIGHT);
+
+		// title
+		Label title3 = new Label("Add Food");
+		title3.setFont(Font.font("Cambria", 50));
+		title3.setTranslateX(50);
+		title3.setTranslateY(20);
+		addLayout.getChildren().add(title3);
+		addLayout.setAlignment(title3, Pos.TOP_LEFT);
+		
+		
+		//////////////////// MEAL LIST LAYOUT////////////////////
+		Label text = new Label("Selected Item");
+		text.setFont(Font.font(30));
+		text.setTranslateX(-250);
+		text.setTranslateY(-130);
+		Label mealN = new Label("Name:");
+		mealN.setFont(Font.font(25));
+		mealN.setTranslateX(-350);
+		mealN.setTranslateY(-90);
+		Label mealIn = new Label("Ingredients:");
+		mealIn.setFont(Font.font(25));
+		mealIn.setTranslateX(-350);
+		mealIn.setTranslateY(-50);
+		Label mealCb = new Label("Carbohydrates:");
+		mealCb.setFont(Font.font(25));
+		mealCb.setTranslateX(-350);
+		mealCb.setTranslateY(-10);
+		Label mealCa = new Label("Calories:");
+		mealCa.setFont(Font.font(25));
+		mealCa.setTranslateX(-350);
+		mealCa.setTranslateY(30);
+		Label mealPr = new Label("Protein:");
+		mealPr.setFont(Font.font(25));
+		mealPr.setTranslateX(-350);
+		mealPr.setTranslateY(70);
+		Label mealFa = new Label("Fat:");
+		mealFa.setFont(Font.font(25));
+		mealFa.setTranslateX(-350);
+		mealFa.setTranslateY(110);
+		Label mealFi = new Label("Fiber:");
+		mealFi.setFont(Font.font(25));
+		mealFi.setTranslateX(-350);
+		mealFi.setTranslateY(150);
+		mealLayout.getChildren().addAll(mealN, mealIn, mealCb,
+				mealCa, mealPr, mealFa, mealFi, text);
+		mealLayout.setAlignment(mealN, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(mealIn, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(mealCb, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(mealCa, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(mealPr, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(mealFa, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(mealFi, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(text, Pos.CENTER_RIGHT);
+		
+		Label tempName = new Label();
+		tempName.setFont(Font.font(25));
+		tempName.setTranslateX(560);
+		tempName.setTranslateY(-90);
+		ListView<String> ingrList = new ListView<>();
+		ingrList.setMaxSize(100, 25);
+		ingrList.setTranslateX(-240);
+		ingrList.setTranslateY(-50);
+		Label tempCal = new Label();
+		tempCal.setFont(Font.font(25));
+		tempCal.setTranslateX(-290);
+		tempCal.setTranslateY(-10);
+		Label tempCarb = new Label();
+		tempCarb.setFont(Font.font(25));
+		tempCarb.setTranslateX(-290);
+		tempCarb.setTranslateY(30);
+		Label tempPro = new Label();
+		tempPro.setFont(Font.font(25));
+		tempPro.setTranslateX(-290);
+		tempPro.setTranslateY(70);
+		Label tempFat = new Label();
+		tempFat.setFont(Font.font(25));
+		tempFat.setTranslateX(-290);
+		tempFat.setTranslateY(110);
+		Label tempFib = new Label();
+		tempFib.setFont(Font.font(25));
+		tempFib.setTranslateX(-290);
+		tempFib.setTranslateY(150);
+		mealLayout.getChildren().addAll(tempName, tempCal, 
+				tempCarb, tempPro, tempFat, tempFib, ingrList);
+		mealLayout.setAlignment(tempName, Pos.CENTER_LEFT);
+		mealLayout.setAlignment(tempCal, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempCarb, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempPro, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempFat, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempFib, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(ingrList, Pos.CENTER_RIGHT);
+		
+		TableView table = new TableView();
+		table.setEditable(true);
+		TableColumn mealColumn = new TableColumn("Meals");
+		mealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		table.getColumns().add(mealColumn);
+		table.setTranslateX(75);
+		table.setTranslateY(150);
+		table.setMaxSize(300, 400);
+		table.setItems(testMealArray);
+		table.setOnMouseClicked((new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				MealItem temp = (MealItem)table.getSelectionModel().getSelectedItem();
+				tempName.setText(temp.getName());
+				tempCal.setText(temp.getCal() +"");
+				tempCarb.setText(temp.getCarb() +"");
+				tempPro.setText(temp.getPro() +"");
+				tempFat.setText(temp.getFat() +"");
+				tempFib.setText(temp.getFib() +"");
+				ObservableList tempList = FXCollections.observableArrayList(temp.getIngr());
+				ingrList.setItems(tempList);
+				//here we are going to have a global variable that will be a temp variable
+				//that will be changed when it is clicked on. 
+				//that will be used to call data from MealItem object or some shit
+			}
+		}));
+		mealLayout.getChildren().add(table);
+		mealLayout.setAlignment(table, Pos.TOP_LEFT);
+		
+		
+		// meal Button
+		Button foodBtn1 = new Button("Food List");
+		foodBtn1.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(foodScreen);
+			}
+		});
+		foodBtn1.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			foodBtn1.setEffect(shadow);
+		});
+		foodBtn1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			foodBtn1.setEffect(null);
+		});
+		foodBtn1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		foodBtn1.setTranslateX(-10);
+		foodBtn1.setTranslateY(10);
+		foodBtn1.setMinSize(150, 150 / 2);
+		foodBtn1.setMaxSize(150, 150 / 2);
+		mealLayout.getChildren().add(foodBtn1);
+		mealLayout.setAlignment(foodBtn1, Pos.TOP_RIGHT);
+
+		// query button
+		Button queryBtn2 = new Button("Query");
+		queryBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(queryScreen);
+			}
+		});
+		queryBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			queryBtn2.setEffect(shadow);
+		});
+		queryBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			queryBtn2.setEffect(null);
+		});
+		queryBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		queryBtn2.setTranslateX(-165);
+		queryBtn2.setTranslateY(10);
+		queryBtn2.setMinSize(150, 150 / 2);
+		queryBtn2.setMaxSize(150, 150 / 2);
+		mealLayout.getChildren().add(queryBtn2);
+		mealLayout.setAlignment(queryBtn2, Pos.TOP_RIGHT);
+
+		// add food button
+		Button addBtn2 = new Button("Add Food");
+		addBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(addScreen);
+			}
+		});
+		addBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			addBtn2.setEffect(shadow);
+		});
+		addBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			addBtn2.setEffect(null);
+		});
+		addBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		addBtn2.setTranslateX(-320);
+		addBtn2.setTranslateY(10);
+		addBtn2.setMinSize(150, 150 / 2);
+		addBtn2.setMaxSize(150, 150 / 2);
+		mealLayout.getChildren().add(addBtn2);
+		mealLayout.setAlignment(addBtn2, Pos.TOP_RIGHT);
+
+		// home button
+		Button homeBtn1 = new Button("Go Back");
+		homeBtn1.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(homeScreen);
+			}
+		});
+		homeBtn1.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			homeBtn1.setEffect(shadow);
+		});
+		homeBtn1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			homeBtn1.setEffect(null);
+		});
+		homeBtn1.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		homeBtn1.setTranslateX(-475);
+		homeBtn1.setTranslateY(10);
+		homeBtn1.setMinSize(150, 150 / 2);
+		homeBtn1.setMaxSize(150, 150 / 2);
+		mealLayout.getChildren().add(homeBtn1);
+		mealLayout.setAlignment(homeBtn1, Pos.TOP_RIGHT);
+
+		// title
+		Label title2 = new Label("Meal List");
+		title2.setFont(Font.font("Cambria", 50));
+		title2.setTranslateX(50);
+		title2.setTranslateY(20);
+		mealLayout.getChildren().add(title2);
+		mealLayout.setAlignment(title2, Pos.TOP_LEFT);
+		////////////////////FOOD LIST LAYOUT////////////////////
+		
+		TableView table2 = new TableView();
+		table2.setEditable(true);
+		TableColumn foodCol = new TableColumn("Food");
+		TableColumn calCol = new TableColumn("Calories (cal)");
+		TableColumn carbCol = new TableColumn ("Carbohydrates (g)");
+		TableColumn proCol = new TableColumn ("Protein (g)");
+		TableColumn fatCol = new TableColumn ("Fat (g)");
+		TableColumn fibCol = new TableColumn ("Fiber (g)");
+		table2.getColumns().addAll(foodCol, calCol, carbCol, proCol, fatCol, fibCol);
+		table2.setTranslateX(100);
+		table2.setTranslateY(150);
+		table2.setMaxSize(700, 400);
+		foodCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+		calCol.setCellValueFactory(new PropertyValueFactory<>("cal"));
+		carbCol.setCellValueFactory(new PropertyValueFactory<>("carb"));
+		fatCol.setCellValueFactory(new PropertyValueFactory<>("fat"));
+		fibCol.setCellValueFactory(new PropertyValueFactory<>("fib"));
+		proCol.setCellValueFactory(new PropertyValueFactory<>("pro"));
+		table2.setItems(testFoodArray);
+		foodLayout.getChildren().add(table2);
+		foodLayout.setAlignment(table2, Pos.TOP_LEFT);
+		
+		
+		//meal Button
+		Button mealBtn1 = new Button("Meal List");
+		mealBtn1.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(mealScreen);
+			}
+		});
+		mealBtn1.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			mealBtn1.setEffect(shadow);
+		});
+		mealBtn1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			mealBtn1.setEffect(null);
+		});
+		mealBtn1.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		mealBtn1.setTranslateX(-10);
+		mealBtn1.setTranslateY(10);
+		mealBtn1.setMinSize(150, 150/2);
+		mealBtn1.setMaxSize(150, 150/2);
+		foodLayout.getChildren().add(mealBtn1);
+		foodLayout.setAlignment(mealBtn1, Pos.TOP_RIGHT);
+		
+		
+		//query button
+		Button queryBtn1 = new Button("Query");
+		queryBtn1.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(queryScreen);
+			}
+		});
+		queryBtn1.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			queryBtn1.setEffect(shadow);
+		});
+		queryBtn1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			queryBtn1.setEffect(null);
+		});
+		queryBtn1.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		queryBtn1.setTranslateX(-165);
+		queryBtn1.setTranslateY(10);
+		queryBtn1.setMinSize(150, 150/2);
+		queryBtn1.setMaxSize(150, 150/2);
+		foodLayout.getChildren().add(queryBtn1);
+		foodLayout.setAlignment(queryBtn1, Pos.TOP_RIGHT);
+		
+		//add food button
+		Button addBtn1 = new Button("Add Food");
+		addBtn1.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(addScreen);
+			}
+		});
+		addBtn1.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			addBtn1.setEffect(shadow);
+		});
+		addBtn1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			addBtn1.setEffect(null);
+		});
+		addBtn1.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		addBtn1.setTranslateX(-320);
+		addBtn1.setTranslateY(10);
+		addBtn1.setMinSize(150, 150/2);
+		addBtn1.setMaxSize(150, 150/2);
+		foodLayout.getChildren().add(addBtn1);
+		foodLayout.setAlignment(addBtn1, Pos.TOP_RIGHT);
+		
+		//home button
+		Button homeBtn = new Button("Go Back");
+		homeBtn.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(homeScreen);
+			}
+		});
+		homeBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			homeBtn.setEffect(shadow);
+		});
+		homeBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			homeBtn.setEffect(null);
+		});
+		homeBtn.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		homeBtn.setTranslateX(-475);
+		homeBtn.setTranslateY(10);
+		homeBtn.setMinSize(150, 150/2);
+		homeBtn.setMaxSize(150, 150/2);
+		foodLayout.getChildren().add(homeBtn);
+		foodLayout.setAlignment(homeBtn, Pos.TOP_RIGHT);
+		
+		//title
+		Label title1 = new Label("Food List");
+		title1.setFont(Font.font("Cambria", 50));
+		title1.setTranslateX(50);
+		title1.setTranslateY(20);
+		foodLayout.getChildren().add(title1);
+		foodLayout.setAlignment(title1, Pos.TOP_LEFT);
+		//foodScreen = new Scene(foodLayout, 900, 600);
+		////////////////////HOME LAYOUT/////////////////////////
+		//exit Button
+		Button exitBtn = new Button("Quit");
+		exitBtn.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+				System.exit(0);
+			}
+		});
+		exitBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			exitBtn.setEffect(shadow);
+		});
+		exitBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			exitBtn.setEffect(null);
+		});
+		exitBtn.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		exitBtn.setTranslateX(-10);
+		exitBtn.setTranslateY(10);
+		homeLayout.getChildren().add(exitBtn);
+		homeLayout.setAlignment(exitBtn, Pos.TOP_RIGHT);
+		
+		//title Label
+		Label title = new Label("Food Organizer 5000");
+		title.setFont(Font.font("Cambria", 70));
+		//title.setTranslateX(50);
+		title.setTranslateY(50);
+		homeLayout.getChildren().add(title);
+		homeLayout.setAlignment(title, Pos.TOP_CENTER);
+		
+		//meal List Button
+		Button mealBtn = new Button("View Meal List");
+		mealBtn.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(mealScreen);
+			}
+		});
+		mealBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			mealBtn.setEffect(shadow);
+		});
+		mealBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			mealBtn.setEffect(null);
+		});
+		mealBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		mealBtn.setTranslateX(30);
+		mealBtn.setMinSize(250, 250);
+		homeLayout.getChildren().add(mealBtn);
+		homeLayout.setAlignment(mealBtn, Pos.CENTER_LEFT);
+		
+		//food List Button
+		Button foodBtn = new Button("View Food List");
+		foodBtn.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(foodScreen);
+			}
+		});
+		foodBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			foodBtn.setEffect(shadow);
+		});
+		foodBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			foodBtn.setEffect(null);
+		});
+		foodBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		//foodBtn.setTranslateX(30);
+		foodBtn.setMinSize(250, 250);
+		homeLayout.getChildren().add(foodBtn);
+		homeLayout.setAlignment(foodBtn, Pos.CENTER);
+		
+		//add Food Button
+		Button addBtn = new Button("Add Food Item(s)");
+		addBtn.wrapTextProperty().setValue(true);
+		addBtn.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(addScreen);
+			}
+		});
+		addBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			addBtn.setEffect(shadow);
+		});
+		addBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			addBtn.setEffect(null);
+		});
+		addBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		addBtn.setTranslateX(-30);
+		addBtn.setMinSize(250, 250);
+		addBtn.setMaxSize(250, 250);
+		homeLayout.getChildren().add(addBtn);
+		homeLayout.setAlignment(addBtn, Pos.CENTER_RIGHT);
+		
+		//query Button
+		Button queryBtn = new Button("Search For Food");
+		queryBtn.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(queryScreen);
+			}
+		});
+		queryBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			queryBtn.setEffect(shadow);
+		});
+		queryBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			queryBtn.setEffect(null);
+		});
+		queryBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		queryBtn.setTranslateY(-100);
+		queryBtn.setMinSize(850, 50);
+		homeLayout.getChildren().add(queryBtn);
+		homeLayout.setAlignment(queryBtn, Pos.BOTTOM_CENTER);
+		//Scene homeScreen = new Scene(homeLayout, 900, 600);
+		primaryStage.setScene(homeScreen);
+		
+		////////////////// CSS STUFF FML///////////////////
+		homeScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		foodScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		queryScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		addScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		mealScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		exitBtn.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		
+		/////////////////END ALL THIS STUFF////////////
+		primaryStage.show();
+		
+	}
+}
