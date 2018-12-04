@@ -10,43 +10,34 @@ public class MealItem <T> {
 	private int fat;
 	private int protein;
 	private int fiber;
-	private ArrayList ingredients = new ArrayList();
+	private ArrayList<FoodItem> ingredients = new ArrayList();
 	
 	
 	  /**
      * Constructor
      * initializes a meal item with all fields to 0 or empty
      */
-	public MealItem () {
-		this.name = "";
-		this.calories = 0;
-		this.carbohydrates= 0;
-		this.fat = 0;
-		this.protein = 0;
-		this.fiber = 0;
-		this.ingredients = ingredients;
-	}
-	
-	 /**
-     * Constructor
-     * initializes the parameters to the values passed in
-     * @param String name
-     * @param int calories
-     * @param int carbs
-     * @param int fat
-     * @param int protein
-     * @param int fiber
-     * @param ArrayList ingr
-     */
-	public MealItem (String name, int calories, int carbs, int fat, int protein, int fiber, ArrayList ingredients) {
+	public MealItem (String name, ArrayList ingredients) {
 		this.name = name;
+		this.ingredients = ingredients;
+		calcNutrients();
 		this.calories = calories;
-		this.carbohydrates= carbs;
+		this.carbohydrates= carbohydrates;
 		this.fat = fat;
 		this.protein = protein;
 		this.fiber = fiber;
-		this.ingredients = ingredients;
+		
 	}
+	
+	 private void calcNutrients() {
+		 for(int i = 0; i < ingredients.size(); i++) {
+			 calories += ingredients.get(i).getNutrientValue("calories");
+			 carbohydrates += ingredients.get(i).getNutrientValue("carbohydrates"); 
+			 fat += ingredients.get(i).getNutrientValue("fat");
+			 protein += ingredients.get(i).getNutrientValue("protein");
+			 fiber += ingredients.get(i).getNutrientValue("fiber");
+		 }
+	 }
 	
 	/**
      * Gets the list of ingredients for the meal
