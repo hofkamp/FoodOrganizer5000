@@ -52,7 +52,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
      */
     @Override
     public void insert(K key, V value) {
-        root.insertValue(key, value);
+        root.insert(key, value);
     }
     
     
@@ -301,7 +301,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          * @see BPTree.Node#getFirstLeafKey()
          */
         K getFirstLeafKey() {
-            return values.get(0);
+            return keys.get(0);
         }
         
         /**
@@ -318,7 +318,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
          */
         void insert(K key, V value) {
             int loc = Collections.binarySearch(keys, key);
-            int valueIndex = loc >= 0 ? : -loc - 1;
+            int valueIndex = loc >= 0 ? loc : -loc - 1;
             if(loc >= 0) {
             	values.set(valueIndex, value);
             } else {
@@ -330,7 +330,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
             	InternalNode newRoot = new InternalNode();
             	newRoot.keys.add(sibling.getFirstLeafKey());
             	newRoot.children.add(this);
-            	newRot.children.add(sibling);
+            	newRoot.children.add(sibling);
             	root = newRoot;
             }
         }
@@ -342,7 +342,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         Node split() {
             LeafNode sibling = new LeafNode();
             int fromX = (keys.size() + 1) / 2, toY = keys.size();
-            sibling.keys.addAll(keys.subList(from, to));
+            sibling.keys.addAll(keys.subList(fromX, toY));
             sibling.values.addAll(values.subList(fromX, toY));
             keys.subList(fromX, toY).clear();
             values.subList(fromX, toY).clear();
