@@ -115,16 +115,16 @@ public class FoodData implements FoodDataADT<FoodItem> {
 	@Override
 	public void saveFoodItems(String filename) {
 		List<String[]> al = new ArrayList<>(); 
-		List<FoodItem> output = new ArrayList<>();
+		List<String[]> output = new ArrayList<>();
 		List<String> sorter = new ArrayList<>();
 		for(int i = 0; i<foodItemList.size();i++) {
 			String[] object = new String[2];
 			String name = foodItemList.get(i).getName();
 			String ID = foodItemList.get(i).getID();
-			object[0] = name;
-			object[1] = ID;
+			object[0] = ID;
+			object[1] = name;
 			al.add(object);
-			sorter.add(name);
+			sorter.add(name.toLowerCase());
 		}
 		
 		Collections.sort(sorter);
@@ -132,18 +132,22 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		for(int i = 0; i<foodItemList.size(); i++) {
 			String name = sorter.get(i);
 			for(int j = 0; j<al.size();j++) {
-				if(name.equals(al.get(j)[0])) {
+				if(name.toLowerCase().equals(al.get(j)[1].toLowerCase())) {
 					String[] object = new String[3];
-					FoodItem food = new FoodItem(name, al.get(j)[1]);
-					output.add(food);
+					object[0] = al.get(j)[0];
+					object[1] = name;
+					FoodItem food = new FoodItem( object[1], name);
+					object[2] = food.getNutrients().toString();
+					output.add(object);
+					break;
 				}			
 			}
 		}
 		
 		try {
 			FileWriter writer = new FileWriter(filename);
-			for(FoodItem food: output) {
-				writer.write(food.toString());
+			for(String[] food: output) {
+				writer.write(food[0] + "," + food[1] + "," + food[2]);
 				writer.write("\n");
 			}
 			writer.close();
@@ -152,5 +156,6 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		}
 		
 	}
+	
 
 }
