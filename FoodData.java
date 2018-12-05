@@ -99,7 +99,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
-        // TODO : Complete
+        foodItemList.add(foodItem);
     }
 
     /*
@@ -108,8 +108,49 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> getAllFoodItems() {
-        // TODO : Complete
-        return null;
+        return foodItemList;
     }
+
+
+	@Override
+	public void saveFoodItems(String filename) {
+		List<String[]> al = new ArrayList<>(); 
+		List<FoodItem> output = new ArrayList<>();
+		List<String> sorter = new ArrayList<>();
+		for(int i = 0; i<foodItemList.size();i++) {
+			String[] object = new String[2];
+			String name = foodItemList.get(i).getName();
+			String ID = foodItemList.get(i).getID();
+			object[0] = name;
+			object[1] = ID;
+			al.add(object);
+			sorter.add(name);
+		}
+		
+		Collections.sort(sorter);
+		
+		for(int i = 0; i<foodItemList.size(); i++) {
+			String name = sorter.get(i);
+			for(int j = 0; j<al.size();j++) {
+				if(name.equals(al.get(j)[0])) {
+					String[] object = new String[3];
+					FoodItem food = new FoodItem(name, al.get(j)[1]);
+					output.add(food);
+				}			
+			}
+		}
+		
+		try {
+			FileWriter writer = new FileWriter(filename);
+			for(FoodItem food: output) {
+				writer.write(food.toString());
+				writer.write("\n");
+			}
+			writer.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
 
 }
