@@ -139,6 +139,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 					FoodItem food = new FoodItem( object[1], name);
 					object[2] = food.getNutrients().toString();
 					output.add(object);
+					al.remove(j);
 					break;
 				}			
 			}
