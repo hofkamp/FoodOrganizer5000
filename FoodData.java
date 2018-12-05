@@ -1,3 +1,12 @@
+package finalProject;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,7 +25,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     private HashMap<String, BPTree<Double, FoodItem>> indexes;
     
     
-     /**
+    /**
      * Public constructor
      */
     public FoodData() {
@@ -118,11 +127,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		List<String[]> output = new ArrayList<>();
 		List<String> sorter = new ArrayList<>();
 		for(int i = 0; i<foodItemList.size();i++) {
-			String[] object = new String[2];
+			String[] object = new String[3];
 			String name = foodItemList.get(i).getName();
 			String ID = foodItemList.get(i).getID();
 			object[0] = ID;
 			object[1] = name;
+			object[2] = foodItemList.get(i).getNutrients().toString();
 			al.add(object);
 			sorter.add(name.toLowerCase());
 		}
@@ -136,15 +146,14 @@ public class FoodData implements FoodDataADT<FoodItem> {
 					String[] object = new String[3];
 					object[0] = al.get(j)[0];
 					object[1] = name;
-					FoodItem food = new FoodItem( object[1], name);
-					object[2] = food.getNutrients().toString();
+					object[2] = al.get(j)[2];
 					output.add(object);
 					al.remove(j);
 					break;
 				}			
 			}
 		}
-		
+
 		try {
 			FileWriter writer = new FileWriter(filename);
 			for(String[] food: output) {
@@ -158,5 +167,4 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		
 	}
 	
-
 }
