@@ -78,7 +78,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public List<FoodItem> filterByName(String substring) {
     		//create a list object to store the filtered items
-        List<FoodItem> filteredItems = new ArrayList<>();
+        List<FoodItem> filteredItems = new ArrayList<FoodItem>();
         
         //for loop to parse through all the food objects 
         for(int i = 0; i<foodItemList.size(); i++ ) {
@@ -98,8 +98,33 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
-        // TODO : Complete
-        return null;
+    	List<FoodItem> filteredItems = new ArrayList<FoodItem>();
+        for(int i = 0; i<rules.size(); i++) {
+        		String rule = rules.get(i);
+        		String[] ruleSplit = rule.split(" ");
+        		String nutrient = ruleSplit[0];
+        		String comparator = ruleSplit[1];
+        		Double value =  Double.parseDouble(ruleSplit[2]);
+        		
+        		for(int j = 0; j< foodItemList.size(); j++) {
+        			FoodItem food = foodItemList.get(j);
+        			if(comparator.equals("<=")) {
+        				if(food.getNutrientValue(nutrient) <= value)
+        					filteredItems.add(food);
+        			}
+        		
+        			else if(comparator.equals(">=")) {
+        				if(food.getNutrientValue(nutrient) >= value)
+        					filteredItems.add(food);
+        			}
+        		
+        			else if(comparator.equals("==")) {
+        				if(food.getNutrientValue(nutrient) == value)
+        					filteredItems.add(food);
+        			}
+        		}
+        }
+        return filteredItems;        
     }
 
     /*
