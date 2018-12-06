@@ -1,3 +1,4 @@
+package finalProject;
 
 import java.util.ArrayList;
 
@@ -28,8 +29,9 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.value.ChangeListener;
 
+enum NUTRIENTS {Cal,Carb,Fat,Pro,Fib};
+
 public class Main extends Application {
-	MealItem temp = new MealItem();
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -51,45 +53,40 @@ public class Main extends Application {
 		Scene addScreen = new Scene(addLayout, 900, 600);
 		///////TEMP VARIABLES//////////////
 		ObservableList testFoodArray = FXCollections.observableArrayList();
-		FoodItem carrot = new FoodItem();
-		carrot.setName("Carrot");
-		carrot.setCal(10);
-		carrot.setCarb(5);
-		carrot.setFat(0);
-		carrot.setPro(2);
-		carrot.setFib(0);
+		FoodItem carrot = new FoodItem("Carrot","Carrot");
+		carrot.addNutrient("calories",10);
+		carrot.addNutrient("carbohydrates",5);
+		carrot.addNutrient("fat",0);
+		carrot.addNutrient("protein",2);
+		carrot.addNutrient("fiber",0);
 		
-		FoodItem lettuce = new FoodItem();
-		lettuce.setName("Lettuce");
-		lettuce.setCal(10);
-		lettuce.setCarb(4);
-		lettuce.setFib(3);
-		lettuce.setPro(3);
-		lettuce.setFat(1);
-		
-		FoodItem broccoli = new FoodItem();
-		broccoli.setName("Broccoli");
-		broccoli.setCal(15);
-		broccoli.setCarb(7);
-		broccoli.setFat(8);
-		broccoli.setFib(5);
-		broccoli.setPro(2);
+		FoodItem lettuce = new FoodItem("Lettuce","Lettuce");
+		lettuce.addNutrient("calories",10);
+		lettuce.addNutrient("carbohydrates",4);
+		lettuce.addNutrient("fat",3);
+		lettuce.addNutrient("protein",3);
+		lettuce.addNutrient("fiber",1);
+
+		FoodItem broccoli = new FoodItem("Broccoli","Broccoli");
+		broccoli.addNutrient("calories",15);
+		broccoli.addNutrient("carbohydrates",7);
+		broccoli.addNutrient("fat",8);
+		broccoli.addNutrient("protein",5);
+		broccoli.addNutrient("fiber",2);
 		
 		testFoodArray.addAll(carrot, lettuce, broccoli);
 		
 		ObservableList testMealArray =  FXCollections.observableArrayList();
-		MealItem salad = new MealItem();
-		salad.setName("Salad");
+		ArrayList tester = new ArrayList();
+		tester.add(carrot);
+		tester.add(lettuce);
+		tester.add(broccoli);
+		MealItem salad = new MealItem("Salad", tester);
 		salad.setCal(10);
 		salad.setCarb(5);
 		salad.setFat(0);
 		salad.setFib(7);
 		salad.setPro(2);
-		ArrayList tester = new ArrayList();
-		tester.add("carrot");
-		tester.add("lettuce");
-		tester.add("broccoli");
-		salad.setIngr(tester);
 		testMealArray.add(salad);
 		
 		
@@ -693,7 +690,7 @@ public class Main extends Application {
 				tempPro.setText(temp.getPro() +"");
 				tempFat.setText(temp.getFat() +"");
 				tempFib.setText(temp.getFib() +"");
-				ObservableList tempList = FXCollections.observableArrayList(temp.getIngr());
+				ObservableList tempList = FXCollections.observableArrayList(temp.getIngredients());
 				ingrList.setItems(tempList);
 				//here we are going to have a global variable that will be a temp variable
 				//that will be changed when it is clicked on. 
@@ -1045,11 +1042,11 @@ public class Main extends Application {
 		primaryStage.setScene(homeScreen);
 		
 		////////////////// CSS STUFF ///////////////////
-		homeScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
-		foodScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
-		queryScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
-		addScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
-		mealScreen.getStylesheets().add(getClass().getResource("styleFile.css").toExternalForm());
+		homeScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
+		foodScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
+		queryScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
+		addScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
+		mealScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		
 		
 		/////////////////END ALL THIS STUFF////////////
