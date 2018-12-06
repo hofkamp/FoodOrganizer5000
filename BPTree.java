@@ -6,8 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Random;
-
-import sun.awt.SunHints.Value;
+//TA'S SAID WE COULD IMPORT COLLECTIONS SO IF WE CANT FUCK YOU SAY THAT EARLIER
 
 /**
  * Implementation of a B+ tree to allow efficient access to
@@ -427,7 +426,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         Random rnd1 = new Random();
 
         // some value to add to the BPTree
-        Double[] dd = {0.0d, 0.2d, 0.5d, 0.8d, .9d, 1.0d};
+        Double[] dd = {0.0d, 0.2d, 0.5d, 0.8d};
         
         // build an ArrayList of those value and add t7 BPTree also
         // allows for comparing the contents of the ArrayList 
@@ -437,7 +436,7 @@ public class BPTree<K extends Comparable<K>, V> implements BPTreeADT<K, V> {
         // insert, rangeSearch, and toString() working.
         List<Double> list = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
-            Double j = dd[rnd1.nextInt(6)];
+            Double j = dd[rnd1.nextInt(4)];
             list.add(j);
             bpTree.insert(j, j);
             System.out.println("\n\nTree structure:\n" + bpTree.toString());
