@@ -99,33 +99,51 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
     	List<FoodItem> filteredItems = new ArrayList<FoodItem>();
-        for(int i = 0; i<rules.size(); i++) {
-        		String rule = rules.get(i);
-        		String[] ruleSplit = rule.split(" ");
-        		String nutrient = ruleSplit[0];
-        		String comparator = ruleSplit[1];
-        		Double value =  Double.parseDouble(ruleSplit[2]);
-        		
-        		for(int j = 0; j< foodItemList.size(); j++) {
-        			FoodItem food = foodItemList.get(j);
-        			if(comparator.equals("<=")) {
-        				if(food.getNutrientValue(nutrient) <= value)
-        					filteredItems.add(food);
-        			}
-        		
-        			else if(comparator.equals(">=")) {
-        				if(food.getNutrientValue(nutrient) >= value)
-        					filteredItems.add(food);
-        			}
-        		
-        			else if(comparator.equals("==")) {
-        				if(food.getNutrientValue(nutrient) == value)
-        					filteredItems.add(food);
-        			}
+     	List<FoodItem> finalItems = new ArrayList<FoodItem>();
+     	 for(int i = 0; i<rules.size(); i++) {
+     		String rule = rules.get(i);
+     		String[] ruleSplit = rule.split(" ");
+     		String nutrient = ruleSplit[0];
+     		String comparator = ruleSplit[1];
+     		Double value =  Double.parseDouble(ruleSplit[2]);
+     		
+     		for(int j = 0; j< foodItemList.size(); j++) {
+     			FoodItem food = foodItemList.get(j);
+     			if(comparator.equals("<=")) {
+     				if(food.getNutrientValue(nutrient) <= value)
+     					filteredItems.add(food);
+     			}
+     		
+     			else if(comparator.equals(">=")) {
+     				if(food.getNutrientValue(nutrient) >= value)
+     					filteredItems.add(food);
+     			}
+     		
+     			else if(comparator.equals("==")) {
+     				if(food.getNutrientValue(nutrient) == value)
+     					filteredItems.add(food);
+     			}
+     			}
+     	 	}
+        		if(rules.size() == 1) {
+        			return filteredItems;
         		}
-        }
-        return filteredItems;        
-    }
+        		
+        		for(int f = 0; f<filteredItems.size(); f++) {
+        			int count = 0;
+            			for(int y = f+1; y<filteredItems.size(); y++) {
+            				if(filteredItems.get(f).getID().equals(filteredItems.get(y).getID())){
+        					count ++;				
+            				}
+            			}
+            			if(count == rules.size()-1) {
+            				finalItems.add(filteredItems.get(f));
+            			}
+        			
+        		}        
+        return finalItems;             
+            
+}
 
     /*
      * (non-Javadoc)
