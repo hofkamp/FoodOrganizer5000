@@ -261,6 +261,20 @@ public class Main extends Application {
 		  queryLayout.setAlignment(fibA, Pos.CENTER_LEFT);
 		  queryLayout.setAlignment(fibF1, Pos.CENTER_LEFT);
 		  
+		  // Enter button
+		  Button enter = new Button("Enter");
+		  enter.setOnAction(new EventHandler<ActionEvent>() {
+		  public void handle(ActionEvent event) {
+			  primaryStage.setScene(foodScreen);
+		  }
+		  });
+		  enter.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		  enter.setTranslateX(-40);
+		  enter.setTranslateY(-30);
+		  enter.setMinSize(50, 20);			
+		  enter.setMaxSize(100, 50);			
+		  queryLayout.getChildren().add(enter);			
+		  queryLayout.setAlignment(enter, Pos.CENTER_RIGHT);
 		  
 		  //food list button 
 		  Button foodBtn3 = new Button("Food List");
@@ -615,8 +629,12 @@ public class Main extends Application {
 		tempName.setFont(Font.font(25));
 		tempName.setTranslateX(560);
 		tempName.setTranslateY(-90);
+		TextField name = new TextField();
+		name.setMaxSize(100, 25);
+		name.setTranslateX(-240);
+		name.setTranslateY(-90);
 		ListView<String> ingrList = new ListView<>();
-		ingrList.setMaxSize(100, 25);
+		ingrList.setMaxSize(100, 31);
 		ingrList.setTranslateX(-240);
 		ingrList.setTranslateY(-50);
 		Label tempCal = new Label();
@@ -639,8 +657,14 @@ public class Main extends Application {
 		tempFib.setFont(Font.font(25));
 		tempFib.setTranslateX(-290);
 		tempFib.setTranslateY(150);
-		mealLayout.getChildren().addAll(tempName, tempCal, 
-				tempCarb, tempPro, tempFat, tempFib, ingrList);
+		mealLayout.getChildren().addAll(name, tempCal, tempCarb, tempPro, tempFat, tempFib, ingrList);
+		mealLayout.setAlignment(name, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempCal, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempCarb, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempPro, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempFat, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempFib, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(ingrList, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempName, Pos.CENTER_LEFT);
 		mealLayout.setAlignment(tempCal, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempCarb, Pos.CENTER_RIGHT);
@@ -799,7 +823,26 @@ public class Main extends Application {
 		foodLayout.getChildren().add(table2);
 		foodLayout.setAlignment(table2, Pos.TOP_LEFT);
 		
+		// Save button		
+		Button save = new Button("Save");
+		save.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		save.setTranslateX(-230);
+		save.setTranslateY(-15);
+		save.setMinSize(50, 20);
+		save.setMaxSize(100, 50);		
+		foodLayout.getChildren().add(save);		
+		foodLayout.setAlignment(save, Pos.BOTTOM_RIGHT);
 		
+		// Enter button
+		Button enter2 = new Button("Enter");
+		enter2.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		enter2.setTranslateX(-100);
+		enter2.setTranslateY(-15);
+		enter2.setMinSize(50, 20);
+		enter2.setMaxSize(100, 50);		
+		foodLayout.getChildren().add(enter2);		
+		foodLayout.setAlignment(enter2, Pos.BOTTOM_RIGHT);	
+
 		//meal Button
 		Button mealBtn1 = new Button("Meal List");
 		mealBtn1.setOnAction(new EventHandler<ActionEvent>(){
