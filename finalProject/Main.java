@@ -874,16 +874,6 @@ public class Main extends Application {
         foodLayout.setAlignment(chooseMeal, Pos.BOTTOM_RIGHT);
         chooseMeal.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
-//                TableView table = new TableView();
-//                table.setEditable(true);
-//                TableColumn mealColumn = new TableColumn("Meals");
-//                mealColumn.setMinWidth(300);
-//                mealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-//                table.getColumns().add(mealColumn);
-//                table.setTranslateX(75);
-//                table.setTranslateY(150);
-//                table.setMaxSize(300, 400);
-//                table.setItems(testMealArray);
                 primaryStage.setScene(chooseScreen);
             }
         });
@@ -1010,6 +1000,38 @@ public class Main extends Application {
             }
         });
 		chooseLayout.getChildren().add(continueButton);
+		
+		Label addNewMeal = new Label("Add a new food");
+		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		addNewMeal.setTranslateX(100);
+		addNewMeal.setTranslateY(0);
+		chooseLayout.getChildren().add(addNewMeal);
+		
+		TextField newMealF = new TextField();
+		newMealF.setTranslateX(100);
+		newMealF.setTranslateY(50);
+		newMealF.setMinSize(200, 30);
+		newMealF.setMaxSize(200, 30);
+		chooseLayout.getChildren().add(newMealF);
+		
+		Button addMealButton = new Button("Add new meal");
+		addMealButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		addMealButton.setTranslateX(100);
+		addMealButton.setTranslateY(100);
+		addMealButton.setMaxSize(100, 50);
+		addMealButton.setMinSize(100, 50);
+		chooseLayout.getChildren().add(addMealButton);
+		addMealButton.setOnAction(new EventHandler<ActionEvent>() {
+		    public void handle(ActionEvent event) {
+		        String newMealName = newMealF.getText();
+		        boolean contains = false;
+		        for (Object meal : testMealArray)
+		            if (((MealItem)meal).getName().equals(newMealName))
+		                contains = true;
+		        if (!contains)
+		            testMealArray.add(new MealItem(newMealF.getText(),new ArrayList<FoodItem>()));
+		    }
+		});
 		
 		////////////////////HOME LAYOUT/////////////////////////
 		//exit Button
