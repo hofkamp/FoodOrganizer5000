@@ -37,6 +37,8 @@ public class Main extends Application {
 		launch(args);
 	}
 	
+	MealItem chosenMeal = null;
+	
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Food Organizer 5000");
 		BorderPane borderPane = new BorderPane();
@@ -46,11 +48,13 @@ public class Main extends Application {
 		StackPane mealLayout = new StackPane();
 		StackPane queryLayout = new StackPane();
 		StackPane addLayout = new StackPane();
+		StackPane chooseLayout = new StackPane();
 		Scene homeScreen = new Scene(homeLayout, 900, 600);
 		Scene foodScreen = new Scene(foodLayout, 900, 600);
 		Scene mealScreen = new Scene(mealLayout, 900, 600);
 		Scene queryScreen = new Scene(queryLayout, 900, 600);
 		Scene addScreen = new Scene(addLayout, 900, 600);
+		Scene chooseScreen = new Scene(chooseLayout,900,600);
 		///////TEMP VARIABLES//////////////
 		ObservableList testFoodArray = FXCollections.observableArrayList();
 		FoodItem carrot = new FoodItem("Carrot","Carrot");
@@ -839,6 +843,50 @@ public class Main extends Application {
 		enter2.setMaxSize(100, 50);		
 		foodLayout.getChildren().add(enter2);		
 		foodLayout.setAlignment(enter2, Pos.BOTTOM_RIGHT);	
+		
+		// addToMeal button
+        Button addToMeal = new Button("Add to meal");
+        addToMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
+        addToMeal.setTranslateX(-600);
+        addToMeal.setTranslateY(-15);
+        addToMeal.setMinSize(50, 20);
+        addToMeal.setMaxSize(160, 50);     
+        foodLayout.getChildren().add(addToMeal);       
+        foodLayout.setAlignment(addToMeal, Pos.BOTTOM_RIGHT);
+        addToMeal.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+                FoodItem foodForMeal = (FoodItem)table2.getSelectionModel().getSelectedItem();
+                if (foodForMeal != null) {
+                    System.out.println(foodForMeal.getName());
+                    //chosenMeal.getIngredients().add(foodForMeal);
+                }
+            }
+        });
+        
+        // chooseMeal button
+        Button chooseMeal = new Button("Choose Meal");
+        chooseMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
+        chooseMeal.setTranslateX(-380);
+        chooseMeal.setTranslateY(-15);
+        chooseMeal.setMinSize(50, 20);
+        chooseMeal.setMaxSize(160, 50);     
+        foodLayout.getChildren().add(chooseMeal);       
+        foodLayout.setAlignment(chooseMeal, Pos.BOTTOM_RIGHT);
+        chooseMeal.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+//                TableView table = new TableView();
+//                table.setEditable(true);
+//                TableColumn mealColumn = new TableColumn("Meals");
+//                mealColumn.setMinWidth(300);
+//                mealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+//                table.getColumns().add(mealColumn);
+//                table.setTranslateX(75);
+//                table.setTranslateY(150);
+//                table.setMaxSize(300, 400);
+//                table.setItems(testMealArray);
+                primaryStage.setScene(chooseScreen);
+            }
+        });
 
 		//meal Button
 		Button mealBtn1 = new Button("Meal List");
@@ -933,6 +981,36 @@ public class Main extends Application {
 		foodLayout.getChildren().add(title1);
 		foodLayout.setAlignment(title1, Pos.TOP_LEFT);
 		//foodScreen = new Scene(foodLayout, 900, 600);
+		////////////////////CHOOSE MEAL/////////////////////////
+		TableView chooseTable = new TableView();
+		chooseTable.setEditable(true);
+		TableColumn chooseMealColumn = new TableColumn("meals");
+		chooseMealColumn.setMinWidth(300);
+        chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		chooseTable.getColumns().add(chooseMealColumn);
+		chooseTable.setTranslateX(-200);
+		chooseTable.setTranslateY(0);
+		chooseTable.setMaxSize(300, 400);
+		chooseTable.setItems(testMealArray);
+		chooseLayout.getChildren().add(chooseTable);
+		
+		Button continueButton = new Button("Continue with meal");
+		continueButton.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		continueButton.setTranslateX(100);
+		continueButton.setTranslateY(-100);
+		continueButton.setMaxSize(230, 50);
+		continueButton.setMinSize(180, 30);
+		continueButton.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+                chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+                if (chosenMeal != null) {
+                    System.out.println(chosenMeal.getName());
+                    primaryStage.setScene(foodScreen);
+                }
+            }
+        });
+		chooseLayout.getChildren().add(continueButton);
+		
 		////////////////////HOME LAYOUT/////////////////////////
 		//exit Button
 		Button exitBtn = new Button("Quit");
