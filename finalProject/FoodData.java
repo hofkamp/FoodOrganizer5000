@@ -1,5 +1,6 @@
 package finalProject;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -31,6 +32,16 @@ public class FoodData implements FoodDataADT<FoodItem> {
     public FoodData() {
         foodItemList = new ArrayList<>();
         indexes = new HashMap<String, BPTree<Double,FoodItem>>();
+        BPTree<Double, FoodItem> cals = new BPTree<>(6);
+        BPTree<Double, FoodItem> fat = new BPTree<>(6);
+        BPTree<Double, FoodItem> carb = new BPTree<>(6);
+        BPTree<Double, FoodItem> fib = new BPTree<>(6);
+        BPTree<Double, FoodItem> pro = new BPTree<>(6);
+        indexes.put("calories", cals);
+        indexes.put("fat", fat);
+        indexes.put("carbohydrates", carb);
+        indexes.put("fiber", fib);
+        indexes.put("protein", pro);
     }
     
     
@@ -41,32 +52,46 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void loadFoodItems(String filePath) {
         Path pathToFile = Paths.get(filePath);
-        
         //create a buffered reader using try with resources
-        try(BufferedReader reader = Files.newBufferedReader(pathToFile)){
-        		
+        try{
+        	BufferedReader reader = Files.newBufferedReader(pathToFile);	
         	//read the first line of the file
         		String line = reader.readLine();
         		
         	//read all lines of the file
         		while(line != null) {
         			//split the string in to an array of values using the comma as a delimiter
+     
         			
-        			String[] foodArray = line.split(",");
+        			String[] foodArray = line.split(",", 12);
+        			if(foodArray[0].compareTo("") == 0)
+        				break;
+        			
         			FoodItem food = new FoodItem(foodArray[0], foodArray[1]);
         			
         			//add the nutrients to the food object
-        			food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3]));
-        			food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5]));
-        			food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7]));
-        			food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9]));
-        			food.addNutrient(foodArray[10], Double.parseDouble(foodArray[11]));
+        			
+        			food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3])); //calories
+        			food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5])); //fat
+        			food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7])); //carb
+        			food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9])); //fiber
+        			food.addNutrient(foodArray[10], Double.parseDouble(foodArray[11])); //protein 
+        			
+        			indexes.get("calories").insert(Double.parseDouble(foodArray[3]), food);
+        			indexes.get("fat").insert(Double.parseDouble(foodArray[5]), food);
+        			indexes.get("carbohydrates").insert(Double.parseDouble(foodArray[7]), food);
+        			indexes.get("fiber").insert(Double.parseDouble(foodArray[9]), food);
+        			indexes.get("protein").insert(Double.parseDouble(foodArray[11]), food);
         			
         			foodItemList.add(food);
+ 
+        			//if(reader.readLine() == null)
+        			//break;
         			line = reader.readLine();
+        			
         		}
         	
-        } catch (IOException e) {
+        } catch (Exception e) {
 			e.printStackTrace();
 		}
     }
@@ -99,33 +124,33 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public List<FoodItem> filterByNutrients(List<String> rules) {
     	List<FoodItem> filteredItems = new ArrayList<FoodItem>();
-        for(int i = 0; i<rules.size(); i++) {
-        		String rule = rules.get(i);
-        		String[] ruleSplit = rule.split(" ");
-        		String nutrient = ruleSplit[0];
-        		String comparator = ruleSplit[1];
-        		Double value =  Double.parseDouble(ruleSplit[2]);
-        		
-        		for(int j = 0; j< foodItemList.size(); j++) {
-        			FoodItem food = foodItemList.get(j);
-        			if(comparator.equals("<=")) {
-        				if(food.getNutrientValue(nutrient) <= value)
-        					filteredItems.add(food);
-        			}
-        		
-        			else if(comparator.equals(">=")) {
-        				if(food.getNutrientValue(nutrient) >= value)
-        					filteredItems.add(food);
-        			}
-        		
-        			else if(comparator.equals("==")) {
-        				if(food.getNutrientValue(nutrient) == value)
-        					filteredItems.add(food);
-        			}
-        		}
-        }
-        return filteredItems;        
-    }
+    	List<FoodItem> finalItems = new ArrayList<FoodItem>();
+    	for(int i = 0; i < rules.size(); i++) {
+    		String rule = rules.get(i);
+    		String[] ruleSplit = rule.split(" ");
+    		String nutrient = ruleSplit[0];
+    		String comparator = ruleSplit[1];
+    		Double value = Double.parseDouble(ruleSplit[2]);
+    		filteredItems.addAll(indexes.get(nutrient).rangeSearch(value, comparator));
+    	}
+    	if(rules.size() == 1) {
+			return filteredItems;
+		}
+		
+		for(int f = 0; f<filteredItems.size(); f++) {
+			int count = 0;
+    			for(int y = f+1; y<filteredItems.size(); y++) {
+    				if(filteredItems.get(f).getID().equals(filteredItems.get(y).getID())){
+					count ++;				
+    				}
+    			}
+    			if(count == rules.size()-1) {
+    				finalItems.add(filteredItems.get(f));
+    			}
+			
+		}
+         return finalItems;   
+}
 
     /*
      * (non-Javadoc)
@@ -191,5 +216,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		}
 		
 	}
+	
+	
 	
 }
