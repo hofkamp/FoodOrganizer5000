@@ -22,11 +22,13 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 
 enum NUTRIENTS {Cal,Carb,Fat,Pro,Fib};
@@ -38,6 +40,7 @@ public class Main extends Application {
 	}
 	
 	MealItem chosenMeal = null;
+    private boolean queryOn = false;
 	
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Food Organizer 5000");
@@ -799,11 +802,11 @@ public class Main extends Application {
 		////////////////////FOOD LIST LAYOUT////////////////////
 		
 		TableView table2 = new TableView();
-		table2.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		table2.setEditable(true);
 		TableColumn foodCol = new TableColumn("Food");
 		foodCol.setMinWidth(200);
 		foodCol.setMaxWidth(200);
+		foodCol.setSortType(TableColumn.SortType.ASCENDING);
 		TableColumn calCol = new TableColumn("Calories (cal)");
 		TableColumn carbCol = new TableColumn ("Carbohydrates (g)");
 		TableColumn proCol = new TableColumn ("Protein (g)");
@@ -812,9 +815,9 @@ public class Main extends Application {
 		fibCol.setMinWidth(100);
 		fibCol.setMaxWidth(100);
 		table2.getColumns().addAll(foodCol, calCol, carbCol, proCol, fatCol, fibCol);
-		table2.setTranslateX(100);
+		table2.setTranslateX(50);
 		table2.setTranslateY(150);
-		table2.setMaxSize(700, 400);
+		table2.setMaxSize(635, 400);
 		foodCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 		calCol.setCellValueFactory(new PropertyValueFactory<>("cal"));
 		carbCol.setCellValueFactory(new PropertyValueFactory<>("carb"));
@@ -822,53 +825,102 @@ public class Main extends Application {
 		fibCol.setCellValueFactory(new PropertyValueFactory<>("fib"));
 		proCol.setCellValueFactory(new PropertyValueFactory<>("pro"));
 		table2.setItems(testFoodArray);
+		table2.getSortOrder().add(foodCol);
+		table2.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		foodLayout.getChildren().add(table2);
 		foodLayout.setAlignment(table2, Pos.TOP_LEFT);
-		
-		// Save button		
+		// Save button 
 		Button save = new Button("Save");
+		save.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		        save.setEffect(shadow);
+		    });
+		save.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		        save.setEffect(null);
+		    });
 		save.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		save.setTranslateX(-230);
-		save.setTranslateY(-15);
+		save.setTranslateX(-25);
+		save.setTranslateY(-25);
 		save.setMinSize(50, 20);
-		save.setMaxSize(100, 50);		
-		foodLayout.getChildren().add(save);		
-		foodLayout.setAlignment(save, Pos.BOTTOM_RIGHT);
-		
+		save.setMaxSize(100, 50); 
+		foodLayout.getChildren().add(save); 
+		foodLayout.setAlignment(save, Pos.CENTER_RIGHT);
 		// Enter button
 		Button enter2 = new Button("Enter");
+		enter2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		        enter2.setEffect(shadow);
+		    });
+		enter2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		        enter2.setEffect(null);
+		    });
 		enter2.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		enter2.setTranslateX(-100);
-		enter2.setTranslateY(-15);
+		enter2.setTranslateX(-25);
+		enter2.setTranslateY(-100);
 		enter2.setMinSize(50, 20);
-		enter2.setMaxSize(100, 50);		
-		foodLayout.getChildren().add(enter2);		
-		foodLayout.setAlignment(enter2, Pos.BOTTOM_RIGHT);	
+		enter2.setMaxSize(100, 50); 
+		foodLayout.getChildren().add(enter2); 
+		foodLayout.setAlignment(enter2, Pos.CENTER_RIGHT); 
+		// Unfilter button
+		Button unfilter = new Button ("Unfilter");
+		unfilter.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		    unfilter.setEffect(shadow);
+		});
+		unfilter.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		    unfilter.setEffect(null);
+		});
+		unfilter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		unfilter.setTranslateX(-25);
+		unfilter.setTranslateY(50);
+		unfilter.setMinSize(50, 20);
+		unfilter.setMaxSize(100, 50);
+		foodLayout.getChildren().add(unfilter);
+		foodLayout.setAlignment(unfilter, Pos.CENTER_RIGHT);
+		//filter status label
+		Label filterBox = new Label("Filter Status:");
+		filterBox.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		filterBox.setTranslateX(-15);
+		filterBox.setTranslateY(100);
+		foodLayout.getChildren().add(filterBox);
+		foodLayout.setAlignment(filterBox, Pos.CENTER_RIGHT);
+		//filter status
+		Label filterStatus = new Label();
+		filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+		    String s = " ";
+		    if(queryOn)
+		        s = "ON";
+		    else
+		        s = "OFF";
+		    return s;
+		}));
+		filterStatus.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		filterStatus.setTranslateX(-25);
+		filterStatus.setTranslateY(125);
+		foodLayout.getChildren().add(filterStatus);
+		foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);	
 		
-		// addToMeal button
-        Button addToMeal = new Button("Add to meal");
-        addToMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
-        addToMeal.setTranslateX(-600);
-        addToMeal.setTranslateY(-15);
-        addToMeal.setMinSize(50, 20);
-        addToMeal.setMaxSize(160, 50);     
-        foodLayout.getChildren().add(addToMeal);       
-        foodLayout.setAlignment(addToMeal, Pos.BOTTOM_RIGHT);
-        addToMeal.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event) {
-                FoodItem foodForMeal = (FoodItem)table2.getSelectionModel().getSelectedItem();
-                if (foodForMeal != null) {
-                    System.out.println(foodForMeal.getName());
-                    //chosenMeal.getIngredients().add(foodForMeal);
-                }
-            }
-        });
+//		// addToMeal button
+//        Button addToMeal = new Button("Add to meal");
+//        addToMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
+//        addToMeal.setTranslateX(-600);
+//        addToMeal.setTranslateY(-15);
+//        addToMeal.setMinSize(50, 20);
+//        addToMeal.setMaxSize(160, 50);     
+//        foodLayout.getChildren().add(addToMeal);       
+//        foodLayout.setAlignment(addToMeal, Pos.BOTTOM_RIGHT);
+//        addToMeal.setOnAction(new EventHandler<ActionEvent>(){
+//            public void handle(ActionEvent event) {
+//                FoodItem foodForMeal = (FoodItem)table2.getSelectionModel().getSelectedItem();
+//                if (foodForMeal != null) {
+//                    System.out.println(foodForMeal.getName());
+//                    //chosenMeal.getIngredients().add(foodForMeal);
+//                }
+//            }
+//        });
         
         // chooseMeal button
         Button chooseMeal = new Button("Choose Meal");
         chooseMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
-        chooseMeal.setTranslateX(-380);
-        chooseMeal.setTranslateY(-15);
+        chooseMeal.setTranslateX(-25);
+        chooseMeal.setTranslateY(-100);
         chooseMeal.setMinSize(50, 20);
         chooseMeal.setMaxSize(160, 50);     
         foodLayout.getChildren().add(chooseMeal);       
