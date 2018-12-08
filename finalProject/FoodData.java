@@ -39,7 +39,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
         BPTree<Double, FoodItem> pro = new BPTree<>(6);
         indexes.put("calories", cals);
         indexes.put("fat", fat);
-        indexes.put("carbohydrates", carb);
+        indexes.put("carbohydrate", carb);
         indexes.put("fiber", fib);
         indexes.put("protein", pro);
     }
@@ -79,7 +79,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			
         			indexes.get("calories").insert(Double.parseDouble(foodArray[3]), food);
         			indexes.get("fat").insert(Double.parseDouble(foodArray[5]), food);
-        			indexes.get("carbohydrates").insert(Double.parseDouble(foodArray[7]), food);
+        			indexes.get("carbohydrate").insert(Double.parseDouble(foodArray[7]), food);
         			indexes.get("fiber").insert(Double.parseDouble(foodArray[9]), food);
         			indexes.get("protein").insert(Double.parseDouble(foodArray[11]), food);
         			
@@ -158,7 +158,12 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void addFoodItem(FoodItem foodItem) {
-        foodItemList.add(foodItem);
+    	   foodItemList.add(foodItem);
+        indexes.get("calories").insert(foodItem.getNutrientValue("calories"), foodItem);
+   		indexes.get("fat").insert(foodItem.getNutrientValue("fat"), foodItem);
+   		indexes.get("carbohydrate").insert(foodItem.getNutrientValue("carbohydrate"), foodItem);
+   		indexes.get("fiber").insert(foodItem.getNutrientValue("fiber"), foodItem);
+   		indexes.get("protein").insert(foodItem.getNutrientValue("protein"), foodItem);
     }
 
     /*
