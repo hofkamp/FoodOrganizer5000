@@ -35,12 +35,16 @@ enum NUTRIENTS {Cal,Carb,Fat,Pro,Fib};
 
 public class Main extends Application {
 	
+    private String filePath = "foodItems.txt";
+    private FoodData foodData = new FoodData();
+    private ArrayList<FoodItem> foodItems = new ArrayList<FoodItem>();
+    private ArrayList<MealItem> mealItems = new ArrayList<MealItem>();
+    private MealItem chosenMeal = null;
+    private boolean queryOn = false;
+    
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
-	MealItem chosenMeal = null;
-    private boolean queryOn = false;
 	
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Food Organizer 5000");
@@ -58,6 +62,10 @@ public class Main extends Application {
 		Scene queryScreen = new Scene(queryLayout, 900, 600);
 		Scene addScreen = new Scene(addLayout, 900, 600);
 		Scene chooseScreen = new Scene(chooseLayout,900,600);
+		
+		foodData.loadFoodItems(filePath);
+		foodItems = (ArrayList<FoodItem>) foodData.getAllFoodItems();
+		
 		///////TEMP VARIABLES//////////////
 		ObservableList testFoodArray = FXCollections.observableArrayList();
 		FoodItem carrot = new FoodItem("Carrot","Carrot");
@@ -839,13 +847,13 @@ public class Main extends Application {
 		    });
 		save.setFont(Font.font("Arial", FontWeight.BOLD,20));
 		save.setTranslateX(-25);
-		save.setTranslateY(-25);
-		save.setMinSize(50, 20);
-		save.setMaxSize(100, 50); 
+		save.setTranslateY(-50);
+		save.setMinSize(160, 50);
+		//save.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(save); 
 		foodLayout.setAlignment(save, Pos.CENTER_RIGHT);
 		// Enter button
-		Button enter2 = new Button("Enter");
+		Button enter2 = new Button("Add to Meal");
 		enter2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		        enter2.setEffect(shadow);
 		    });
@@ -854,9 +862,9 @@ public class Main extends Application {
 		    });
 		enter2.setFont(Font.font("Arial", FontWeight.BOLD,20));
 		enter2.setTranslateX(-25);
-		enter2.setTranslateY(-100);
-		enter2.setMinSize(50, 20);
-		enter2.setMaxSize(100, 50); 
+		enter2.setTranslateY(-125);
+		enter2.setMinSize(160, 50);
+		//enter2.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(enter2); 
 		foodLayout.setAlignment(enter2, Pos.CENTER_RIGHT); 
 		// Unfilter button
@@ -869,31 +877,31 @@ public class Main extends Application {
 		});
 		unfilter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		unfilter.setTranslateX(-25);
-		unfilter.setTranslateY(50);
-		unfilter.setMinSize(50, 20);
-		unfilter.setMaxSize(100, 50);
+		unfilter.setTranslateY(25);
+		unfilter.setMinSize(160, 50);
+		//unfilter.setMaxSize(100, 50);
 		foodLayout.getChildren().add(unfilter);
 		foodLayout.setAlignment(unfilter, Pos.CENTER_RIGHT);
 		//filter status label
 		Label filterBox = new Label("Filter Status:");
 		filterBox.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		filterBox.setTranslateX(-15);
-		filterBox.setTranslateY(100);
-		foodLayout.getChildren().add(filterBox);
-		foodLayout.setAlignment(filterBox, Pos.CENTER_RIGHT);
+		filterBox.setTranslateX(-25);
+		filterBox.setTranslateY(75);
+		//foodLayout.getChildren().add(filterBox);
+		//foodLayout.setAlignment(filterBox, Pos.CENTER_RIGHT);
 		//filter status
 		Label filterStatus = new Label();
 		filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
 		    String s = " ";
 		    if(queryOn)
-		        s = "ON";
+		        s = "Filter Status: ON ";
 		    else
-		        s = "OFF";
+		        s = "Filter Status: OFF";
 		    return s;
 		}));
 		filterStatus.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		filterStatus.setTranslateX(-25);
-		filterStatus.setTranslateY(125);
+		filterStatus.setTranslateY(75);
 		foodLayout.getChildren().add(filterStatus);
 		foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);	
 		
@@ -915,12 +923,27 @@ public class Main extends Application {
 //                }
 //            }
 //        });
+		
+		 Label currentMealText = new Label("Adding to This Meal:");
+	        currentMealText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+	        currentMealText.setTranslateX(-15);
+	        currentMealText.setTranslateY(-115);
+	        foodLayout.getChildren().add(currentMealText);
+	        foodLayout.setAlignment(currentMealText, Pos.BOTTOM_RIGHT);
+	        
+	    Label currentMeal = new Label("none");
+	        currentMeal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+	        currentMeal.setTranslateX(-25);
+	        currentMeal.setTranslateY(-90);
+	        currentMeal.setMaxWidth(160);
+	        foodLayout.getChildren().add(currentMeal);
+	        foodLayout.setAlignment(currentMeal, Pos.BOTTOM_RIGHT);
         
         // chooseMeal button
         Button chooseMeal = new Button("Choose Meal");
         chooseMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
         chooseMeal.setTranslateX(-25);
-        chooseMeal.setTranslateY(-100);
+        chooseMeal.setTranslateY(-150);
         chooseMeal.setMinSize(50, 20);
         chooseMeal.setMaxSize(160, 50);     
         foodLayout.getChildren().add(chooseMeal);       
@@ -929,6 +952,15 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 primaryStage.setScene(chooseScreen);
             }
+        });
+        
+       
+        
+        chooseMeal.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+            chooseMeal.setEffect(shadow);
+        });
+        chooseMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+            chooseMeal.setEffect(null);
         });
 
 		//meal Button
@@ -1052,9 +1084,15 @@ public class Main extends Application {
                 }
             }
         });
+		continueButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		    continueButton.setEffect(shadow);
+        });
+		continueButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		    continueButton.setEffect(null);
+        });
 		chooseLayout.getChildren().add(continueButton);
 		
-		Label addNewMeal = new Label("Add a new food");
+		Label addNewMeal = new Label("Add a new meal");
 		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		addNewMeal.setTranslateX(100);
 		addNewMeal.setTranslateY(0);
@@ -1071,8 +1109,8 @@ public class Main extends Application {
 		addMealButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		addMealButton.setTranslateX(100);
 		addMealButton.setTranslateY(100);
-		addMealButton.setMaxSize(100, 50);
-		addMealButton.setMinSize(100, 50);
+        addMealButton.setMaxSize(180, 50);
+        addMealButton.setMinSize(180, 30);
 		chooseLayout.getChildren().add(addMealButton);
 		addMealButton.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent event) {
@@ -1085,6 +1123,12 @@ public class Main extends Application {
 		            testMealArray.add(new MealItem(newMealF.getText(),new ArrayList<FoodItem>()));
 		    }
 		});
+		addMealButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		    addMealButton.setEffect(shadow);
+        });
+		addMealButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		    addMealButton.setEffect(null);
+        });
 		
 		////////////////////HOME LAYOUT/////////////////////////
 		//exit Button
@@ -1200,6 +1244,7 @@ public class Main extends Application {
 		queryScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		addScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		mealScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
+		chooseScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		
 		
 		/////////////////END ALL THIS STUFF////////////
