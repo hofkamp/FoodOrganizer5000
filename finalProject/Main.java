@@ -799,6 +799,7 @@ public class Main extends Application {
 		////////////////////FOOD LIST LAYOUT////////////////////
 		
 		TableView table2 = new TableView();
+		table2.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		table2.setEditable(true);
 		TableColumn foodCol = new TableColumn("Food");
 		foodCol.setMinWidth(200);
