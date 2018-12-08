@@ -494,6 +494,52 @@ public class Main extends Application {
 		
 		//enter button
 		Button entrBtn = new Button("ENTER");
+		entrBtn.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent e) {
+
+				 String pathT = fileF.getText();
+				String nameT = foodF.getText();
+				Double carbsT = Double.parseDouble(carbF.getText());
+				Double caloriesT = Double.parseDouble(calF.getText());
+				Double fatT = Double.parseDouble(fatF.getText());
+				Double proteinT = Double.parseDouble(proF.getText());
+				Double fiberT = Double.parseDouble(fibF.getText());
+				FoodData data = new FoodData();
+				
+				if(!nameT.isEmpty() && pathT.isEmpty()) {
+					FoodItem food = new FoodItem(nameT.hashCode()+ "", nameT);
+					food.addNutrient("carbohydrate", carbsT);
+					food.addNutrient("calories", caloriesT);
+					food.addNutrient("fat", fatT);
+					food.addNutrient("protein", proteinT);
+					food.addNutrient("fiber", fiberT);	
+					data.addFoodItem(food);
+					foodItems.add(food);
+					foodTableItem tableFood = new foodTableItem(food);
+					tableItems.add(tableFood);
+				}
+				
+				if (nameT.isEmpty() && !pathT.isEmpty()) {	
+					List<FoodItem> loadedFoods = new ArrayList<FoodItem>();
+					data.loadFoodItems(pathT);
+					loadedFoods = data.getAllFoodItems();
+					
+					for(int i = 0; i<loadedFoods.size(); i++) {
+						foodTableItem tableFood = new foodTableItem(loadedFoods.get(i));
+						foodItems.add(loadedFoods.get(i));
+						tableItems.add(tableFood);
+					}
+				}
+				 carbF.clear();  
+				 calF.clear(); 
+				 fatF.clear(); 
+				 proF.clear(); 
+				 fibF.clear(); 
+				 foodF.clear(); 
+				 fileF.clear(); 
+				 primaryStage.setScene(foodScreen);
+			}
+	});
 		//TODO: ADD ACTION ONCE OTHER METHODS IMPLEMENTED
 		//TODO: for this button to work, either text has to be entered into 
 		//the file name input or the multiple food inputs. not both, only the one or all the others
