@@ -1,12 +1,14 @@
 package finalProject;
 
+
+
 import java.util.ArrayList;
 
 public class MealItem <T> {
 	//fields
 	private String name;
 	private int calories;
-	private int carbohydrates;
+	private int carbohydrate;
 	private int fat;
 	private int protein;
 	private int fiber;
@@ -22,7 +24,7 @@ public class MealItem <T> {
 		this.ingredients = ingredients;
 		calcNutrients();
 		this.calories = calories;
-		this.carbohydrates= carbohydrates;
+		this.carbohydrate= carbohydrate;
 		this.fat = fat;
 		this.protein = protein;
 		this.fiber = fiber;
@@ -32,7 +34,7 @@ public class MealItem <T> {
 	 private void calcNutrients() {
 		 for(int i = 0; i < ingredients.size(); i++) {
 			 calories += ingredients.get(i).getNutrientValue("calories");
-			 carbohydrates += ingredients.get(i).getNutrientValue("carbohydrates"); 
+			 carbohydrate += ingredients.get(i).getNutrientValue("carbohydrate"); 
 			 fat += ingredients.get(i).getNutrientValue("fat");
 			 protein += ingredients.get(i).getNutrientValue("protein");
 			 fiber += ingredients.get(i).getNutrientValue("fiber");
@@ -90,14 +92,14 @@ public class MealItem <T> {
      * @return int carbohydrates
      */
 	public int getCarb() {
-		return carbohydrates;
+		return carbohydrate;
 	}
 	
 	/**
      * Sets the amount of carbohydrates in the meal
      */
 	public void setCarb(int carb) {
-		this.carbohydrates = carb;
+		this.carbohydrate = carb;
 	}
 	
 	/**
