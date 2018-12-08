@@ -2,6 +2,7 @@ package finalProject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -21,9 +22,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -39,6 +42,7 @@ public class Main extends Application {
     private String filePath = "foodItems.csv";
     private FoodData foodData = new FoodData();
     private List<FoodItem> foodItems = new ArrayList<FoodItem>();
+    private List<foodTableItem> tableItems = new ArrayList<foodTableItem>();
     private List<MealItem> mealItems = new ArrayList<MealItem>();
     private MealItem chosenMeal = null;
     private boolean queryOn = false;
@@ -66,7 +70,11 @@ public class Main extends Application {
 		
 		foodData.loadFoodItems(filePath);
 		foodItems = foodData.getAllFoodItems();
-		ObservableList foodList = FXCollections.observableList(foodItems);
+		for(FoodItem food: foodItems) {//needed for foodList
+			foodTableItem temp = new foodTableItem(food);
+			tableItems.add(temp);
+		}
+		ObservableList<foodTableItem> foodList = FXCollections.observableList(tableItems);
 		
 		///////TEMP VARIABLES//////////////
 		ObservableList testFoodArray = FXCollections.observableArrayList();
@@ -828,13 +836,16 @@ public class Main extends Application {
 		table2.setTranslateX(50);
 		table2.setTranslateY(150);
 		table2.setMaxSize(635, 400);
+		
 		foodCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 		//foodCol.setCellFactory(new Callback<Table>);
-		calCol.setCellValueFactory(new PropertyValueFactory<>("cals"));
-		carbCol.setCellValueFactory(new PropertyValueFactory<>("carb"));
+		calCol.setCellValueFactory(new PropertyValueFactory<>("calories"));
+		//calCol.setCellFactory(new Callback<TableColumn<BPTree,  Double>, TableCell<BPTree, Double>>());
+		//TableCell<BPTree, Double> testCell = new TableCell<BPTree, Double>();
+		carbCol.setCellValueFactory(new PropertyValueFactory<>("carbohydrates"));
 		fatCol.setCellValueFactory(new PropertyValueFactory<>("fat"));
-		fibCol.setCellValueFactory(new PropertyValueFactory<>("fib"));
-		proCol.setCellValueFactory(new PropertyValueFactory<>("pro"));
+		fibCol.setCellValueFactory(new PropertyValueFactory<>("fiber"));
+		proCol.setCellValueFactory(new PropertyValueFactory<>("protein"));
 		table2.setItems(foodList);
 		table2.getSortOrder().add(foodCol);
 		//table2.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
