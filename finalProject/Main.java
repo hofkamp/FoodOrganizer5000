@@ -663,6 +663,20 @@ public class Main extends Application {
 		enter2.setTranslateX(-25);
 		enter2.setTranslateY(-125);
 		enter2.setMinSize(160, 50);
+		enter2.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+                FoodItem chosenFood = null; //foodList.((foodTableItem)table2.getSelectionModel().getSelectedItem()).getId();
+                if (table2.getSelectionModel().getSelectedItem() != null)
+                    chosenFood = (FoodItem)((foodTableItem)table2.getSelectionModel().getSelectedItem()).getFood();
+                if(chosenMeal != null && chosenFood != null) {
+                    System.out.println("a");
+                    chosenMeal.getIngredients().add(chosenFood);
+                    for (Object a : chosenMeal.getIngredients())
+                        System.out.print(((FoodItem)a).getName() + " ");
+                    System.out.println();
+                }
+            }
+        });
 		//enter2.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(enter2); 
 		foodLayout.setAlignment(enter2, Pos.CENTER_RIGHT); 
@@ -703,25 +717,6 @@ public class Main extends Application {
 		filterStatus.setTranslateY(75);
 		foodLayout.getChildren().add(filterStatus);
 		foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);	
-		
-//		// addToMeal button
-//        Button addToMeal = new Button("Add to meal");
-//        addToMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
-//        addToMeal.setTranslateX(-600);
-//        addToMeal.setTranslateY(-15);
-//        addToMeal.setMinSize(50, 20);
-//        addToMeal.setMaxSize(160, 50);     
-//        foodLayout.getChildren().add(addToMeal);       
-//        foodLayout.setAlignment(addToMeal, Pos.BOTTOM_RIGHT);
-//        addToMeal.setOnAction(new EventHandler<ActionEvent>(){
-//            public void handle(ActionEvent event) {
-//                FoodItem foodForMeal = (FoodItem)table2.getSelectionModel().getSelectedItem();
-//                if (foodForMeal != null) {
-//                    System.out.println(foodForMeal.getName());
-//                    //chosenMeal.getIngredients().add(foodForMeal);
-//                }
-//            }
-//        });
 		
 		 Label currentMealText = new Label("Adding to This Meal:");
 	        currentMealText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -1138,7 +1133,7 @@ public class Main extends Application {
             public void handle(ActionEvent event) {
                 chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
                 if (chosenMeal != null) {
-                    System.out.println(chosenMeal.getName());
+                    currentMeal.setText(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
                 }
             }

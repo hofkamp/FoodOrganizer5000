@@ -5,6 +5,7 @@ import finalProject.FoodItem;
 //used for displaying food items in table cuz you can't display
 //a BPTree
 public class foodTableItem {
+    private FoodItem food;
 	private String name;
 	private String id;
 	private String calories;
@@ -14,6 +15,7 @@ public class foodTableItem {
 	private String protein; 
 	
 	public foodTableItem(FoodItem food) {
+	    this.food = food;
 		this.name = food.getName();
 		this.id = food.getID();
 		this.calories = food.getNutrientValue("calories") + "";
@@ -22,6 +24,10 @@ public class foodTableItem {
 		this.fiber = food.getNutrientValue("fiber") + "";
 		this.protein = food.getNutrientValue("protein") + "";
 		
+	}
+	
+	public FoodItem getFood() {
+	    return food;
 	}
 
 	public String getName() {
