@@ -669,11 +669,7 @@ public class Main extends Application {
                 if (table2.getSelectionModel().getSelectedItem() != null)
                     chosenFood = (FoodItem)((foodTableItem)table2.getSelectionModel().getSelectedItem()).getFood();
                 if(chosenMeal != null && chosenFood != null) {
-                    System.out.println("a");
                     chosenMeal.getIngredients().add(chosenFood);
-                    for (Object a : chosenMeal.getIngredients())
-                        System.out.print(((FoodItem)a).getName() + " ");
-                    System.out.println();
                 }
             }
         });
