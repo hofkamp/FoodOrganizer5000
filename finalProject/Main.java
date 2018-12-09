@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.sun.prism.paint.Color;
 import javafx.scene.shape.*;
+import javafx.animation.FadeTransition;
 import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -122,7 +123,6 @@ public class Main extends Application {
 		salad.setFib(7);
 		salad.setPro(2);
 		testMealArray.add(salad);
-		
 		
 		
 		
@@ -398,6 +398,15 @@ public class Main extends Application {
 		foodLayout.getChildren().add(save); 
 		foodLayout.setAlignment(save, Pos.CENTER_RIGHT);
 		
+        Label addedToMealWarning = new Label("Successfully added to meal");
+        addedToMealWarning.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        addedToMealWarning.setTranslateX(0);
+        addedToMealWarning.setTranslateY(-180);
+        foodLayout.getChildren().add(addedToMealWarning);
+        foodLayout.setAlignment(addedToMealWarning, Pos.CENTER);
+        fadeOut.setNode(addedToMealWarning);
+        addedToMealWarning.setVisible(false);
+		
 		// Enter button
 		Button enter2 = new Button("Add to Meal");
 		enter2.setOnAction(new EventHandler<ActionEvent>(){
@@ -409,6 +418,8 @@ public class Main extends Application {
                     
                     chosenMeal.getIngredients().add(chosenFood);
                     chosenMeal.calcNutrients();
+                        addedToMealWarning.setVisible(true);
+                        fadeOut.playFromStart();
                 }
             }
         });
@@ -506,6 +517,11 @@ public class Main extends Application {
 	        currentMealText.setTranslateY(-115);
 	        foodLayout.getChildren().add(currentMealText);
 	        foodLayout.setAlignment(currentMealText, Pos.BOTTOM_RIGHT);
+
+            fadeOut.setFromValue(1.0);
+            fadeOut.setToValue(0.0);
+            fadeOut.setCycleCount(1);
+            fadeOut.setAutoReverse(false);
 	        
 	    Label currentMeal = new Label();
 	    //if(chosenMeal == null) 
@@ -532,9 +548,6 @@ public class Main extends Application {
                 primaryStage.setScene(chooseScreen);
             }
         });
-        
-       
-        
         chooseMeal.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
             chooseMeal.setEffect(shadow);
         });
@@ -963,7 +976,7 @@ public class Main extends Application {
 		proA.setTranslateY(0);
 		proA.setStyle("-fx-text-fill: black");
 		RadioButton proE = new RadioButton("Equal");
-		proE.setToggleGroup(calGroup);
+		proE.setToggleGroup(proGroup);
 		proE.setTranslateX(190);
 		proE.setTranslateY(20);
 		proE.setStyle("-fx-text-fill: black");
@@ -1001,7 +1014,7 @@ public class Main extends Application {
 		carA.setTranslateY(75);
 		carA.setStyle("-fx-text-fill: black");
 		RadioButton carE = new RadioButton("Equal");
-		carE.setToggleGroup(calGroup);
+		carE.setToggleGroup(carGroup);
 		carE.setTranslateX(190);
 		carE.setTranslateY(95);
 		carE.setStyle("-fx-text-fill: black");
@@ -1039,7 +1052,7 @@ public class Main extends Application {
 		fatA.setTranslateY(150);
 		fatA.setStyle("-fx-text-fill: black");
 		RadioButton fatE = new RadioButton("Equal");
-		fatE.setToggleGroup(calGroup);
+		fatE.setToggleGroup(fatGroup);
 		fatE.setTranslateX(190);
 		fatE.setTranslateY(170);
 		fatE.setStyle("-fx-text-fill: black");
@@ -1077,7 +1090,7 @@ public class Main extends Application {
 		fibA.setTranslateY(225);
 		fibA.setStyle("-fx-text-fill: black");
 		RadioButton fibE = new RadioButton("Equal");
-		fibE.setToggleGroup(calGroup);
+		fibE.setToggleGroup(fibGroup);
 		fibE.setTranslateX(190);
 		fibE.setTranslateY(245);
 		fibE.setStyle("-fx-text-fill: black");
@@ -1318,9 +1331,10 @@ public class Main extends Application {
 			public void handle(MouseEvent event) {
 			    if (event.getClickCount() == 2) {
 			        chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
-				
-			        currentMeal.setText(chosenMeal.getName());
-			        primaryStage.setScene(foodScreen);
+			        if (chosenMeal != null) {
+			            currentMeal.setText(chosenMeal.getName());
+			            primaryStage.setScene(foodScreen);
+			        }
 			    }
 			}
 		}));
@@ -1337,9 +1351,10 @@ public class Main extends Application {
 		continueButton.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
                 chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
-                if (chosenMeal != null);
+                if (chosenMeal != null) {
                     currentMeal.setText(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
+                }
                 
             }
         });
@@ -1529,4 +1544,8 @@ public class Main extends Application {
 		primaryStage.show();
 		
 	}
+	
+	private FadeTransition fadeOut = new FadeTransition(
+	        Duration.millis(2000)
+	    );
 }
