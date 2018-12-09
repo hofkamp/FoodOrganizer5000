@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.sun.prism.paint.Color;
+import javafx.scene.shape.*;
+import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,6 +14,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -19,10 +24,13 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import javafx.util.Duration;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
@@ -46,6 +54,7 @@ public class Main extends Application {
     private List<MealItem> mealItems = new ArrayList<MealItem>();
     private MealItem chosenMeal = null;
     private boolean queryOn = false;
+    private FoodItem temp;
     
 	public static void main(String[] args) {
 		launch(args);
@@ -80,21 +89,21 @@ public class Main extends Application {
 		ObservableList testFoodArray = FXCollections.observableArrayList();
 		FoodItem carrot = new FoodItem("Carrot","Carrot");
 		carrot.addNutrient("calories",10);
-		carrot.addNutrient("carbohydrates",5);
+		carrot.addNutrient("carbohydrate",5);
 		carrot.addNutrient("fat",0);
 		carrot.addNutrient("protein",2);
 		carrot.addNutrient("fiber",0);
 		
 		FoodItem lettuce = new FoodItem("Lettuce","Lettuce");
 		lettuce.addNutrient("calories",10);
-		lettuce.addNutrient("carbohydrates",4);
+		lettuce.addNutrient("carbohydrate",4);
 		lettuce.addNutrient("fat",3);
 		lettuce.addNutrient("protein",3);
 		lettuce.addNutrient("fiber",1);
 
 		FoodItem broccoli = new FoodItem("Broccoli","Broccoli");
 		broccoli.addNutrient("calories",15);
-		broccoli.addNutrient("carbohydrates",7);
+		broccoli.addNutrient("carbohydrate",7);
 		broccoli.addNutrient("fat",8);
 		broccoli.addNutrient("protein",5);
 		broccoli.addNutrient("fiber",2);
@@ -115,277 +124,8 @@ public class Main extends Application {
 		testMealArray.add(salad);
 		
 		
-		//////////////////// QUERY LAYOUT////////////////////////
 		
-		Label leftText = new Label("Search by nutritional facts:");
-		  Label rightText = new Label("Search for a food item:");
-		  leftText.setFont(Font.font("Arial", 30));
-		  rightText.setFont(Font.font("Arial", 30));
-		  leftText.setTranslateY(-150);
-		  leftText.setTranslateX(40);
-		  rightText.setTranslateX(-40);
-		  rightText.setTranslateY(-150);
-		  queryLayout.getChildren().add(leftText);
-		  queryLayout.getChildren().add(rightText);
-		  queryLayout.setAlignment(leftText, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(rightText, Pos.CENTER_RIGHT);
-		  
-		  TextField foodField = new TextField();
-		  foodField.setMaxSize(300, 30);
-		  foodField.setTranslateY(-90);
-		  foodField.setTranslateX(-40);
-		  queryLayout.getChildren().add(foodField);
-		  queryLayout.setAlignment(foodField, Pos.CENTER_RIGHT);
-		  
-		  Label calQ = new Label("Calories (cal):");
-		  TextField calorieF = new TextField();
-		  calorieF.setMaxSize(75, 30);
-		  calorieF.setTranslateX(290);
-		  calorieF.setTranslateY(-90);
-		  calQ.setFont(Font.font("Arial", 20));
-		  calQ.setTranslateY(-95);
-		  calQ.setTranslateX(40);
-		  ToggleGroup calGroup = new ToggleGroup();
-		  RadioButton calB = new RadioButton("Below");
-		  calB.setToggleGroup(calGroup);
-		  calB.setSelected(true);
-		  calB.setTranslateX(190);
-		  calB.setTranslateY(-95);
-		  calB.setStyle("-fx-text-fill: white");
-		  RadioButton calA = new RadioButton("Above");
-		  calA.setToggleGroup(calGroup);
-		  calA.setTranslateX(190);
-		  calA.setTranslateY(-75);
-		  calA.setStyle("-fx-text-fill: white");
-		  queryLayout.getChildren().add(calQ);
-		  queryLayout.getChildren().add(calB);
-		  queryLayout.getChildren().add(calA);
-		  queryLayout.getChildren().add(calorieF);
-		  queryLayout.setAlignment(calQ, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(calB, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(calA, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(calorieF, Pos.CENTER_LEFT);
-		  
-		  Label proQ= new Label("Protein (g):");
-		  TextField proteinF = new TextField();
-		  proteinF.setMaxSize(75, 30);
-		  proteinF.setTranslateX(290);
-		  proteinF.setTranslateY(-35);
-		  proQ.setFont(Font.font("Arial", 20));
-		  proQ.setTranslateX(40);
-		  proQ.setTranslateY(-40);
-		  ToggleGroup proGroup = new ToggleGroup();
-		  RadioButton proB = new RadioButton("Below");
-		  proB.setToggleGroup(proGroup);
-		  proB.setSelected(true);
-		  proB.setTranslateX(190);
-		  proB.setTranslateY(-40);
-		  proB.setStyle("-fx-text-fill: white");
-		  RadioButton proA = new RadioButton("Above");
-		  proA.setToggleGroup(proGroup);
-		  proA.setTranslateX(190);
-		  proA.setTranslateY(-20);
-		  proA.setStyle("-fx-text-fill: white");
-		  queryLayout.getChildren().add(proQ);
-		  queryLayout.getChildren().add(proB);
-		  queryLayout.getChildren().add(proA);
-		  queryLayout.getChildren().add(proteinF);
-		  queryLayout.setAlignment(proQ, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(proB, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(proA, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(proteinF, Pos.CENTER_LEFT);
-		  
-		  Label carQ = new Label("Carbs (g):");
-		  TextField carF = new TextField();
-		  carF.setMaxSize(75, 30);
-		  carF.setTranslateX(290);
-		  carF.setTranslateY(20);
-		  carQ.setFont(Font.font("Arial", 20));
-		  carQ.setTranslateX(40);
-		  carQ.setTranslateY(15);
-		  ToggleGroup carGroup = new ToggleGroup();
-		  RadioButton carB = new RadioButton("Below");
-		  carB.setToggleGroup(carGroup);
-		  carB.setSelected(true);
-		  carB.setTranslateX(190);
-		  carB.setTranslateY(15);
-		  carB.setStyle("-fx-text-fill: white");
-		  RadioButton carA = new RadioButton("Above");
-		  carA.setToggleGroup(carGroup);
-		  carA.setTranslateX(190);
-		  carA.setTranslateY(35);
-		  carA.setStyle("-fx-text-fill: white");
-		  queryLayout.getChildren().add(carQ);
-		  queryLayout.getChildren().add(carB);
-		  queryLayout.getChildren().add(carA);
-		  queryLayout.getChildren().add(carF);
-		  queryLayout.setAlignment(carQ, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(carB, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(carA, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(carF, Pos.CENTER_LEFT);
-		  
-		  Label fatQ = new Label("Fat (g):");
-		  TextField fatF1 = new TextField();
-		  fatF1.setMaxSize(75, 30);
-		  fatF1.setTranslateX(290);
-		  fatF1.setTranslateY(75);
-		  fatQ.setFont(Font.font("Arial", 20));
-		  fatQ.setTranslateX(40);
-		  fatQ.setTranslateY(70);
-		  ToggleGroup fatGroup = new ToggleGroup();
-		  RadioButton fatB = new RadioButton("Below");
-		  fatB.setToggleGroup(fatGroup);
-		  fatB.setSelected(true);
-		  fatB.setTranslateX(190);
-		  fatB.setTranslateY(70);
-		  fatB.setStyle("-fx-text-fill: white");
-		  RadioButton fatA = new RadioButton("Above");
-		  fatA.setToggleGroup(fatGroup);
-		  fatA.setTranslateX(190);
-		  fatA.setTranslateY(90);
-		  fatA.setStyle("-fx-text-fill: white");
-		  queryLayout.getChildren().add(fatQ);
-		  queryLayout.getChildren().add(fatB);
-		  queryLayout.getChildren().add(fatA);
-		  queryLayout.getChildren().add(fatF1);
-		  queryLayout.setAlignment(fatQ, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(fatB, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(fatA, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(fatF1, Pos.CENTER_LEFT);
-		  
-		  Label fibQ = new Label("Fiber (g):");
-		  TextField fibF1 = new TextField();
-		  fibF1.setMaxSize(75, 30);
-		  fibF1.setTranslateX(290);
-		  fibF1.setTranslateY(135);
-		  fibQ.setFont(Font.font("Arial", 20));
-		  fibQ.setTranslateX(40);
-		  fibQ.setTranslateY(125);
-		  ToggleGroup fibGroup = new ToggleGroup();
-		  RadioButton fibB = new RadioButton("Below");
-		  fibB.setToggleGroup(fibGroup);
-		  fibB.setSelected(true);
-		  fibB.setTranslateX(190);
-		  fibB.setTranslateY(125);
-		  fibB.setStyle("-fx-text-fill: white");
-		  RadioButton fibA = new RadioButton("Above");
-		  fibA.setToggleGroup(fibGroup);
-		  fibA.setTranslateX(190);
-		  fibA.setTranslateY(145);
-		  fibA.setStyle("-fx-text-fill: white");
-
-		  queryLayout.getChildren().add(fibQ);
-		  queryLayout.getChildren().add(fibB);
-		  queryLayout.getChildren().add(fibA);
-		  queryLayout.getChildren().add(fibF1);
-		  queryLayout.setAlignment(fibQ, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(fibB, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(fibA, Pos.CENTER_LEFT);
-		  queryLayout.setAlignment(fibF1, Pos.CENTER_LEFT);
-		  
-		  // Enter button
-		  Button enter = new Button("Enter");
-		  enter.setOnAction(new EventHandler<ActionEvent>() {
-		  public void handle(ActionEvent event) {
-			  primaryStage.setScene(foodScreen);
-		  }
-		  });
-		  enter.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		  enter.setTranslateX(-40);
-		  enter.setTranslateY(-30);
-		  enter.setMinSize(50, 20);			
-		  enter.setMaxSize(100, 50);			
-		  queryLayout.getChildren().add(enter);			
-		  queryLayout.setAlignment(enter, Pos.CENTER_RIGHT);
-		  
-		  //food list button 
-		  Button foodBtn3 = new Button("Food List");
-		  foodBtn3.setOnAction(new EventHandler<ActionEvent>() {
-		   public void handle(ActionEvent event) {
-		    primaryStage.setScene(foodScreen);
-		   }
-		  });
-		  foodBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		   foodBtn3.setEffect(shadow);
-		  });
-		  foodBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		   foodBtn3.setEffect(null);
-		  });
-		  foodBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		  foodBtn3.setTranslateX(-10);
-		  foodBtn3.setTranslateY(10);
-		  foodBtn3.setMinSize(150, 150 / 2);
-		  foodBtn3.setMaxSize(150, 150 / 2);
-		  queryLayout.getChildren().add(foodBtn3);
-		  queryLayout.setAlignment(foodBtn3, Pos.TOP_RIGHT);
-		  // add food button
-		  Button addBtn3 = new Button("Add Food");
-		  addBtn3.setOnAction(new EventHandler<ActionEvent>() {
-		   public void handle(ActionEvent event) {
-		    primaryStage.setScene(addScreen);
-		   }
-		  });
-		  addBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		   addBtn3.setEffect(shadow);
-		  });
-		  addBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		   addBtn3.setEffect(null);
-		  });
-		  addBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		  addBtn3.setTranslateX(-165);
-		  addBtn3.setTranslateY(10);
-		  addBtn3.setMinSize(150, 150 / 2);
-		  addBtn3.setMaxSize(150, 150 / 2);
-		  queryLayout.getChildren().add(addBtn3);
-		  queryLayout.setAlignment(addBtn3, Pos.TOP_RIGHT);
-		  // meal list button
-		  Button mealBtn4 = new Button("Meal List");
-		  mealBtn4.setOnAction(new EventHandler<ActionEvent>() {
-		   public void handle(ActionEvent event) {
-		    primaryStage.setScene(mealScreen);
-		   }
-		  });
-		  mealBtn4.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		   mealBtn4.setEffect(shadow);
-		  });
-		  mealBtn4.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		   mealBtn4.setEffect(null);
-		  });
-		  mealBtn4.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		  mealBtn4.setTranslateX(-320);
-		  mealBtn4.setTranslateY(10);
-		  mealBtn4.setMinSize(150, 150 / 2);
-		  mealBtn4.setMaxSize(150, 150 / 2);
-		  queryLayout.getChildren().add(mealBtn4);
-		  queryLayout.setAlignment(mealBtn4, Pos.TOP_RIGHT);
-		  // home button
-		  Button homeBtn3 = new Button("Go Back");
-		  homeBtn3.setOnAction(new EventHandler<ActionEvent>() {
-		   public void handle(ActionEvent event) {
-		    primaryStage.setScene(homeScreen);
-		   }
-		  });
-		  homeBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		   homeBtn3.setEffect(shadow);
-		  });
-		  homeBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		   homeBtn3.setEffect(null);
-		  });
-		  homeBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		  homeBtn3.setTranslateX(-475);
-		  homeBtn3.setTranslateY(10);
-		  homeBtn3.setMinSize(150, 150 / 2);
-		  homeBtn3.setMaxSize(150, 150 / 2);
-		  queryLayout.getChildren().add(homeBtn3);
-		  queryLayout.setAlignment(homeBtn3, Pos.TOP_RIGHT);
-		  // title
-		  Label title4 = new Label("Query");
-		  title4.setFont(Font.font("Cambria", 50));
-		  title4.setTranslateX(50);
-		  title4.setTranslateY(20);
-
-		  queryLayout.getChildren().add(title4);
-		  queryLayout.setAlignment(title4, Pos.TOP_LEFT);
+		
 		
 		//////////////////// MEAL LIST LAYOUT////////////////////
 		Label text = new Label("Selected Item");
@@ -440,7 +180,7 @@ public class Main extends Application {
 		name.setTranslateX(-240);
 		name.setTranslateY(-90);
 		ListView<String> ingrList = new ListView<>();
-		ingrList.setMaxSize(100, 31);
+		ingrList.setMaxSize(200, 40);
 		ingrList.setTranslateX(-240);
 		ingrList.setTranslateY(-50);
 		Label tempCal = new Label();
@@ -626,18 +366,24 @@ public class Main extends Application {
 		calCol.setCellValueFactory(new PropertyValueFactory<>("calories"));
 		//calCol.setCellFactory(new Callback<TableColumn<BPTree,  Double>, TableCell<BPTree, Double>>());
 		//TableCell<BPTree, Double> testCell = new TableCell<BPTree, Double>();
-		carbCol.setCellValueFactory(new PropertyValueFactory<>("carbohydrates"));
+		carbCol.setCellValueFactory(new PropertyValueFactory<>("carbohydrate"));
 		fatCol.setCellValueFactory(new PropertyValueFactory<>("fat"));
 		fibCol.setCellValueFactory(new PropertyValueFactory<>("fiber"));
 		proCol.setCellValueFactory(new PropertyValueFactory<>("protein"));
 		table2.setItems(foodList);
 		table2.getSortOrder().add(foodCol);
+		
 		//table2.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		foodLayout.getChildren().add(table2);
 		foodLayout.setAlignment(table2, Pos.TOP_LEFT);
 		
 		// Save button 
 		Button save = new Button("Save");
+		save.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+               foodData.saveFoodItems("savedFile.txt");
+            }
+        });
 		save.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		        save.setEffect(shadow);
 		    });
@@ -651,8 +397,20 @@ public class Main extends Application {
 		//save.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(save); 
 		foodLayout.setAlignment(save, Pos.CENTER_RIGHT);
+		
 		// Enter button
 		Button enter2 = new Button("Add to Meal");
+		enter2.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+            	FoodItem chosenFood = null; //foodList.((foodTableItem)table2.getSelectionModel().getSelectedItem()).getId();
+                if (table2.getSelectionModel().getSelectedItem() != null)
+                    chosenFood = (FoodItem)((foodTableItem)table2.getSelectionModel().getSelectedItem()).getFood();
+                if(chosenMeal != null && chosenFood != null) {
+                    
+                    chosenMeal.getIngredients().add(chosenFood);
+                }
+            }
+        });
 		enter2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		        enter2.setEffect(shadow);
 		    });
@@ -663,21 +421,43 @@ public class Main extends Application {
 		enter2.setTranslateX(-25);
 		enter2.setTranslateY(-125);
 		enter2.setMinSize(160, 50);
-		enter2.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event) {
-                FoodItem chosenFood = null; //foodList.((foodTableItem)table2.getSelectionModel().getSelectedItem()).getId();
-                if (table2.getSelectionModel().getSelectedItem() != null)
-                    chosenFood = (FoodItem)((foodTableItem)table2.getSelectionModel().getSelectedItem()).getFood();
-                if(chosenMeal != null && chosenFood != null) {
-                    chosenMeal.getIngredients().add(chosenFood);
-                }
-            }
-        });
 		//enter2.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(enter2); 
-		foodLayout.setAlignment(enter2, Pos.CENTER_RIGHT); 
+		foodLayout.setAlignment(enter2, Pos.CENTER_RIGHT);
+		
+		//filter status
+				Label filterStatus = new Label();
+				filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+				    String s = " ";
+				    if(queryOn)
+				        s = "Filter Status: ON ";
+				    else
+				        s = "Filter Status: OFF";
+				    return s;
+				}));
+				filterStatus.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+				filterStatus.setTranslateX(-25);
+				filterStatus.setTranslateY(75);
+				foodLayout.getChildren().add(filterStatus);
+				foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);
+		
 		// Unfilter button
 		Button unfilter = new Button ("Unfilter");
+		unfilter.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+              
+            	queryOn = false;
+               
+                filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+				    String s = " ";
+				    if(queryOn)
+				        s = "Filter Status: ON ";
+				    else
+				        s = "Filter Status: OFF";
+				    return s;
+				}));
+            }
+        });
 		unfilter.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 		    unfilter.setEffect(shadow);
 		});
@@ -698,21 +478,26 @@ public class Main extends Application {
 		filterBox.setTranslateY(75);
 		//foodLayout.getChildren().add(filterBox);
 		//foodLayout.setAlignment(filterBox, Pos.CENTER_RIGHT);
-		//filter status
-		Label filterStatus = new Label();
-		filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
-		    String s = " ";
-		    if(queryOn)
-		        s = "Filter Status: ON ";
-		    else
-		        s = "Filter Status: OFF";
-		    return s;
-		}));
-		filterStatus.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		filterStatus.setTranslateX(-25);
-		filterStatus.setTranslateY(75);
-		foodLayout.getChildren().add(filterStatus);
-		foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);	
+			
+		
+//		// addToMeal button
+//        Button addToMeal = new Button("Add to meal");
+//        addToMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
+//        addToMeal.setTranslateX(-600);
+//        addToMeal.setTranslateY(-15);
+//        addToMeal.setMinSize(50, 20);
+//        addToMeal.setMaxSize(160, 50);     
+//        foodLayout.getChildren().add(addToMeal);       
+//        foodLayout.setAlignment(addToMeal, Pos.BOTTOM_RIGHT);
+//        addToMeal.setOnAction(new EventHandler<ActionEvent>(){
+//            public void handle(ActionEvent event) {
+//                FoodItem foodForMeal = (FoodItem)table2.getSelectionModel().getSelectedItem();
+//                if (foodForMeal != null) {
+//                    System.out.println(foodForMeal.getName());
+//                    //chosenMeal.getIngredients().add(foodForMeal);
+//                }
+//            }
+//        });
 		
 		 Label currentMealText = new Label("Adding to This Meal:");
 	        currentMealText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -721,7 +506,10 @@ public class Main extends Application {
 	        foodLayout.getChildren().add(currentMealText);
 	        foodLayout.setAlignment(currentMealText, Pos.BOTTOM_RIGHT);
 	        
-	    Label currentMeal = new Label("none");
+	    Label currentMeal = new Label();
+	    //if(chosenMeal == null) 
+	    	currentMeal.setText("none");
+	    //else currentMeal.setText(chosenMeal.getName());
 	        currentMeal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 	        currentMeal.setTranslateX(-25);
 	        currentMeal.setTranslateY(-90);
@@ -837,7 +625,7 @@ public class Main extends Application {
 		homeBtn.setMaxSize(150, 150/2);
 		foodLayout.getChildren().add(homeBtn);
 		foodLayout.setAlignment(homeBtn, Pos.TOP_RIGHT);
-		
+
 		//title
 		Label title1 = new Label("Food List");
 		title1.setFont(Font.font("Cambria", 50));
@@ -846,8 +634,8 @@ public class Main extends Application {
 		foodLayout.getChildren().add(title1);
 		foodLayout.setAlignment(title1, Pos.TOP_LEFT);
 		//foodScreen = new Scene(foodLayout, 900, 600);
-				
-////////////////////ADD FOOD LAYOUT/////////////////////
+
+		////////////////////ADD FOOD LAYOUT/////////////////////
 		//file name input
 		Label fileName = new Label("File Name:");
 		TextField fileF = new TextField();
@@ -861,14 +649,12 @@ public class Main extends Application {
 		addLayout.setAlignment(fileF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(fileName);
 		addLayout.setAlignment(fileName, Pos.CENTER_LEFT);
-
 		//random OR text box for aesthetic
 		Label ORText = new Label("OR");
 		ORText.setFont(Font.font("Arial", 40));
 		ORText.setTranslateY(-40);
 		addLayout.getChildren().add(ORText);
 		addLayout.setAlignment(ORText, Pos.CENTER);
-
 		//food name input
 		Label foodName = new Label("Food Name:");
 		TextField foodF = new TextField();
@@ -882,7 +668,6 @@ public class Main extends Application {
 		addLayout.setAlignment(foodF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(foodName);
 		addLayout.setAlignment(foodName, Pos.CENTER_LEFT);
-
 		//carb number input
 		Label carbNum = new Label("Carbohydrate(g):");
 		TextField carbF = new TextField();
@@ -896,7 +681,6 @@ public class Main extends Application {
 		addLayout.setAlignment(carbF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(carbNum);
 		addLayout.setAlignment(carbNum, Pos.CENTER_LEFT);
-
 		//calorie num input
 		Label calNum = new Label("Calories:");
 		TextField calF = new TextField();
@@ -910,7 +694,6 @@ public class Main extends Application {
 		addLayout.setAlignment(calF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(calNum);
 		addLayout.setAlignment(calNum, Pos.CENTER_LEFT);
-
 		//fat num input
 		Label fatNum = new Label("Fat(g):");
 		TextField fatF = new TextField();
@@ -924,7 +707,6 @@ public class Main extends Application {
 		addLayout.setAlignment(fatF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(fatNum);
 		addLayout.setAlignment(fatNum, Pos.CENTER_LEFT);
-
 		//protein num input
 		Label proNum = new Label("Protein(g):");
 		TextField proF = new TextField();
@@ -938,7 +720,6 @@ public class Main extends Application {
 		addLayout.setAlignment(proF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(proNum);
 		addLayout.setAlignment(proNum, Pos.CENTER_LEFT);
-
 		//fiber num input
 		Label fibNum = new Label("Fiber(g):");
 		TextField fibF = new TextField();
@@ -952,10 +733,8 @@ public class Main extends Application {
 		addLayout.setAlignment(fibF, Pos.CENTER_LEFT);
 		addLayout.getChildren().add(fibNum);
 		addLayout.setAlignment(fibNum, Pos.CENTER_LEFT);
-
 		//enter button
 		Button entrBtn = new Button("ENTER");
-
 		entrBtn.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e) {
 				String pathT = fileF.getText();
@@ -966,7 +745,7 @@ public class Main extends Application {
 				Double proteinT = Double.parseDouble(proF.getText());
 				Double fiberT = Double.parseDouble(fibF.getText());
 				FoodData data = new FoodData();
-	
+
 				if(!nameT.isEmpty() && pathT.isEmpty()) {
 					FoodItem food = new FoodItem(nameT.hashCode()+ "", nameT);
 					food.addNutrient("carbohydrate", carbsT);
@@ -979,12 +758,12 @@ public class Main extends Application {
 					foodTableItem tableFood = new foodTableItem(food);
 					tableItems.add(tableFood);
 				}
-	
+
 				if (nameT.isEmpty() && !pathT.isEmpty()) {	
 					List<FoodItem> loadedFoods = new ArrayList<FoodItem>();
 					data.loadFoodItems(pathT);
 					loadedFoods = data.getAllFoodItems();
-		
+
 					for(int i = 0; i<loadedFoods.size(); i++) {
 						foodTableItem tableFood = new foodTableItem(loadedFoods.get(i));
 						foodItems.add(loadedFoods.get(i));
@@ -1002,120 +781,547 @@ public class Main extends Application {
 				primaryStage.setScene(foodScreen);
 			}
 		});
-
 		entrBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) ->{
 			entrBtn.setEffect(shadow);
 		});
 		entrBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) ->{
 			entrBtn.setEffect(null);
 		});
-			entrBtn.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
-			entrBtn.setMinSize(300, 75);
-			entrBtn.setTranslateY(-25);
-			addLayout.getChildren().add(entrBtn);
-			addLayout.setAlignment(entrBtn, Pos.BOTTOM_CENTER);
+		entrBtn.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
+		entrBtn.setMinSize(300, 75);
+		entrBtn.setTranslateY(-25);
+		addLayout.getChildren().add(entrBtn);
+		addLayout.setAlignment(entrBtn, Pos.BOTTOM_CENTER);
+		//food list button
+		Button foodBtn2 = new Button("Food List");
+		foodBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(foodScreen);
+			}	
+		});
+		foodBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			foodBtn2.setEffect(shadow);
+		});
+		foodBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			foodBtn2.setEffect(null);
+		});
+		foodBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		foodBtn2.setTranslateX(-10);
+		foodBtn2.setTranslateY(10);
+		foodBtn2.setMinSize(150, 150 / 2);
+		foodBtn2.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(foodBtn2);
+		addLayout.setAlignment(foodBtn2, Pos.TOP_RIGHT);
+		// query button
+		Button queryBtn3 = new Button("Query");
+		queryBtn3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(queryScreen);
+			}
+		});
+		queryBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			queryBtn3.setEffect(shadow);
+		});
+		queryBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			queryBtn3.setEffect(null);
+		});
+		queryBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		queryBtn3.setTranslateX(-165);
+		queryBtn3.setTranslateY(10);
+		queryBtn3.setMinSize(150, 150 / 2);
+		queryBtn3.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(queryBtn3);
+		addLayout.setAlignment(queryBtn3, Pos.TOP_RIGHT);
+		// meal list button
+		Button mealBtn3 = new Button("Meal List");
+		mealBtn3.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(mealScreen);
+			}
+		});
+		mealBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			mealBtn3.setEffect(shadow);
+		});
+		mealBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			mealBtn3.setEffect(null);
+		});
+		mealBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		mealBtn3.setTranslateX(-320);
+		mealBtn3.setTranslateY(10);
+		mealBtn3.setMinSize(150, 150 / 2);
+		mealBtn3.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(mealBtn3);
+		addLayout.setAlignment(mealBtn3, Pos.TOP_RIGHT);
+		// home button
+		Button homeBtn2 = new Button("Go Back");
+		homeBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(homeScreen);
+			}
+		});
+		homeBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			homeBtn2.setEffect(shadow);
+		});
+		homeBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			homeBtn2.setEffect(null);
+		});
+		homeBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		homeBtn2.setTranslateX(-475);
+		homeBtn2.setTranslateY(10);
+		homeBtn2.setMinSize(150, 150 / 2);
+		homeBtn2.setMaxSize(150, 150 / 2);
+		addLayout.getChildren().add(homeBtn2);
+		addLayout.setAlignment(homeBtn2, Pos.TOP_RIGHT);
+		// title
+		Label title3 = new Label("Add Food");
+		title3.setFont(Font.font("Cambria", 50));
+		title3.setTranslateX(50);
+		title3.setTranslateY(20);
+		addLayout.getChildren().add(title3);
+		addLayout.setAlignment(title3, Pos.TOP_LEFT);	
 
-			//food list button
-			Button foodBtn2 = new Button("Food List");
-			foodBtn2.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					primaryStage.setScene(foodScreen);
-				}	
-			});
-			foodBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-				foodBtn2.setEffect(shadow);
-			});
-			foodBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-				foodBtn2.setEffect(null);
-			});
-			foodBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-			foodBtn2.setTranslateX(-10);
-			foodBtn2.setTranslateY(10);
-			foodBtn2.setMinSize(150, 150 / 2);
-			foodBtn2.setMaxSize(150, 150 / 2);
-			addLayout.getChildren().add(foodBtn2);
-			addLayout.setAlignment(foodBtn2, Pos.TOP_RIGHT);
+		//////////////////// QUERY LAYOUT////////////////////////
 
-			// query button
-			Button queryBtn3 = new Button("Query");
-			queryBtn3.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					primaryStage.setScene(queryScreen);
-				}
-			});
-			queryBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-				queryBtn3.setEffect(shadow);
-			});
-			queryBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-				queryBtn3.setEffect(null);
-			});
-			queryBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-			queryBtn3.setTranslateX(-165);
-			queryBtn3.setTranslateY(10);
-			queryBtn3.setMinSize(150, 150 / 2);
-			queryBtn3.setMaxSize(150, 150 / 2);
-			addLayout.getChildren().add(queryBtn3);
-			addLayout.setAlignment(queryBtn3, Pos.TOP_RIGHT);
+		Label leftText = new Label("Search by nutritional facts:");
+		Label rightText = new Label("Search for a food item:");
+		leftText.setFont(Font.font("Arial", 30));
+		rightText.setFont(Font.font("Arial", 30));
+		leftText.setTranslateY(-150);
+		leftText.setTranslateX(40);
+		rightText.setTranslateX(-40);
+		rightText.setTranslateY(-150);
+		queryLayout.getChildren().add(leftText);
+		queryLayout.getChildren().add(rightText);
+		queryLayout.setAlignment(leftText, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(rightText, Pos.CENTER_RIGHT);
 
-			// meal list button
-			Button mealBtn3 = new Button("Meal List");
-			mealBtn3.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					primaryStage.setScene(mealScreen);
-				}
-			});
-			mealBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-				mealBtn3.setEffect(shadow);
-			});
-			mealBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-				mealBtn3.setEffect(null);
-			});
-			mealBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-			mealBtn3.setTranslateX(-320);
-			mealBtn3.setTranslateY(10);
-			mealBtn3.setMinSize(150, 150 / 2);
-			mealBtn3.setMaxSize(150, 150 / 2);
-			addLayout.getChildren().add(mealBtn3);
-			addLayout.setAlignment(mealBtn3, Pos.TOP_RIGHT);
+		TextField foodField = new TextField();
+		foodField.setMaxSize(300, 30);
+		foodField.setTranslateY(-90);
+		foodField.setTranslateX(-40);
+		queryLayout.getChildren().add(foodField);
+		queryLayout.setAlignment(foodField, Pos.CENTER_RIGHT);
 
-			// home button
-			Button homeBtn2 = new Button("Go Back");
-			homeBtn2.setOnAction(new EventHandler<ActionEvent>() {
-				public void handle(ActionEvent event) {
-					primaryStage.setScene(homeScreen);
-				}
-				});
-			homeBtn2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-				homeBtn2.setEffect(shadow);
-			});
-			homeBtn2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-				homeBtn2.setEffect(null);
-			});
-			homeBtn2.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-			homeBtn2.setTranslateX(-475);
-			homeBtn2.setTranslateY(10);
-			homeBtn2.setMinSize(150, 150 / 2);
-			homeBtn2.setMaxSize(150, 150 / 2);
-			addLayout.getChildren().add(homeBtn2);
-			addLayout.setAlignment(homeBtn2, Pos.TOP_RIGHT);
+		// Calorie Label//
+		Label calQ = new Label("Calories (cal):");
+		TextField calorieF = new TextField();
+		calorieF.setMaxSize(75, 30);
+		calorieF.setTranslateX(290);
+		calorieF.setTranslateY(-90);
+		calQ.setFont(Font.font("Arial", 20));
+		calQ.setTranslateY(-95);
+		calQ.setTranslateX(40);
+		ToggleGroup calGroup = new ToggleGroup();
+		RadioButton calB = new RadioButton("Below");
+		calB.setToggleGroup(calGroup);
+		calB.setSelected(true);
+		calB.setTranslateX(190);
+		calB.setTranslateY(-95);
+		calB.setStyle("-fx-text-fill: black");
+		RadioButton calA = new RadioButton("Above");
+		calA.setToggleGroup(calGroup);
+		calA.setTranslateX(190);
+		calA.setTranslateY(-75);
+		calA.setStyle("-fx-text-fill: black");
+		RadioButton calE = new RadioButton("Equal");
+		calE.setToggleGroup(calGroup);
+		calE.setTranslateX(190);
+		calE.setTranslateY(-55);
+		calE.setStyle("-fx-text-fill: black");
 
-			// title
-			Label title3 = new Label("Add Food");
-			title3.setFont(Font.font("Cambria", 50));
-			title3.setTranslateX(50);
-			title3.setTranslateY(20);
-			addLayout.getChildren().add(title3);
-			addLayout.setAlignment(title3, Pos.TOP_LEFT);		
+		queryLayout.getChildren().add(calE);
+		queryLayout.getChildren().add(calQ);
+		queryLayout.getChildren().add(calB);
+		queryLayout.getChildren().add(calA);
+		queryLayout.getChildren().add(calorieF);
+		queryLayout.setAlignment(calQ, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(calB, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(calA, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(calorieF, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(calE, Pos.CENTER_LEFT);
+
+		// Protein Label//
+		Label proQ = new Label("Protein (g):");
+		TextField proteinF = new TextField();
+		proteinF.setMaxSize(75, 30);
+		proteinF.setTranslateX(290);
+		proteinF.setTranslateY(-15);
+		proQ.setFont(Font.font("Arial", 20));
+		proQ.setTranslateX(40);
+		proQ.setTranslateY(-20);
+		ToggleGroup proGroup = new ToggleGroup();
+		RadioButton proB = new RadioButton("Below");
+		proB.setToggleGroup(proGroup);
+		proB.setSelected(true);
+		proB.setTranslateX(190);
+		proB.setTranslateY(-20);
+		proB.setStyle("-fx-text-fill: black");
+		RadioButton proA = new RadioButton("Above");
+		proA.setToggleGroup(proGroup);
+		proA.setTranslateX(190);
+		proA.setTranslateY(0);
+		proA.setStyle("-fx-text-fill: black");
+		RadioButton proE = new RadioButton("Equal");
+		proE.setToggleGroup(calGroup);
+		proE.setTranslateX(190);
+		proE.setTranslateY(20);
+		proE.setStyle("-fx-text-fill: black");
+
+		queryLayout.getChildren().add(proE);
+		queryLayout.getChildren().add(proQ);
+		queryLayout.getChildren().add(proB);
+		queryLayout.getChildren().add(proA);
+		queryLayout.getChildren().add(proteinF);
+		queryLayout.setAlignment(proQ, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(proB, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(proA, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(proteinF, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(proE, Pos.CENTER_LEFT);
+
+		// Carb Label//
+		Label carQ = new Label("Carbs (g):");
+		TextField carF = new TextField();
+		carF.setMaxSize(75, 30);
+		carF.setTranslateX(290);
+		carF.setTranslateY(60);
+		carQ.setFont(Font.font("Arial", 20));
+		carQ.setTranslateX(40);
+		carQ.setTranslateY(55);
+		ToggleGroup carGroup = new ToggleGroup();
+		RadioButton carB = new RadioButton("Below");
+		carB.setToggleGroup(carGroup);
+		carB.setSelected(true);
+		carB.setTranslateX(190);
+		carB.setTranslateY(55);
+		carB.setStyle("-fx-text-fill: black");
+		RadioButton carA = new RadioButton("Above");
+		carA.setToggleGroup(carGroup);
+		carA.setTranslateX(190);
+		carA.setTranslateY(75);
+		carA.setStyle("-fx-text-fill: black");
+		RadioButton carE = new RadioButton("Equal");
+		carE.setToggleGroup(calGroup);
+		carE.setTranslateX(190);
+		carE.setTranslateY(95);
+		carE.setStyle("-fx-text-fill: black");
+
+		queryLayout.getChildren().add(carE);
+		queryLayout.getChildren().add(carQ);
+		queryLayout.getChildren().add(carB);
+		queryLayout.getChildren().add(carA);
+		queryLayout.getChildren().add(carF);
+		queryLayout.setAlignment(carQ, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(carB, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(carA, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(carF, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(carE, Pos.CENTER_LEFT);
+
+		// Fat Label//
+		Label fatQ = new Label("Fat (g):");
+		TextField fatF1 = new TextField();
+		fatF1.setMaxSize(75, 30);
+		fatF1.setTranslateX(290);
+		fatF1.setTranslateY(135);
+		fatQ.setFont(Font.font("Arial", 20));
+		fatQ.setTranslateX(40);
+		fatQ.setTranslateY(130);
+		ToggleGroup fatGroup = new ToggleGroup();
+		RadioButton fatB = new RadioButton("Below");
+		fatB.setToggleGroup(fatGroup);
+		fatB.setSelected(true);
+		fatB.setTranslateX(190);
+		fatB.setTranslateY(130);
+		fatB.setStyle("-fx-text-fill: black");
+		RadioButton fatA = new RadioButton("Above");
+		fatA.setToggleGroup(fatGroup);
+		fatA.setTranslateX(190);
+		fatA.setTranslateY(150);
+		fatA.setStyle("-fx-text-fill: black");
+		RadioButton fatE = new RadioButton("Equal");
+		fatE.setToggleGroup(calGroup);
+		fatE.setTranslateX(190);
+		fatE.setTranslateY(170);
+		fatE.setStyle("-fx-text-fill: black");
+
+		queryLayout.getChildren().add(fatE);
+		queryLayout.getChildren().add(fatQ);
+		queryLayout.getChildren().add(fatB);
+		queryLayout.getChildren().add(fatA);
+		queryLayout.getChildren().add(fatF1);
+		queryLayout.setAlignment(fatQ, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fatB, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fatA, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fatF1, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fatE, Pos.CENTER_LEFT);
+
+		// Fiber Label//
+		Label fibQ = new Label("Fiber (g):");
+		TextField fibF1 = new TextField();
+		fibF1.setMaxSize(75, 30);
+		fibF1.setTranslateX(290);
+		fibF1.setTranslateY(210);
+		fibQ.setFont(Font.font("Arial", 20));
+		fibQ.setTranslateX(40);
+		fibQ.setTranslateY(205);
+		ToggleGroup fibGroup = new ToggleGroup();
+		RadioButton fibB = new RadioButton("Below");
+		fibB.setToggleGroup(fibGroup);
+		fibB.setSelected(true);
+		fibB.setTranslateX(190);
+		fibB.setTranslateY(205);
+		fibB.setStyle("-fx-text-fill: black");
+		RadioButton fibA = new RadioButton("Above");
+		fibA.setToggleGroup(fibGroup);
+		fibA.setTranslateX(190);
+		fibA.setTranslateY(225);
+		fibA.setStyle("-fx-text-fill: black");
+		RadioButton fibE = new RadioButton("Equal");
+		fibE.setToggleGroup(calGroup);
+		fibE.setTranslateX(190);
+		fibE.setTranslateY(245);
+		fibE.setStyle("-fx-text-fill: black");
+
+		queryLayout.getChildren().add(fibE);
+		queryLayout.getChildren().add(fibQ);
+		queryLayout.getChildren().add(fibB);
+		queryLayout.getChildren().add(fibA);
+		queryLayout.getChildren().add(fibF1);
+		queryLayout.setAlignment(fibQ, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fibB, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fibA, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fibF1, Pos.CENTER_LEFT);
+		queryLayout.setAlignment(fibE, Pos.CENTER_LEFT);
+
+		// Enter button
+		Button enter = new Button("Enter");
+		enter.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+
+		if (foodField.getText().equals("")) {
+			queryOn = true;
+		List<String> finalInputList = new ArrayList<String>();
+
+		if (!String.valueOf(calorieF.getText()).equals("")) {
+		if (calB.isSelected()) {
+		String input = "calories <= " + String.valueOf(calorieF.getText());
+		finalInputList.add(input);
+		} else if (calA.isSelected()) {
+		String input = "calories >= " + String.valueOf(calorieF.getText());
+		finalInputList.add(input);
+		} else if (calE.isSelected()) {
+		String input = "calories == " + String.valueOf(calorieF.getText());
+		finalInputList.add(input);
+		}
+		}
+
+		if (!String.valueOf(proteinF.getText()).equals("")) {
+		if (proB.isSelected()) {
+		String input = "protein <= " + String.valueOf(proteinF.getText());
+		finalInputList.add(input);
+		} else if (proA.isSelected()) {
+		String input = "protein >= " + String.valueOf(proteinF.getText());
+		finalInputList.add(input);
+		} else if (proE.isSelected()) {
+		String input = "protein == " + String.valueOf(proteinF.getText());
+		finalInputList.add(input);
+		}
+		}
+
+		if (!String.valueOf(carF.getText()).equals("")) {
+		if (carB.isSelected()) {
+		String input = "carbohydrate <= " + String.valueOf(carF.getText());
+		finalInputList.add(input);
+		} else if (carA.isSelected()) {
+		String input = "carbohydrate >= " + String.valueOf(carF.getText());
+		finalInputList.add(input);
+		} else if (carE.isSelected()) {
+		String input = "carbohydrate == " + String.valueOf(carF.getText());
+		finalInputList.add(input);
+		}
+		}
+
+		if (!String.valueOf(fatF1.getText()).equals("")) {
+		if (fatB.isSelected()) {
+		String input = "fat <= " + String.valueOf(fatF1.getText());
+		finalInputList.add(input);
+		} else if (fatA.isSelected()) {
+		String input = "fat >= " + String.valueOf(fatF1.getText());
+		finalInputList.add(input);
+		} else if (fatE.isSelected()) {
+		String input = "fat == " + String.valueOf(fatF1.getText());
+		finalInputList.add(input);
+		}
+		}
+
+		if (!String.valueOf(fibF1.getText()).equals("")) {
+		if (fibB.isSelected()) {
+		String input = "fiber <= " + String.valueOf(fibF1.getText());
+		finalInputList.add(input);
+		} else if (fibA.isSelected()) {
+		String input = "fiber >= " + String.valueOf(fibF1.getText());
+		finalInputList.add(input);
+		} else if (fibE.isSelected()) {
+		String input = "fiber == " + String.valueOf(fibF1.getText());
+		finalInputList.add(input);
+		}
+		}
+
+		List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
+		List<FoodItem> tempFoodList = foodData.filterByNutrients(finalInputList);
+		for (FoodItem food : tempFoodList) {
+		foodTableItem temp = new foodTableItem(food);
+		tempFoodTableItems.add(temp);
+		}
+
+		ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
+
+		table2.setItems(temp);
+
+		} else if (!foodField.getText().equals("")) {
+			queryOn = true;
+		// figure out how to display the updated list
+		String textFieldInput = String.valueOf(foodField.getText());
+
+		List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
+		List<FoodItem> tempFoodList = foodData.filterByName(textFieldInput);
+		for (FoodItem food : tempFoodList) {
+		foodTableItem temp = new foodTableItem(food);
+		tempFoodTableItems.add(temp);
+		}
+
+		ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
+		
+
+		table2.setItems(temp);
+		}
+
+
+		primaryStage.setScene(foodScreen);
+		
+
+		}
+		});
+		enter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		enter.setTranslateX(-40);
+		enter.setTranslateY(-30);
+		enter.setMinSize(50, 20);
+		enter.setMaxSize(100, 50);
+		queryLayout.getChildren().add(enter);
+		queryLayout.setAlignment(enter, Pos.CENTER_RIGHT);
+
+		// food list button
+		Button foodBtn3 = new Button("Food List");
+		foodBtn3.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+		primaryStage.setScene(foodScreen);
+		}
+		});
+		foodBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		foodBtn3.setEffect(shadow);
+		});
+		foodBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		foodBtn3.setEffect(null);
+		});
+		foodBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		foodBtn3.setTranslateX(-10);
+		foodBtn3.setTranslateY(10);
+		foodBtn3.setMinSize(150, 150 / 2);
+		foodBtn3.setMaxSize(150, 150 / 2);
+		queryLayout.getChildren().add(foodBtn3);
+		queryLayout.setAlignment(foodBtn3, Pos.TOP_RIGHT);
+
+		// add food button
+		Button addBtn3 = new Button("Add Food");
+		addBtn3.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+		primaryStage.setScene(addScreen);
+		}
+		});
+		addBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		addBtn3.setEffect(shadow);
+		});
+		addBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		addBtn3.setEffect(null);
+		});
+		addBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		addBtn3.setTranslateX(-165);
+		addBtn3.setTranslateY(10);
+		addBtn3.setMinSize(150, 150 / 2);
+		addBtn3.setMaxSize(150, 150 / 2);
+		queryLayout.getChildren().add(addBtn3);
+		queryLayout.setAlignment(addBtn3, Pos.TOP_RIGHT);
+
+		// meal list button
+		Button mealBtn4 = new Button("Meal List");
+		mealBtn4.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+		primaryStage.setScene(mealScreen);
+		}
+		});
+		mealBtn4.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		mealBtn4.setEffect(shadow);
+		});
+		mealBtn4.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		mealBtn4.setEffect(null);
+		});
+		mealBtn4.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		mealBtn4.setTranslateX(-320);
+		mealBtn4.setTranslateY(10);
+		mealBtn4.setMinSize(150, 150 / 2);
+		mealBtn4.setMaxSize(150, 150 / 2);
+		queryLayout.getChildren().add(mealBtn4);
+		queryLayout.setAlignment(mealBtn4, Pos.TOP_RIGHT);
+
+		// home button
+		Button homeBtn3 = new Button("Go Back");
+		homeBtn3.setOnAction(new EventHandler<ActionEvent>() {
+		public void handle(ActionEvent event) {
+		primaryStage.setScene(homeScreen);
+		}
+		});
+		homeBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+		homeBtn3.setEffect(shadow);
+		});
+		homeBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+		homeBtn3.setEffect(null);
+		});
+		homeBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		homeBtn3.setTranslateX(-475);
+		homeBtn3.setTranslateY(10);
+		homeBtn3.setMinSize(150, 150 / 2);
+		homeBtn3.setMaxSize(150, 150 / 2);
+		queryLayout.getChildren().add(homeBtn3);
+		queryLayout.setAlignment(homeBtn3, Pos.TOP_RIGHT);
+
+		// title
+		Label title4 = new Label("Query");
+		title4.setFont(Font.font("Cambria", 50));
+		title4.setTranslateX(50);
+		title4.setTranslateY(20);
+
+		queryLayout.getChildren().add(title4);
+		queryLayout.setAlignment(title4, Pos.TOP_LEFT);
+		
 		////////////////////CHOOSE MEAL/////////////////////////
 		TableView chooseTable = new TableView();
 		chooseTable.setEditable(true);
-		TableColumn chooseMealColumn = new TableColumn("meals");
+		TableColumn chooseMealColumn = new TableColumn("Meals");
 		chooseMealColumn.setMinWidth(300);
         chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		chooseTable.getColumns().add(chooseMealColumn);
 		chooseTable.setTranslateX(-200);
 		chooseTable.setTranslateY(0);
 		chooseTable.setMaxSize(300, 400);
+		chooseTable.setOnMouseClicked((new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+				
+				currentMeal.setText(chosenMeal.getName());
+				primaryStage.setScene(foodScreen);
+			}
+		}));
+		
 		chooseTable.setItems(testMealArray);
 		chooseLayout.getChildren().add(chooseTable);
 		
@@ -1127,11 +1333,10 @@ public class Main extends Application {
 		continueButton.setMinSize(180, 30);
 		continueButton.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
-                chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
-                if (chosenMeal != null) {
+               System.out.println(chosenMeal.getName());
                     currentMeal.setText(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
-                }
+                
             }
         });
 		continueButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
