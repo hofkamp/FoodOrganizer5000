@@ -181,7 +181,7 @@ public class Main extends Application {
 		name.setTranslateY(-90);
 		ListView<String> ingrList = new ListView<>();
 		ingrList.setMaxSize(200, 40);
-		ingrList.setTranslateX(-240);
+		ingrList.setTranslateX(-140);
 		ingrList.setTranslateY(-50);
 		Label tempCal = new Label();
 		tempCal.setFont(Font.font(25));
@@ -408,6 +408,7 @@ public class Main extends Application {
                 if(chosenMeal != null && chosenFood != null) {
                     
                     chosenMeal.getIngredients().add(chosenFood);
+                    chosenMeal.calcNutrients();
                 }
             }
         });
@@ -1315,10 +1316,12 @@ public class Main extends Application {
 		chooseTable.setOnMouseClicked((new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+			    if (event.getClickCount() == 2) {
+			        chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
 				
-				currentMeal.setText(chosenMeal.getName());
-				primaryStage.setScene(foodScreen);
+			        currentMeal.setText(chosenMeal.getName());
+			        primaryStage.setScene(foodScreen);
+			    }
 			}
 		}));
 		
@@ -1328,12 +1331,13 @@ public class Main extends Application {
 		Button continueButton = new Button("Continue with meal");
 		continueButton.setFont(Font.font("Arial", FontWeight.BOLD,20));
 		continueButton.setTranslateX(100);
-		continueButton.setTranslateY(-100);
+		continueButton.setTranslateY(-120);
 		continueButton.setMaxSize(230, 50);
 		continueButton.setMinSize(180, 30);
 		continueButton.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
-               System.out.println(chosenMeal.getName());
+                chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+                if (chosenMeal != null);
                     currentMeal.setText(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
                 
@@ -1350,12 +1354,12 @@ public class Main extends Application {
 		Label addNewMeal = new Label("Add a new meal");
 		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		addNewMeal.setTranslateX(100);
-		addNewMeal.setTranslateY(0);
+		addNewMeal.setTranslateY(-50);
 		chooseLayout.getChildren().add(addNewMeal);
 		
 		TextField newMealF = new TextField();
 		newMealF.setTranslateX(100);
-		newMealF.setTranslateY(50);
+		newMealF.setTranslateY(0);
 		newMealF.setMinSize(200, 30);
 		newMealF.setMaxSize(200, 30);
 		chooseLayout.getChildren().add(newMealF);
@@ -1363,7 +1367,7 @@ public class Main extends Application {
 		Button addMealButton = new Button("Add new meal");
 		addMealButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		addMealButton.setTranslateX(100);
-		addMealButton.setTranslateY(100);
+		addMealButton.setTranslateY(50);
         addMealButton.setMaxSize(180, 50);
         addMealButton.setMinSize(180, 30);
 		chooseLayout.getChildren().add(addMealButton);
@@ -1383,6 +1387,25 @@ public class Main extends Application {
         });
 		addMealButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 		    addMealButton.setEffect(null);
+        });
+		
+		Button cancelButton = new Button("Cancel");
+        cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        cancelButton.setTranslateX(100);
+        cancelButton.setTranslateY(145);
+        cancelButton.setMaxSize(180, 50);
+        cancelButton.setMinSize(180, 30);
+        chooseLayout.getChildren().add(cancelButton);
+        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent event) {
+                primaryStage.setScene(foodScreen);
+            }
+        });
+        cancelButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+            cancelButton.setEffect(shadow);
+        });
+        cancelButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+            cancelButton.setEffect(null);
         });
 		
 		////////////////////HOME LAYOUT/////////////////////////

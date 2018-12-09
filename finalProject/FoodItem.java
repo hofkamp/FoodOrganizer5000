@@ -77,4 +77,8 @@ public class FoodItem {
         return nutrients.get(name);
     }
     
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

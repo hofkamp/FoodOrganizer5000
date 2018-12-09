@@ -31,10 +31,10 @@ public class MealItem <T> {
 		
 	}
 	
-	 private void calcNutrients() {
+	 public void calcNutrients() {
 		 for(int i = 0; i < ingredients.size(); i++) {
 			 calories += ingredients.get(i).getNutrientValue("calories");
-			 carbohydrate += ingredients.get(i).getNutrientValue("carbohydrates"); 
+			 carbohydrate += ingredients.get(i).getNutrientValue("carbohydrate"); 
 			 fat += ingredients.get(i).getNutrientValue("fat");
 			 protein += ingredients.get(i).getNutrientValue("protein");
 			 fiber += ingredients.get(i).getNutrientValue("fiber");
