@@ -175,10 +175,6 @@ public class Main extends Application {
 		tempName.setFont(Font.font(25));
 		tempName.setTranslateX(560);
 		tempName.setTranslateY(-90);
-		TextField name = new TextField();
-		name.setMaxSize(100, 25);
-		name.setTranslateX(-240);
-		name.setTranslateY(-90);
 		ListView<String> ingrList = new ListView<>();
 		ingrList.setMaxSize(200, 40);
 		ingrList.setTranslateX(-140);
@@ -203,8 +199,7 @@ public class Main extends Application {
 		tempFib.setFont(Font.font(25));
 		tempFib.setTranslateX(-290);
 		tempFib.setTranslateY(150);
-		mealLayout.getChildren().addAll(name, tempCal, tempCarb, tempPro, tempFat, tempFib, ingrList);
-		mealLayout.setAlignment(name, Pos.CENTER_RIGHT);
+		mealLayout.getChildren().addAll(tempName, tempCal, tempCarb, tempPro, tempFat, tempFib, ingrList);
 		mealLayout.setAlignment(tempCal, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempCarb, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempPro, Pos.CENTER_RIGHT);
