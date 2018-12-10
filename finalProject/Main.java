@@ -422,6 +422,12 @@ public class Main extends Application {
                         fadeOut.playFromStart();
                         table.getSortOrder().add(foodCol);
                         primaryStage.setScene(mealScreen);
+			 tempName.setText("");
+        		 tempCal.setText("");
+        		 tempCarb.setText("");
+        		 tempPro.setText("");
+        		 tempFat.setText("");
+        		 tempFib.setText("");
                 }
             }
         });
