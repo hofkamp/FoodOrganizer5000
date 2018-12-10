@@ -129,37 +129,37 @@ public class Main extends Application {
 		
 		//////////////////// MEAL LIST LAYOUT////////////////////
 		Label text = new Label("Selected Item");
-		text.setFont(Font.font(30));
-		text.setTranslateX(-250);
-		text.setTranslateY(-130);
+		text.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		text.setTranslateX(-130);
+		text.setTranslateY(-110);
 		Label mealN = new Label("Name:");
 		mealN.setFont(Font.font(25));
-		mealN.setTranslateX(-350);
-		mealN.setTranslateY(-90);
+		mealN.setTranslateX(-240);
+		mealN.setTranslateY(-70);
 		Label mealIn = new Label("Ingredients:");
 		mealIn.setFont(Font.font(25));
-		mealIn.setTranslateX(-350);
-		mealIn.setTranslateY(-50);
+		mealIn.setTranslateX(-240);
+		mealIn.setTranslateY(-30);
 		Label mealCb = new Label("Carbohydrates:");
 		mealCb.setFont(Font.font(25));
-		mealCb.setTranslateX(-350);
-		mealCb.setTranslateY(-10);
+		mealCb.setTranslateX(-240);
+		mealCb.setTranslateY(10);
 		Label mealCa = new Label("Calories:");
 		mealCa.setFont(Font.font(25));
-		mealCa.setTranslateX(-350);
-		mealCa.setTranslateY(30);
+		mealCa.setTranslateX(-240);
+		mealCa.setTranslateY(50);
 		Label mealPr = new Label("Protein:");
 		mealPr.setFont(Font.font(25));
-		mealPr.setTranslateX(-350);
-		mealPr.setTranslateY(70);
+		mealPr.setTranslateX(-240);
+		mealPr.setTranslateY(90);
 		Label mealFa = new Label("Fat:");
 		mealFa.setFont(Font.font(25));
-		mealFa.setTranslateX(-350);
-		mealFa.setTranslateY(110);
+		mealFa.setTranslateX(-240);
+		mealFa.setTranslateY(130);
 		Label mealFi = new Label("Fiber:");
 		mealFi.setFont(Font.font(25));
-		mealFi.setTranslateX(-350);
-		mealFi.setTranslateY(150);
+		mealFi.setTranslateX(-240);
+		mealFi.setTranslateY(170);
 		mealLayout.getChildren().addAll(mealN, mealIn, mealCb,
 				mealCa, mealPr, mealFa, mealFi, text);
 		mealLayout.setAlignment(mealN, Pos.CENTER_RIGHT);
@@ -173,46 +173,41 @@ public class Main extends Application {
 		
 		Label tempName = new Label();
 		tempName.setFont(Font.font(25));
-		tempName.setTranslateX(560);
-		tempName.setTranslateY(-90);
+		tempName.setTranslateX(-135);
+		tempName.setTranslateY(-70);
 		ListView<String> ingrList = new ListView<>();
-		ingrList.setMaxSize(200, 40);
-		ingrList.setTranslateX(-140);
-		ingrList.setTranslateY(-50);
-		Label tempCal = new Label();
-		tempCal.setFont(Font.font(25));
-		tempCal.setTranslateX(-290);
-		tempCal.setTranslateY(-10);
+		ingrList.setMaxSize(100, 31);
+		ingrList.setTranslateX(-135);
+		ingrList.setTranslateY(-27);
 		Label tempCarb = new Label();
 		tempCarb.setFont(Font.font(25));
-		tempCarb.setTranslateX(-290);
-		tempCarb.setTranslateY(30);
+		tempCarb.setTranslateX(-135);
+		tempCarb.setTranslateY(10);
+		Label tempCal = new Label();
+		tempCal.setFont(Font.font(25));
+		tempCal.setTranslateX(-135);
+		tempCal.setTranslateY(50);
 		Label tempPro = new Label();
 		tempPro.setFont(Font.font(25));
-		tempPro.setTranslateX(-290);
-		tempPro.setTranslateY(70);
+		tempPro.setTranslateX(-135);
+		tempPro.setTranslateY(90);
 		Label tempFat = new Label();
 		tempFat.setFont(Font.font(25));
-		tempFat.setTranslateX(-290);
-		tempFat.setTranslateY(110);
+		tempFat.setTranslateX(-135);
+		tempFat.setTranslateY(130);
 		Label tempFib = new Label();
 		tempFib.setFont(Font.font(25));
-		tempFib.setTranslateX(-290);
-		tempFib.setTranslateY(150);
+		tempFib.setTranslateX(-135);
+		tempFib.setTranslateY(170);
 		mealLayout.getChildren().addAll(tempName, tempCal, tempCarb, tempPro, tempFat, tempFib, ingrList);
+		mealLayout.setAlignment(Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempCal, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempCarb, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempPro, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempFat, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(tempFib, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(ingrList, Pos.CENTER_RIGHT);
-		mealLayout.setAlignment(tempName, Pos.CENTER_LEFT);
-		mealLayout.setAlignment(tempCal, Pos.CENTER_RIGHT);
-		mealLayout.setAlignment(tempCarb, Pos.CENTER_RIGHT);
-		mealLayout.setAlignment(tempPro, Pos.CENTER_RIGHT);
-		mealLayout.setAlignment(tempFat, Pos.CENTER_RIGHT);
-		mealLayout.setAlignment(tempFib, Pos.CENTER_RIGHT);
-		mealLayout.setAlignment(ingrList, Pos.CENTER_RIGHT);
+		mealLayout.setAlignment(tempName, Pos.CENTER_RIGHT);
 		
 		TableView table = new TableView();
 		table.setEditable(true);
@@ -225,24 +220,25 @@ public class Main extends Application {
 		table.setMaxSize(300, 400);
 		table.setItems(testMealArray);
 		table.setOnMouseClicked((new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				MealItem temp = (MealItem)table.getSelectionModel().getSelectedItem();
-				tempName.setText(temp.getName());
-				tempCal.setText(temp.getCal() +"");
-				tempCarb.setText(temp.getCarb() +"");
-				tempPro.setText(temp.getPro() +"");
-				tempFat.setText(temp.getFat() +"");
-				tempFib.setText(temp.getFib() +"");
-				ObservableList tempList = FXCollections.observableArrayList(temp.getIngredients());
-				ingrList.setItems(tempList);
-				//here we are going to have a global variable that will be a temp variable
-				//that will be changed when it is clicked on. 
-				//that will be used to call data from MealItem object or some shit
-			}
+		@Override
+		public void handle(MouseEvent event) {
+			MealItem temp = (MealItem)table.getSelectionModel().getSelectedItem();
+			tempName.setText(temp.getName());
+			tempCal.setText(temp.getCal() +"");
+			tempCarb.setText(temp.getCarb() +"");
+			tempPro.setText(temp.getPro() +"");
+			tempFat.setText(temp.getFat() +"");
+			tempFib.setText(temp.getFib() +"");
+			ObservableList tempList = FXCollections.observableArrayList(temp.getIngredients());
+			ingrList.setItems(tempList);
+			//here we are going to have a global variable that will be a temp variable
+			//that will be changed when it is clicked on. 
+			//that will be used to call data from MealItem object or some shit
+		}
 		}));
 		mealLayout.getChildren().add(table);
 		mealLayout.setAlignment(table, Pos.TOP_LEFT);
+		
 		
 		
 		// meal Button
@@ -1324,7 +1320,7 @@ public class Main extends Application {
 		chooseTable.setEditable(true);
 		TableColumn chooseMealColumn = new TableColumn("Meals");
 		chooseMealColumn.setMinWidth(300);
-        chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+       		chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		chooseTable.getColumns().add(chooseMealColumn);
 		chooseTable.setTranslateX(-200);
 		chooseTable.setTranslateY(0);
@@ -1347,18 +1343,17 @@ public class Main extends Application {
 		
 		Button continueButton = new Button("Continue with meal");
 		continueButton.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		continueButton.setTranslateX(100);
-		continueButton.setTranslateY(-120);
+		continueButton.setTranslateX(-170);
+		continueButton.setTranslateY(210);
 		continueButton.setMaxSize(230, 50);
 		continueButton.setMinSize(180, 30);
 		continueButton.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event) {
-                chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+            	public void handle(ActionEvent event) {
+                	chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
                 if (chosenMeal != null) {
-                    currentMeal.setText(chosenMeal.getName());
+                    System.out.println(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
                 }
-                
             }
         });
 		continueButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
@@ -1370,24 +1365,24 @@ public class Main extends Application {
 		chooseLayout.getChildren().add(continueButton);
 		
 		Label addNewMeal = new Label("Add a new meal");
-		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		addNewMeal.setTranslateX(100);
-		addNewMeal.setTranslateY(-50);
+		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		addNewMeal.setTranslateX(210);
+		addNewMeal.setTranslateY(-80);
 		chooseLayout.getChildren().add(addNewMeal);
 		
 		TextField newMealF = new TextField();
-		newMealF.setTranslateX(100);
-		newMealF.setTranslateY(0);
+		newMealF.setTranslateX(210);
+		newMealF.setTranslateY(-35);
 		newMealF.setMinSize(200, 30);
 		newMealF.setMaxSize(200, 30);
 		chooseLayout.getChildren().add(newMealF);
 		
 		Button addMealButton = new Button("Add new meal");
 		addMealButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		addMealButton.setTranslateX(100);
-		addMealButton.setTranslateY(50);
-        addMealButton.setMaxSize(180, 50);
-        addMealButton.setMinSize(180, 30);
+		addMealButton.setTranslateX(210);
+		addMealButton.setTranslateY(20);
+        	addMealButton.setMaxSize(180, 50);
+        	addMealButton.setMinSize(180, 30);
 		chooseLayout.getChildren().add(addMealButton);
 		addMealButton.setOnAction(new EventHandler<ActionEvent>() {
 		    public void handle(ActionEvent event) {
@@ -1408,22 +1403,22 @@ public class Main extends Application {
         });
 		
 		Button cancelButton = new Button("Cancel");
-        cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        cancelButton.setTranslateX(100);
-        cancelButton.setTranslateY(145);
-        cancelButton.setMaxSize(180, 50);
-        cancelButton.setMinSize(180, 30);
-        chooseLayout.getChildren().add(cancelButton);
-        cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                primaryStage.setScene(foodScreen);
-            }
+        	cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        	cancelButton.setTranslateX(390);
+       		cancelButton.setTranslateY(-265);
+        	cancelButton.setMaxSize(100, 50);
+        	cancelButton.setMinSize(100, 30);
+        	chooseLayout.getChildren().add(cancelButton);
+        	cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+            	public void handle(ActionEvent event) {
+                	primaryStage.setScene(foodScreen);
+            	}
         });
-        cancelButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-            cancelButton.setEffect(shadow);
+        	cancelButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+            		cancelButton.setEffect(shadow);
         });
-        cancelButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-            cancelButton.setEffect(null);
+        	cancelButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+            		cancelButton.setEffect(null);
         });
 		
 		////////////////////HOME LAYOUT/////////////////////////
