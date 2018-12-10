@@ -415,11 +415,13 @@ public class Main extends Application {
                 if (table2.getSelectionModel().getSelectedItem() != null)
                     chosenFood = (FoodItem)((foodTableItem)table2.getSelectionModel().getSelectedItem()).getFood();
                 if(chosenMeal != null && chosenFood != null) {
-                    
-                    chosenMeal.getIngredients().add(chosenFood);
-                    chosenMeal.calcNutrients();
+                    	 chosenMeal.getIngredients().add(chosenFood);
+                   	 chosenMeal.calcNutrients();
                         addedToMealWarning.setVisible(true);
+                        mealItems.add(chosenMeal);   
                         fadeOut.playFromStart();
+                        table.getSortOrder().add(foodCol);
+                        primaryStage.setScene(mealScreen);
                 }
             }
         });
