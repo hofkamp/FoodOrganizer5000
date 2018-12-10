@@ -1322,8 +1322,8 @@ public class Main extends Application {
 		chooseMealColumn.setMinWidth(300);
        		chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 		chooseTable.getColumns().add(chooseMealColumn);
-		chooseTable.setTranslateX(-200);
-		chooseTable.setTranslateY(0);
+		chooseTable.setTranslateX(-190);
+		chooseTable.setTranslateY(-10);
 		chooseTable.setMaxSize(300, 400);
 		chooseTable.setOnMouseClicked((new EventHandler<MouseEvent>() {
 			@Override
@@ -1343,8 +1343,8 @@ public class Main extends Application {
 		
 		Button continueButton = new Button("Continue with meal");
 		continueButton.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		continueButton.setTranslateX(-170);
-		continueButton.setTranslateY(210);
+		continueButton.setTranslateX(-190);
+		continueButton.setTranslateY(225);
 		continueButton.setMaxSize(230, 50);
 		continueButton.setMinSize(180, 30);
 		continueButton.setOnAction(new EventHandler<ActionEvent>(){
