@@ -7,7 +7,9 @@ import java.util.Map;
 
 import javafx.scene.shape.*;
 import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -44,6 +47,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -60,10 +64,11 @@ public class Main extends Application {
     private MealItem chosenMeal = null;
     private boolean queryOn = false;
     private FoodItem temp;
-    private ObservableList<MealItem> mealArray =  FXCollections.observableArrayList();
+ //   private ObservableList mealArray =  FXCollections.observableArrayList();
     private File selectedFile;
+    
+    private ObservableList<MealItem> mealArray =  FXCollections.observableArrayList();
     private MealItem tempMeal;
-
     
 	public static void main(String[] args) {
 		launch(args);
@@ -137,6 +142,15 @@ public class Main extends Application {
 		mealLayout.setAlignment(mealFi, Pos.CENTER_RIGHT);
 		mealLayout.setAlignment(text, Pos.CENTER_RIGHT);
 		
+        Label addedToMealWarning = new Label("Successfully added to meal");
+        addedToMealWarning.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        addedToMealWarning.setTranslateX(0);
+        addedToMealWarning.setTranslateY(-180);
+        mealLayout.getChildren().add(addedToMealWarning);
+        mealLayout.setAlignment(addedToMealWarning, Pos.CENTER);
+        fadeOut.setNode(addedToMealWarning);
+        addedToMealWarning.setVisible(false);
+		
 		Label tempName = new Label();
 		tempName.setFont(Font.font(25));
 		tempName.setTranslateX(-135);
@@ -195,13 +209,13 @@ public class Main extends Application {
 			@Override
 			public void handle(MouseEvent event) {
 				 tempMeal = (MealItem)table.getSelectionModel().getSelectedItem();
-	 			tempName.setText(tempMeal.getName());
-	 			tempCal.setText(tempMeal.getCal() +"");
-	 			tempCarb.setText(tempMeal.getCarb() +"");
-	 			tempPro.setText(tempMeal.getPro() +"");
-	 			tempFat.setText(tempMeal.getFat() +"");
-	 			tempFib.setText(tempMeal.getFib() +"");
-	 			ObservableList tempList = FXCollections.observableArrayList(tempMeal.getIngredients());
+	 	 			tempName.setText(tempMeal.getName());
+	 	 			tempCal.setText(tempMeal.getCal() +"");
+	 	 			tempCarb.setText(tempMeal.getCarb() +"");
+	 	 			tempPro.setText(tempMeal.getPro() +"");
+	 	 			tempFat.setText(tempMeal.getFat() +"");
+	 	 			tempFib.setText(tempMeal.getFib() +"");
+	 	 			ObservableList tempList = FXCollections.observableArrayList(tempMeal.getIngredients());
 	 			ingrList.setItems(tempList);
 	 			//here we are going to have a global variable that will be a temp variable
 	 			//that will be changed when it is clicked on. 
@@ -322,33 +336,45 @@ public class Main extends Application {
         chooseMeal1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
             chooseMeal1.setEffect(null);
         });
-		
+
+        Tooltip t = new Tooltip("Create a new meal");
+        bindTooltip(chooseMeal1, t);
+        
         Button clearMeal = new Button("Clear Meal");
-		clearMeal.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
-		clearMeal.setMinSize(150, 50);
-		clearMeal.setTranslateX(-300);
-        clearMeal.setTranslateY(-50);  
-        mealLayout.getChildren().add(clearMeal);       
-        mealLayout.setAlignment(clearMeal, Pos.BOTTOM_RIGHT);
-        clearMeal.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event) {
-            	System.out.println(mealArray.toString());
-            	for(int i = 0; i < mealArray.size(); i++) {
-            		if(tempMeal.getName().compareTo(mealArray.get(i).getName()) == 0)
-            			mealArray.remove(i);
-            	}
-            	mealArray.remove(tempMeal.getName());
-            	System.out.println(mealArray.toString());
-            	primaryStage.setScene(mealScreen);
-            }
-        });
-        clearMeal.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-            clearMeal.setEffect(shadow);
-        });
-        clearMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-            clearMeal.setEffect(null);
-        });
-	
+ 		clearMeal.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
+ 		clearMeal.setMinSize(150, 50);
+ 		clearMeal.setTranslateX(-300);
+         clearMeal.setTranslateY(-50);  
+         mealLayout.getChildren().add(clearMeal);       
+         mealLayout.setAlignment(clearMeal, Pos.BOTTOM_RIGHT);
+         clearMeal.setOnAction(new EventHandler<ActionEvent>(){
+             public void handle(ActionEvent event) {
+             	System.out.println(mealArray.toString());
+             	for(int i = 0; i < mealArray.size(); i++) {
+             		if(tempMeal.getName().compareTo(mealArray.get(i).getName()) == 0)
+             			mealArray.remove(i);
+             	}
+             	mealArray.remove(tempMeal.getName());
+             	System.out.println(mealArray.toString());
+             	primaryStage.setScene(mealScreen);
+             	tempName.setText("");
+ 	 			tempCal.setText("");
+ 	 			tempCarb.setText("");
+ 	 			tempPro.setText("");
+ 	 			tempFat.setText("");
+ 	 			tempFib.setText("");
+             	ingrList.setItems(null);
+             }
+         });
+         clearMeal.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+             clearMeal.setEffect(shadow);
+         });
+         clearMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+             clearMeal.setEffect(null);
+         });
+         
+         Tooltip x = new Tooltip("Remove the selected meal from the meal list");
+         bindTooltip(clearMeal, t);
 		////////////////////FOOD LIST LAYOUT////////////////////
 		
 		TableView table2 = new TableView();
@@ -356,7 +382,8 @@ public class Main extends Application {
 
  		table2.getSelectionModel().setSelectionMode(
  			    SelectionMode.MULTIPLE
- 			);
+ 		);
+ 		
 		TableColumn foodCol = new TableColumn("Food");
 		foodCol.setMinWidth(200);
 		foodCol.setMaxWidth(200);
@@ -390,67 +417,67 @@ public class Main extends Application {
 		foodLayout.setAlignment(table2, Pos.TOP_LEFT);
 		
 		Label fileL = new Label("File Name:");
-		fileL.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		fileL.setTranslateX(25);
-		fileL.setTranslateY(-20);
-		//fileL.setMinSize(160, 50);
-		//save.setMaxSize(100, 50); 
-		foodLayout.getChildren().add(fileL); 
-		foodLayout.setAlignment(fileL, Pos.BOTTOM_LEFT);
+ 		fileL.setFont(Font.font("Arial", FontWeight.BOLD,20));
+ 		fileL.setTranslateX(25);
+ 		fileL.setTranslateY(-20);
+ 		//fileL.setMinSize(160, 50);
+ 		//save.setMaxSize(100, 50); 
+ 		foodLayout.getChildren().add(fileL); 
+ 		foodLayout.setAlignment(fileL, Pos.BOTTOM_LEFT);
 
-		TextField fileField = new TextField();
-		fileField.setTranslateX(135);
-		fileField.setTranslateY(-15);
-		fileField.setMinSize(550, 30);
-		fileField.setMaxSize(550, 30);
-		foodLayout.getChildren().add(fileField);
-		foodLayout.setAlignment(fileField, Pos.BOTTOM_LEFT);
+ 		TextField fileField = new TextField();
+ 		fileField.setTranslateX(135);
+ 		fileField.setTranslateY(-15);
+ 		fileField.setMinSize(550, 30);
+ 		fileField.setMaxSize(550, 30);
+ 		foodLayout.getChildren().add(fileField);
+ 		foodLayout.setAlignment(fileField, Pos.BOTTOM_LEFT);
 
-		Button save2 = new Button("Save to current file");
-		save2.setOnAction(new EventHandler<ActionEvent>() {
-			public void handle(ActionEvent event) {
-				foodData.saveFoodItems(filePath);
-			}
-		});
-		save2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-			save2.setEffect(shadow);
-		});
-		save2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-			save2.setEffect(null);
-		});
-		save2.setFont(Font.font("Arial", FontWeight.BOLD,15));
+ 		Button save2 = new Button("Save to current file");
+ 		save2.setOnAction(new EventHandler<ActionEvent>() {
+ 			public void handle(ActionEvent event) {
+ 				foodData.saveFoodItems(filePath);
+ 			}
+ 		});
+ 		save2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+ 			save2.setEffect(shadow);
+ 		});
+ 		save2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+ 			save2.setEffect(null);
+ 		});
+ 		save2.setFont(Font.font("Arial", FontWeight.BOLD,15));
 
-		save2.setTranslateX(-25);
-		save2.setTranslateY(185);
-		save2.setMinSize(160, 60);
-		save2.setMaxSize(160, 60);
-		//save.setMaxSize(100, 50); 
-		foodLayout.getChildren().add(save2); 
-		foodLayout.setAlignment(save2, Pos.CENTER_RIGHT);
+ 		save2.setTranslateX(-25);
+ 		save2.setTranslateY(185);
+ 		save2.setMinSize(160, 60);
+ 		save2.setMaxSize(160, 60);
+ 		//save.setMaxSize(100, 50); 
+ 		foodLayout.getChildren().add(save2); 
+ 		foodLayout.setAlignment(save2, Pos.CENTER_RIGHT);
+
 
 
 		// Save button 
 		Button save = new Button("Save");
 		save.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event) {
-				if(fileField.getText().isEmpty())
-					foodData.saveFoodItems("newFile.csv");
-				else {
-					if(fileField.getText().contains(".csv"))
-						foodData.saveFoodItems(fileField.getText());
-					else
-						foodData.saveFoodItems(fileField.getText() + ".csv");
-				}
-			}
-		});
+ 				if(fileField.getText().isEmpty())
+ 					foodData.saveFoodItems("newFile.csv");
+ 				else {
+ 					if(fileField.getText().contains(".csv"))
+ 						foodData.saveFoodItems(fileField.getText());
+ 					else
+ 						foodData.saveFoodItems(fileField.getText() + ".csv");
+ 				}
+ 			}
+ 		});
 		save.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-			save.setEffect(shadow);
-		});
+		        save.setEffect(shadow);
+		    });
 		save.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-			save.setEffect(null);
-		});
+		        save.setEffect(null);
+		    });
 		save.setFont(Font.font("Arial", FontWeight.BOLD,20));
-
 		save.setTranslateX(-25);
 		save.setTranslateY(260);
 		save.setMinSize(160, 50);
@@ -458,37 +485,35 @@ public class Main extends Application {
 		foodLayout.getChildren().add(save); 
 		foodLayout.setAlignment(save, Pos.CENTER_RIGHT);
 		
-        Label addedToMealWarning = new Label("Successfully added to meal");
-        addedToMealWarning.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        addedToMealWarning.setTranslateX(0);
-        addedToMealWarning.setTranslateY(-180);
-        foodLayout.getChildren().add(addedToMealWarning);
-        foodLayout.setAlignment(addedToMealWarning, Pos.CENTER);
-        fadeOut.setNode(addedToMealWarning);
-        addedToMealWarning.setVisible(false);
+		Tooltip l = new Tooltip("save the food list to a file");
+        bindTooltip(save, l);
 		
 		// Enter button
 		Button enter2 = new Button("Add to Meal");
 		enter2.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
-            	FoodItem chosenFood = null; //foodList.((foodTableItem)table2.getSelectionModel().getSelectedItem()).getId();
-                if (table2.getSelectionModel().getSelectedItem() != null)
-                    chosenFood = (FoodItem)((foodTableItem)table2.getSelectionModel().getSelectedItem()).getFood();
-                if(chosenMeal != null && chosenFood != null) {
-                    	 chosenMeal.getIngredients().add(chosenFood);
-                   	 chosenMeal.calcNutrients();
-                        addedToMealWarning.setVisible(true);
-                        mealItems.add(chosenMeal);   
-                        fadeOut.playFromStart();
-                        table.getSortOrder().add(foodCol);
-                        primaryStage.setScene(mealScreen);
-			 tempName.setText("");
-        		 tempCal.setText("");
-        		 tempCarb.setText("");
-        		 tempPro.setText("");
-        		 tempFat.setText("");
-        		 tempFib.setText("");
-                }
+            ObservableList<Object> chosenFoods = null;
+            		if(table2.getSelectionModel().getSelectedItems() != null) {
+            			chosenFoods = (ObservableList<Object>) table2.getSelectionModel().getSelectedItems();
+            		}
+            		if(chosenMeal !=null && chosenFoods!=null) {
+            			for(Object chosenFood : chosenFoods) {
+            				chosenMeal.getIngredients().add(((foodTableItem)chosenFood).getFood());
+            			}
+            			 chosenMeal.calcNutrients();
+                  		 addedToMealWarning.setVisible(true);
+                  		 mealItems.add(chosenMeal);   
+                  		 fadeOut.playFromStart();
+                  		 table.getSortOrder().add(foodCol);
+                  		primaryStage.setScene(mealScreen);
+                  		tempName.setText("");
+                 		 tempCal.setText("");
+                 		 tempCarb.setText("");
+                 		 tempPro.setText("");
+                 		 tempFat.setText("");
+                 		 tempFib.setText("");		 
+            		}
+            
             }
         });
 		enter2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
@@ -505,57 +530,65 @@ public class Main extends Application {
 		foodLayout.getChildren().add(enter2); 
 		foodLayout.setAlignment(enter2, Pos.CENTER_RIGHT);
 		
+		Tooltip g = new Tooltip("Add the selected food to the selected meal");
+        bindTooltip(enter2, g);
 		//filter status
-				Label filterStatus = new Label();
-				filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
-				    String s = " ";
-				    if(queryOn)
-				        s = "Filter Status: ON ";
-				    else
-				        s = "Filter Status: OFF";
-				    return s;
-				}));
-				filterStatus.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-				filterStatus.setTranslateX(-25);
-				filterStatus.setTranslateY(-5);
-				foodLayout.getChildren().add(filterStatus);
-				foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);
-		
-		// Unfilter button
-		Button unfilter = new Button ("Unfilter");
-		unfilter.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event) {
-              
-            	queryOn = false;
-               
-                filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
-				    String s = " ";
-				    if(queryOn)
-				        s = "Filter Status: ON ";
-				    else
-				        s = "Filter Status: OFF";
-				    return s;
-				}));
-            }
+        // filter status
+        Label filterStatus = new Label();
+        filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+                String s = " ";
+                if (queryOn)
+                        s = "Filter Status: ON ";
+                else
+                        s = "Filter Status: OFF";
+                return s;
+        }));
+        filterStatus.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        filterStatus.setTranslateX(-25);
+        filterStatus.setTranslateY(-5);
+        foodLayout.getChildren().add(filterStatus);
+        foodLayout.setAlignment(filterStatus, Pos.CENTER_RIGHT);
+
+        // Unfilter button
+        Button unfilter = new Button("Unfilter");
+        unfilter.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+
+                        queryOn = false;
+
+                        filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+                                String s = " ";
+                                if (queryOn)
+                                        s = "Filter Status: ON ";
+                                else
+                                        s = "Filter Status: OFF";
+                                return s;
+                        }));
+                       table2.setItems(foodList);
+                }
         });
-		unfilter.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		    unfilter.setEffect(shadow);
-		});
-		unfilter.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		    unfilter.setEffect(null);
-		});
-		unfilter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		unfilter.setTranslateX(-25);
-		unfilter.setTranslateY(-50);
-		unfilter.setMinSize(160, 50);
-		//unfilter.setMaxSize(100, 50);
-		foodLayout.getChildren().add(unfilter);
-		foodLayout.setAlignment(unfilter, Pos.CENTER_RIGHT);
+        unfilter.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+                unfilter.setEffect(shadow);
+        });
+        unfilter.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+                unfilter.setEffect(null);
+        });
+        unfilter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        unfilter.setTranslateX(-25);
+        unfilter.setTranslateY(-50);
+        unfilter.setMinSize(160, 50);
+        // unfilter.setMaxSize(100, 50);
+        foodLayout.getChildren().add(unfilter);
+        foodLayout.setAlignment(unfilter, Pos.CENTER_RIGHT);
 		//filter status label
 		Label filterBox = new Label("Filter Status:");
 		filterBox.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		filterBox.setTranslateX(-25);
 		filterBox.setTranslateY(-15);
+		//foodLayout.getChildren().add(filterBox);
+		//foodLayout.setAlignment(filterBox, Pos.CENTER_RIGHT);
+		Tooltip u = new Tooltip("unfilters the list");
+        bindTooltip(unfilter, u);
 		
 		
 		 Label currentMealText = new Label("Adding to This Meal:");
@@ -601,7 +634,9 @@ public class Main extends Application {
         chooseMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
             chooseMeal.setEffect(null);
         });
-
+        
+        Tooltip w = new Tooltip("Select the meal you want to add to");
+        bindTooltip(chooseMeal, w);
 		//meal Button
 		Button mealBtn1 = new Button("Meal List");
 		mealBtn1.setOnAction(new EventHandler<ActionEvent>(){
@@ -695,6 +730,7 @@ public class Main extends Application {
 		foodLayout.getChildren().add(title1);
 		foodLayout.setAlignment(title1, Pos.TOP_LEFT);
 		//foodScreen = new Scene(foodLayout, 900, 600);
+
 		////////////////////ADD FOOD LAYOUT/////////////////////
 		//file name input
 		Button fileButton = new Button("Choose a file...");
@@ -708,7 +744,8 @@ public class Main extends Application {
 		fileButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 			fileButton.setEffect(null);
 		});
-
+		 Tooltip a = new Tooltip("select a .csv file to import");
+	      bindTooltip(fileButton, a);
 		addLayout.setAlignment(fileButton, Pos.TOP_CENTER);
 		//random OR text box for aesthetic
 		Label ORText = new Label("OR");
@@ -798,20 +835,18 @@ public class Main extends Application {
 		fileButton.setOnAction(
 	            new EventHandler<ActionEvent>() {
 	                public void handle(final ActionEvent e) {
-	                	FoodData data = new FoodData();
 	                	FileChooser fileChooser = new FileChooser();
 	            		File selectedFile = fileChooser.showOpenDialog(null);
 	            		
-	            		if (selectedFile != null) {
-	            		List<FoodItem> loadedFoods = new ArrayList<FoodItem>();
-					data.loadFoodItems(selectedFile.getAbsolutePath());
-					loadedFoods = data.getAllFoodItems();
-
-					for(int i = 0; i<loadedFoods.size(); i++) {
-					foodTableItem tableFood = new foodTableItem(loadedFoods.get(i));
-					foodItems.add(loadedFoods.get(i));
-					tableItems.add(tableFood);
+	            	if (selectedFile != null) {
+					foodData.loadFoodItems(selectedFile.getAbsolutePath());
+					foodItems = foodData.getAllFoodItems();
+					
+					for(FoodItem food: foodItems) {
+						foodTableItem tableFood = new foodTableItem(food);
+						tableItems.add(tableFood);
 					}
+						
 	            		}
 					table2.getSortOrder().add(foodCol);
 					carbF.clear();  
@@ -955,6 +990,116 @@ public class Main extends Application {
 		title3.setTranslateY(20);
 		addLayout.getChildren().add(title3);
 		addLayout.setAlignment(title3, Pos.TOP_LEFT);	
+
+////////////////////CHOOSE MEAL/////////////////////////
+		TableView chooseTable = new TableView();
+		chooseTable.setEditable(true);
+		TableColumn chooseMealColumn = new TableColumn("Meals");
+		chooseMealColumn.setMinWidth(300);
+		chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+		chooseTable.getColumns().add(chooseMealColumn);
+		chooseTable.setTranslateX(-190);
+		chooseTable.setTranslateY(-10);
+		chooseTable.setMaxSize(300, 400);
+		chooseTable.setOnMouseClicked((new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getClickCount() == 2) {
+					chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+					if (chosenMeal != null) {
+						currentMeal.setText(chosenMeal.getName());
+						primaryStage.setScene(foodScreen);
+					}
+				}
+			}
+		}));
+
+		chooseTable.setItems(mealArray);
+		chooseLayout.getChildren().add(chooseTable);
+
+		Button continueButton = new Button("Continue with meal");
+		continueButton.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		continueButton.setTranslateX(-190);
+		continueButton.setTranslateY(225);
+		continueButton.setMaxSize(230, 50);
+		continueButton.setMinSize(180, 30);
+		continueButton.setOnAction(new EventHandler<ActionEvent>(){
+			public void handle(ActionEvent event) {
+		chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+		if (chosenMeal != null) {
+			currentMeal.setText(chosenMeal.getName());
+			primaryStage.setScene(foodScreen);
+		}
+			}
+		});
+		continueButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			continueButton.setEffect(shadow);
+		});
+		continueButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			continueButton.setEffect(null);
+		});
+
+		Tooltip c = new Tooltip("Select a meal to add to");
+		bindTooltip(continueButton, c);
+		chooseLayout.getChildren().add(continueButton);
+
+		Label addNewMeal = new Label("Add a new meal");
+		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		addNewMeal.setTranslateX(210);
+		addNewMeal.setTranslateY(-80);
+		chooseLayout.getChildren().add(addNewMeal);
+
+		TextField newMealF = new TextField();
+		newMealF.setTranslateX(210);
+		newMealF.setTranslateY(-35);
+		newMealF.setMinSize(200, 30);
+		newMealF.setMaxSize(200, 30);
+		chooseLayout.getChildren().add(newMealF);
+
+		Button addMealButton = new Button("Add new meal");
+		addMealButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		addMealButton.setTranslateX(210);
+		addMealButton.setTranslateY(20);
+		addMealButton.setMaxSize(180, 50);
+		addMealButton.setMinSize(180, 30);
+		chooseLayout.getChildren().add(addMealButton);
+		addMealButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				String newMealName = newMealF.getText();
+				boolean contains = false;
+				for (Object meal : mealArray)
+					if (((MealItem)meal).getName().equals(newMealName))
+						contains = true;
+				if (!contains)
+					mealArray.add(new MealItem(newMealF.getText(),new ArrayList<FoodItem>()));
+				newMealF.clear();
+			}
+		});
+		addMealButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			addMealButton.setEffect(shadow);
+		});
+		addMealButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			addMealButton.setEffect(null);
+		});
+
+		Button cancelButton = new Button("Cancel");
+		cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		cancelButton.setTranslateX(390);
+		cancelButton.setTranslateY(-265);
+		cancelButton.setMaxSize(100, 50);
+		cancelButton.setMinSize(100, 30);
+		chooseLayout.getChildren().add(cancelButton);
+		cancelButton.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				primaryStage.setScene(foodScreen);
+			}
+		});
+		cancelButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			cancelButton.setEffect(shadow);
+		});
+		cancelButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			cancelButton.setEffect(null);
+		});
 
 		//////////////////// QUERY LAYOUT////////////////////////
 
@@ -1168,322 +1313,371 @@ public class Main extends Application {
 		queryLayout.setAlignment(fibF1, Pos.CENTER_LEFT);
 		queryLayout.setAlignment(fibE, Pos.CENTER_LEFT);
 
-		// Enter button
+		//enter button
 		Button enter = new Button("Enter");
-		enter.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
+        enter.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
 
-		if (foodField.getText().equals("")) {
-			queryOn = true;
-		List<String> finalInputList = new ArrayList<String>();
+                        /*
+                         * // if the values of the textfields are not empty and are less than 0... if
+                         * ((!(String.valueOf(calorieF.getText()).equals(""))) &&
+                         * Integer.valueOf(String.valueOf(calorieF.getText())).compareTo(0) >= 0 &&
+                         * (calorieF.getText()).matches("[0-999]+")) ||
+                         * (!(String.valueOf(proteinF.getText()).equals("")) &&
+                         * Integer.valueOf(String.valueOf(proteinF.getText())).compareTo(0) >= 0 &&
+                         * (proteinF.getText()).matches("[0-999]+")) ||
+                         * (!(String.valueOf(carF.getText()).equals("")) &&
+                         * Integer.valueOf(String.valueOf(carF.getText())).compareTo(0) >= 0 &&
+                         * carF.getText().matches("[0-999]+")) ||
+                         * (!(String.valueOf(fatF1.getText()).equals("")) &&
+                         * Integer.valueOf(String.valueOf(fatF1.getText())).compareTo(0) >= 0 &&
+                         * fatF1.getText().matches("[0-999]+")) ||
+                         * (!(String.valueOf(fibF1.getText()).equals("")) &&
+                         * Integer.valueOf(String.valueOf(fibF1.getText())).compareTo(0) >= 0) &&
+                         * fibF1.getText().matches("[0-999]+"))
+                         */
 
-		if (!String.valueOf(calorieF.getText()).equals("")) {
-		if (calB.isSelected()) {
-		String input = "calories <= " + String.valueOf(calorieF.getText());
-		finalInputList.add(input);
-		} else if (calA.isSelected()) {
-		String input = "calories >= " + String.valueOf(calorieF.getText());
-		finalInputList.add(input);
-		} else if (calE.isSelected()) {
-		String input = "calories == " + String.valueOf(calorieF.getText());
-		finalInputList.add(input);
-		}
-		}
+                        if ((!((calorieF.getText()).matches("[0-9]+")) && (!(String.valueOf(calorieF.getText()).equals(""))))
+                                        || (!((proteinF.getText()).matches("[0-9]+"))
+                                                        && (!(String.valueOf(proteinF.getText()).equals(""))))
+                                        || (!((carF.getText()).matches("[0-9]+")) && (!(String.valueOf(carF.getText()).equals(""))))
+                                        || (!((fatF1.getText()).matches("[0-9]+")) && (!(String.valueOf(fatF1.getText()).equals(""))))
+                                        || (!((fibF1.getText()).matches("[0-9]+"))
+                                                        && (!(String.valueOf(fibF1.getText()).equals(""))))) {
 
-		if (!String.valueOf(proteinF.getText()).equals("")) {
-		if (proB.isSelected()) {
-		String input = "protein <= " + String.valueOf(proteinF.getText());
-		finalInputList.add(input);
-		} else if (proA.isSelected()) {
-		String input = "protein >= " + String.valueOf(proteinF.getText());
-		finalInputList.add(input);
-		} else if (proE.isSelected()) {
-		String input = "protein == " + String.valueOf(proteinF.getText());
-		finalInputList.add(input);
-		}
-		}
+                                // implement pop up here that will show the errors
 
-		if (!String.valueOf(carF.getText()).equals("")) {
-		if (carB.isSelected()) {
-		String input = "carbohydrate <= " + String.valueOf(carF.getText());
-		finalInputList.add(input);
-		} else if (carA.isSelected()) {
-		String input = "carbohydrate >= " + String.valueOf(carF.getText());
-		finalInputList.add(input);
-		} else if (carE.isSelected()) {
-		String input = "carbohydrate == " + String.valueOf(carF.getText());
-		finalInputList.add(input);
-		}
-		}
+                                // System.out.println("hi");
 
-		if (!String.valueOf(fatF1.getText()).equals("")) {
-		if (fatB.isSelected()) {
-		String input = "fat <= " + String.valueOf(fatF1.getText());
-		finalInputList.add(input);
-		} else if (fatA.isSelected()) {
-		String input = "fat >= " + String.valueOf(fatF1.getText());
-		finalInputList.add(input);
-		} else if (fatE.isSelected()) {
-		String input = "fat == " + String.valueOf(fatF1.getText());
-		finalInputList.add(input);
-		}
-		}
+                        } else {
 
-		if (!String.valueOf(fibF1.getText()).equals("")) {
-		if (fibB.isSelected()) {
-		String input = "fiber <= " + String.valueOf(fibF1.getText());
-		finalInputList.add(input);
-		} else if (fibA.isSelected()) {
-		String input = "fiber >= " + String.valueOf(fibF1.getText());
-		finalInputList.add(input);
-		} else if (fibE.isSelected()) {
-		String input = "fiber == " + String.valueOf(fibF1.getText());
-		finalInputList.add(input);
-		}
-		}
+                                if (String.valueOf(foodField.getText()).equals("")
+                                                && (!(String.valueOf(calorieF.getText()).equals(""))
+                                                                || !(String.valueOf(proteinF.getText()).equals(""))
+                                                                || !(String.valueOf(carF.getText()).equals(""))
+                                                                || !(String.valueOf(fatF1.getText()).equals(""))
+                                                                || !(String.valueOf(fibF1.getText()).equals("")))) {
 
-		List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
-		List<FoodItem> tempFoodList = foodData.filterByNutrients(finalInputList);
-		for (FoodItem food : tempFoodList) {
-		foodTableItem temp = new foodTableItem(food);
-		tempFoodTableItems.add(temp);
-		}
+                                        List<String> finalInputList = new ArrayList<String>();
 
-		ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
+                                        if (!(String.valueOf(calorieF.getText()).equals(""))) {
+                                                if (calB.isSelected()) {
+                                                        String input = "calories <= " + String.valueOf(calorieF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (calA.isSelected()) {
+                                                        String input = "calories >= " + String.valueOf(calorieF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (calE.isSelected()) {
+                                                        String input = "calories == " + String.valueOf(calorieF.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
 
-		table2.setItems(temp);
+                                        if (!(String.valueOf(proteinF.getText()).equals(""))) {
+                                                if (proB.isSelected()) {
+                                                        String input = "protein <= " + String.valueOf(proteinF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (proA.isSelected()) {
+                                                        String input = "protein >= " + String.valueOf(proteinF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (proE.isSelected()) {
+                                                        String input = "protein == " + String.valueOf(proteinF.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
 
-		} else if (!foodField.getText().equals("")) {
-			queryOn = true;
-		// figure out how to display the updated list
-		String textFieldInput = String.valueOf(foodField.getText());
+                                        if (!(String.valueOf(carF.getText()).equals(""))) {
+                                                if (carB.isSelected()) {
+                                                        String input = "carbohydrate <= " + String.valueOf(carF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (carA.isSelected()) {
+                                                        String input = "carbohydrate >= " + String.valueOf(carF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (carE.isSelected()) {
+                                                        String input = "carbohydrate == " + String.valueOf(carF.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
 
-		List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
-		List<FoodItem> tempFoodList = foodData.filterByName(textFieldInput);
-		for (FoodItem food : tempFoodList) {
-		foodTableItem temp = new foodTableItem(food);
-		tempFoodTableItems.add(temp);
-		}
+                                        if (!(String.valueOf(fatF1.getText()).equals(""))) {
+                                                if (fatB.isSelected()) {
+                                                        String input = "fat <= " + String.valueOf(fatF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fatA.isSelected()) {
+                                                        String input = "fat >= " + String.valueOf(fatF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fatE.isSelected()) {
+                                                        String input = "fat == " + String.valueOf(fatF1.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
 
-		ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
-		
+                                        if (!(String.valueOf(fibF1.getText()).equals(""))) {
+                                                if (fibB.isSelected()) {
+                                                        String input = "fiber <= " + String.valueOf(fibF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fibA.isSelected()) {
+                                                        String input = "fiber >= " + String.valueOf(fibF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fibE.isSelected()) {
+                                                        String input = "fiber == " + String.valueOf(fibF1.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
 
-		table2.setItems(temp);
-		}
+                                        List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
+                                        List<FoodItem> tempFoodList = foodData.filterByNutrients(finalInputList);
 
 
-		primaryStage.setScene(foodScreen);
-		
+                                        for (FoodItem food : tempFoodList) {
+                                                foodTableItem temp = new foodTableItem(food);
+                                                tempFoodTableItems.add(temp);
+                                        }
 
-		}
-		});
-		enter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		enter.setTranslateX(-40);
-		enter.setTranslateY(-30);
-		enter.setMinSize(50, 20);
-		enter.setMaxSize(100, 50);
-		queryLayout.getChildren().add(enter);
-		queryLayout.setAlignment(enter, Pos.CENTER_RIGHT);
+                                        ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
 
-		// food list button
-		Button foodBtn3 = new Button("Food List");
-		foodBtn3.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-		primaryStage.setScene(foodScreen);
-		}
-		});
-		foodBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		foodBtn3.setEffect(shadow);
-		});
-		foodBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		foodBtn3.setEffect(null);
-		});
-		foodBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		foodBtn3.setTranslateX(-10);
-		foodBtn3.setTranslateY(10);
-		foodBtn3.setMinSize(150, 150 / 2);
-		foodBtn3.setMaxSize(150, 150 / 2);
-		queryLayout.getChildren().add(foodBtn3);
-		queryLayout.setAlignment(foodBtn3, Pos.TOP_RIGHT);
+                                        table2.setItems(temp);
 
-		// add food button
-		Button addBtn3 = new Button("Add Food");
-		addBtn3.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-		primaryStage.setScene(addScreen);
-		}
-		});
-		addBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		addBtn3.setEffect(shadow);
-		});
-		addBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		addBtn3.setEffect(null);
-		});
-		addBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		addBtn3.setTranslateX(-165);
-		addBtn3.setTranslateY(10);
-		addBtn3.setMinSize(150, 150 / 2);
-		addBtn3.setMaxSize(150, 150 / 2);
-		queryLayout.getChildren().add(addBtn3);
-		queryLayout.setAlignment(addBtn3, Pos.TOP_RIGHT);
+                                        filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+                                                return "Filter Status: ON";
+                                        }));
 
-		// meal list button
-		Button mealBtn4 = new Button("Meal List");
-		mealBtn4.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-		primaryStage.setScene(mealScreen);
-		}
-		});
-		mealBtn4.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		mealBtn4.setEffect(shadow);
-		});
-		mealBtn4.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		mealBtn4.setEffect(null);
-		});
-		mealBtn4.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		mealBtn4.setTranslateX(-320);
-		mealBtn4.setTranslateY(10);
-		mealBtn4.setMinSize(150, 150 / 2);
-		mealBtn4.setMaxSize(150, 150 / 2);
-		queryLayout.getChildren().add(mealBtn4);
-		queryLayout.setAlignment(mealBtn4, Pos.TOP_RIGHT);
+                                        primaryStage.setScene(foodScreen);
 
-		// home button
-		Button homeBtn3 = new Button("Go Back");
-		homeBtn3.setOnAction(new EventHandler<ActionEvent>() {
-		public void handle(ActionEvent event) {
-		primaryStage.setScene(homeScreen);
-		}
-		});
-		homeBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		homeBtn3.setEffect(shadow);
-		});
-		homeBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		homeBtn3.setEffect(null);
-		});
-		homeBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		homeBtn3.setTranslateX(-475);
-		homeBtn3.setTranslateY(10);
-		homeBtn3.setMinSize(150, 150 / 2);
-		homeBtn3.setMaxSize(150, 150 / 2);
-		queryLayout.getChildren().add(homeBtn3);
-		queryLayout.setAlignment(homeBtn3, Pos.TOP_RIGHT);
+                                } else if (!(foodField.getText().equals("")) && ((String.valueOf(calorieF.getText()).equals(""))
+                                                && (String.valueOf(proteinF.getText()).equals(""))
+                                                && (String.valueOf(carF.getText()).equals(""))
+                                                && (String.valueOf(fatF1.getText()).equals(""))
+                                                && (String.valueOf(fibF1.getText()).equals("")))) {
+                                        // figure out how to display the updated list
+                                        String textFieldInput = String.valueOf(foodField.getText());
 
-		// title
-		Label title4 = new Label("Query");
-		title4.setFont(Font.font("Cambria", 50));
-		title4.setTranslateX(50);
-		title4.setTranslateY(20);
+                                        List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
+                                        List<FoodItem> tempFoodList = foodData.filterByName(textFieldInput);
+                                        for (FoodItem food : tempFoodList) {
+                                                foodTableItem temp = new foodTableItem(food);
+                                                tempFoodTableItems.add(temp);
+                                        }
 
-		queryLayout.getChildren().add(title4);
-		queryLayout.setAlignment(title4, Pos.TOP_LEFT);
-		
-		////////////////////CHOOSE MEAL/////////////////////////
-		TableView chooseTable = new TableView();
-		chooseTable.setEditable(true);
-		TableColumn chooseMealColumn = new TableColumn("Meals");
-		chooseMealColumn.setMinWidth(300);
-       		chooseMealColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
-		chooseTable.getColumns().add(chooseMealColumn);
-		chooseTable.setTranslateX(-190);
-		chooseTable.setTranslateY(-10);
-		chooseTable.setMaxSize(300, 400);
-		chooseTable.setOnMouseClicked((new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-			    if (event.getClickCount() == 2) {
-			        chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
-			        System.out.println(chosenMeal.getName());
-			        if (chosenMeal != null) {
-			            currentMeal.setText(chosenMeal.getName());
-			            primaryStage.setScene(foodScreen);
-			        }
-			    }
-			}
-		}));
-		
-		chooseTable.setItems(mealArray);
-		chooseLayout.getChildren().add(chooseTable);
-		
-		Button continueButton = new Button("Continue with meal");
-		continueButton.setFont(Font.font("Arial", FontWeight.BOLD,20));
-		continueButton.setTranslateX(-190);
-		continueButton.setTranslateY(225);
-		continueButton.setMaxSize(230, 50);
-		continueButton.setMinSize(180, 30);
-		continueButton.setOnAction(new EventHandler<ActionEvent>(){
-            	public void handle(ActionEvent event) {
-                	chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
-                if (chosenMeal != null) {
-                	currentMeal.setText(chosenMeal.getName());
-                    primaryStage.setScene(foodScreen);
+                                        ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
+
+                                        table2.setItems(temp);
+
+                                        filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+                                                return "Filter Status: ON";
+                                        }));
+
+                                        primaryStage.setScene(foodScreen);
+
+                                }
+
+                                else if (!(foodField.getText().equals("")) && (!(calorieF.getText().isEmpty())
+                                                || !(proteinF.getText().isEmpty()) || !(carF.getText().isEmpty())
+                                                || !(fatF1.getText().isEmpty()) || !(fibF1.getText().isEmpty()))) {
+
+                                        List<String> finalInputList = new ArrayList<String>();
+                                        String textFieldInput = String.valueOf(foodField.getText());
+
+                                        if (!(String.valueOf(calorieF.getText()).equals(""))) {
+                                                if (calB.isSelected()) {
+                                                        String input = "calories <= " + String.valueOf(calorieF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (calA.isSelected()) {
+                                                        String input = "calories >= " + String.valueOf(calorieF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (calE.isSelected()) {
+                                                        String input = "calories == " + String.valueOf(calorieF.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
+
+                                        if (!(String.valueOf(proteinF.getText()).equals(""))) {
+                                                if (proB.isSelected()) {
+                                                        String input = "protein <= " + String.valueOf(proteinF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (proA.isSelected()) {
+                                                        String input = "protein >= " + String.valueOf(proteinF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (proE.isSelected()) {
+                                                        String input = "protein == " + String.valueOf(proteinF.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
+
+                                        if (!(String.valueOf(carF.getText()).equals(""))) {
+                                                if (carB.isSelected()) {
+                                                        String input = "carbohydrate <= " + String.valueOf(carF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (carA.isSelected()) {
+                                                        String input = "carbohydrate >= " + String.valueOf(carF.getText());
+                                                        finalInputList.add(input);
+                                                } else if (carE.isSelected()) {
+                                                        String input = "carbohydrate == " + String.valueOf(carF.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
+
+                                        if (!(String.valueOf(fatF1.getText()).equals(""))) {
+                                                if (fatB.isSelected()) {
+                                                        String input = "fat <= " + String.valueOf(fatF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fatA.isSelected()) {
+                                                        String input = "fat >= " + String.valueOf(fatF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fatE.isSelected()) {
+                                                        String input = "fat == " + String.valueOf(fatF1.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
+
+                                        if (!(String.valueOf(fibF1.getText()).equals(""))) {
+                                                if (fibB.isSelected()) {
+                                                        String input = "fiber <= " + String.valueOf(fibF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fibA.isSelected()) {
+                                                        String input = "fiber >= " + String.valueOf(fibF1.getText());
+                                                        finalInputList.add(input);
+                                                } else if (fibE.isSelected()) {
+                                                        String input = "fiber == " + String.valueOf(fibF1.getText());
+                                                        finalInputList.add(input);
+                                                }
+                                        }
+
+                                        List<foodTableItem> tempFoodTableItems = new ArrayList<foodTableItem>();
+                                        List<FoodItem> tempFoodList = foodData.filterByNutrients(finalInputList);
+                                        List<FoodItem> secondFoodList = new ArrayList<FoodItem>();
+
+                                        for (int i = 0; i < tempFoodList.size(); i++) {
+                                                if (tempFoodList.get(i).getName().contains(textFieldInput)) {
+                                                        secondFoodList.add(tempFoodList.get(i));
+                                                }
+                                        }
+
+                                        for (FoodItem food : secondFoodList) {
+                                                foodTableItem temp = new foodTableItem(food);
+                                                tempFoodTableItems.add(temp);
+                                        }
+
+                                        ObservableList<foodTableItem> temp = FXCollections.observableList(tempFoodTableItems);
+
+                                        table2.setItems(temp);
+
+                                        filterStatus.textProperty().bind(Bindings.createStringBinding(() -> {
+                                                return "Filter Status: ON";
+                                        }));
+
+                                        primaryStage.setScene(foodScreen);
+
+                                }
+
+                                else {
+                                        table2.setItems(foodList);
+                                        primaryStage.setScene(foodScreen);
+                                }
+
+                        }
                 }
-            }
         });
-		continueButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		    continueButton.setEffect(shadow);
+        enter.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        enter.setTranslateX(-40);
+        enter.setTranslateY(-30);
+        enter.setMinSize(50, 20);
+        enter.setMaxSize(100, 50);
+        queryLayout.getChildren().add(enter);
+        queryLayout.setAlignment(enter, Pos.CENTER_RIGHT);
+
+        // food list button
+        Button foodBtn3 = new Button("Food List");
+        foodBtn3.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                        primaryStage.setScene(foodScreen);
+                }
         });
-		continueButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		    continueButton.setEffect(null);
+        foodBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+                foodBtn3.setEffect(shadow);
         });
-		chooseLayout.getChildren().add(continueButton);
-		
-		Label addNewMeal = new Label("Add a new meal");
-		addNewMeal.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-		addNewMeal.setTranslateX(210);
-		addNewMeal.setTranslateY(-80);
-		chooseLayout.getChildren().add(addNewMeal);
-		
-		TextField newMealF = new TextField();
-		newMealF.setTranslateX(210);
-		newMealF.setTranslateY(-35);
-		newMealF.setMinSize(200, 30);
-		newMealF.setMaxSize(200, 30);
-		chooseLayout.getChildren().add(newMealF);
-		
-		Button addMealButton = new Button("Add new meal");
-		addMealButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		addMealButton.setTranslateX(210);
-		addMealButton.setTranslateY(20);
-        	addMealButton.setMaxSize(180, 50);
-        	addMealButton.setMinSize(180, 30);
-		chooseLayout.getChildren().add(addMealButton);
-		addMealButton.setOnAction(new EventHandler<ActionEvent>() {
-		    public void handle(ActionEvent event) {
-		        String newMealName = newMealF.getText();
-		        boolean contains = false;
-		        for (Object meal : mealArray)
-		            if (((MealItem)meal).getName().equals(newMealName))
-		                contains = true;
-		        if (!contains)
-		            mealArray.add(new MealItem(newMealF.getText(),new ArrayList<FoodItem>()));
-		    }
-		});
-		addMealButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		    addMealButton.setEffect(shadow);
+        foodBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+                foodBtn3.setEffect(null);
         });
-		addMealButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		    addMealButton.setEffect(null);
+        foodBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        foodBtn3.setTranslateX(-10);
+        foodBtn3.setTranslateY(10);
+        foodBtn3.setMinSize(150, 150 / 2);
+        foodBtn3.setMaxSize(150, 150 / 2);
+        queryLayout.getChildren().add(foodBtn3);
+        queryLayout.setAlignment(foodBtn3, Pos.TOP_RIGHT);
+
+        // add food button
+        Button addBtn3 = new Button("Add Food");
+        addBtn3.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                        primaryStage.setScene(addScreen);
+                }
         });
-		
-		Button cancelButton = new Button("Cancel");
-        	cancelButton.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-        	cancelButton.setTranslateX(390);
-       		cancelButton.setTranslateY(-265);
-        	cancelButton.setMaxSize(100, 50);
-        	cancelButton.setMinSize(100, 30);
-        	chooseLayout.getChildren().add(cancelButton);
-        	cancelButton.setOnAction(new EventHandler<ActionEvent>() {
-            	public void handle(ActionEvent event) {
-                	primaryStage.setScene(foodScreen);
-            	}
+        addBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+                addBtn3.setEffect(shadow);
         });
-        	cancelButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-            		cancelButton.setEffect(shadow);
+        addBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+                addBtn3.setEffect(null);
         });
-        	cancelButton.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-            		cancelButton.setEffect(null);
+        addBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        addBtn3.setTranslateX(-165);
+        addBtn3.setTranslateY(10);
+        addBtn3.setMinSize(150, 150 / 2);
+        addBtn3.setMaxSize(150, 150 / 2);
+        queryLayout.getChildren().add(addBtn3);
+        queryLayout.setAlignment(addBtn3, Pos.TOP_RIGHT);
+
+        // meal list button
+        Button mealBtn4 = new Button("Meal List");
+        mealBtn4.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                        primaryStage.setScene(mealScreen);
+                }
         });
+        mealBtn4.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+                mealBtn4.setEffect(shadow);
+        });
+        mealBtn4.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+                mealBtn4.setEffect(null);
+        });
+        mealBtn4.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        mealBtn4.setTranslateX(-320);
+        mealBtn4.setTranslateY(10);
+        mealBtn4.setMinSize(150, 150 / 2);
+        mealBtn4.setMaxSize(150, 150 / 2);
+        queryLayout.getChildren().add(mealBtn4);
+        queryLayout.setAlignment(mealBtn4, Pos.TOP_RIGHT);
+
+        // home button
+        Button homeBtn3 = new Button("Go Back");
+        homeBtn3.setOnAction(new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent event) {
+                        primaryStage.setScene(homeScreen);
+                }
+        });
+        homeBtn3.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+                homeBtn3.setEffect(shadow);
+        });
+        homeBtn3.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+                homeBtn3.setEffect(null);
+        });
+        homeBtn3.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        homeBtn3.setTranslateX(-475);
+        homeBtn3.setTranslateY(10);
+        homeBtn3.setMinSize(150, 150 / 2);
+        homeBtn3.setMaxSize(150, 150 / 2);
+        queryLayout.getChildren().add(homeBtn3);
+        queryLayout.setAlignment(homeBtn3, Pos.TOP_RIGHT);
+
+        // title
+        Label title4 = new Label("Query");
+        title4.setFont(Font.font("Cambria", 50));
+        title4.setTranslateX(50);
+        title4.setTranslateY(20);
+
+        queryLayout.getChildren().add(title4);
+        queryLayout.setAlignment(title4, Pos.TOP_LEFT);
 		
 		////////////////////HOME LAYOUT/////////////////////////
 		//exit Button
@@ -1608,6 +1802,25 @@ public class Main extends Application {
 	}
 	
 	private FadeTransition fadeOut = new FadeTransition(
-	        Duration.millis(2000)
+	        Duration.millis(3000)
 	    );
+	public static void bindTooltip(final Node node, final Tooltip tooltip){
+		   node.setOnMouseMoved(new EventHandler<MouseEvent>(){
+		      @Override  
+		      public void handle(MouseEvent event) {
+		         // +15 moves the tooltip 15 pixels below the mouse cursor;
+		         // if you don't change the y coordinate of the tooltip, you
+		         // will see constant screen flicker
+		         tooltip.show(node, event.getScreenX(), event.getScreenY() + 15);
+		      }
+		   });  
+		   node.setOnMouseExited(new EventHandler<MouseEvent>(){
+		      @Override
+		      public void handle(MouseEvent event){
+		         tooltip.hide();
+		      }
+		   });
+		}
+
+
 }
