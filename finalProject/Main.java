@@ -194,14 +194,14 @@ public class Main extends Application {
 		table.setOnMouseClicked((new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				MealItem temp = (MealItem)table.getSelectionModel().getSelectedItem();
-	 			tempName.setText(temp.getName());
-	 			tempCal.setText(temp.getCal() +"");
-	 			tempCarb.setText(temp.getCarb() +"");
-	 			tempPro.setText(temp.getPro() +"");
-	 			tempFat.setText(temp.getFat() +"");
-	 			tempFib.setText(temp.getFib() +"");
-	 			ObservableList tempList = FXCollections.observableArrayList(temp.getIngredients());
+				 tempMeal = (MealItem)table.getSelectionModel().getSelectedItem();
+	 			tempName.setText(tempMeal.getName());
+	 			tempCal.setText(tempMeal.getCal() +"");
+	 			tempCarb.setText(tempMeal.getCarb() +"");
+	 			tempPro.setText(tempMeal.getPro() +"");
+	 			tempFat.setText(tempMeal.getFat() +"");
+	 			tempFib.setText(tempMeal.getFib() +"");
+	 			ObservableList tempList = FXCollections.observableArrayList(tempMeal.getIngredients());
 	 			ingrList.setItems(tempList);
 	 			//here we are going to have a global variable that will be a temp variable
 	 			//that will be changed when it is clicked on. 
@@ -306,7 +306,7 @@ public class Main extends Application {
 		
 		Button chooseMeal1 = new Button("Create Meal");
 		chooseMeal1.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
-		chooseMeal1.setMinSize(300, 50);
+		chooseMeal1.setMinSize(150, 50);
 		chooseMeal1.setTranslateX(-45);
         chooseMeal1.setTranslateY(-50);  
         mealLayout.getChildren().add(chooseMeal1);       
@@ -323,7 +323,7 @@ public class Main extends Application {
             chooseMeal1.setEffect(null);
         });
 		
-	Button clearMeal = new Button("Clear Meal");
+        Button clearMeal = new Button("Clear Meal");
 		clearMeal.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
 		clearMeal.setMinSize(150, 50);
 		clearMeal.setTranslateX(-300);
@@ -332,13 +332,13 @@ public class Main extends Application {
         mealLayout.setAlignment(clearMeal, Pos.BOTTOM_RIGHT);
         clearMeal.setOnAction(new EventHandler<ActionEvent>(){
             public void handle(ActionEvent event) {
-            	//System.out.println(mealArray.toString());
+            	System.out.println(mealArray.toString());
             	for(int i = 0; i < mealArray.size(); i++) {
             		if(tempMeal.getName().compareTo(mealArray.get(i).getName()) == 0)
             			mealArray.remove(i);
             	}
             	mealArray.remove(tempMeal.getName());
-            	//System.out.println(mealArray.toString());
+            	System.out.println(mealArray.toString());
             	primaryStage.setScene(mealScreen);
             }
         });
@@ -348,7 +348,6 @@ public class Main extends Application {
         clearMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
             clearMeal.setEffect(null);
         });
-		
 	
 		////////////////////FOOD LIST LAYOUT////////////////////
 		
@@ -1368,6 +1367,7 @@ public class Main extends Application {
 			public void handle(MouseEvent event) {
 			    if (event.getClickCount() == 2) {
 			        chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
+			        System.out.println(chosenMeal.getName());
 			        if (chosenMeal != null) {
 			            currentMeal.setText(chosenMeal.getName());
 			            primaryStage.setScene(foodScreen);
@@ -1389,7 +1389,7 @@ public class Main extends Application {
             	public void handle(ActionEvent event) {
                 	chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
                 if (chosenMeal != null) {
-                    currentMeal.setText(chosenMeal.getName());
+                	currentMeal.setText(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
                 }
             }
