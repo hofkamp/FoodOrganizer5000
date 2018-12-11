@@ -441,14 +441,15 @@ public class Main extends Application {
              clearMeal.setEffect(null);
          });
          
+	 //creates a tool tip to inform the user what the button does
          Tooltip x = new Tooltip("Remove the selected meal from the meal list");
          bindTooltip(clearMeal, t);
          
          
          
-        ////////////////////////////////////////////////////////
-	////////////////////FOOD LIST LAYOUT////////////////////
-	////////////////////////////////////////////////////////
+       		////////////////////////////////////////////////////////
+		////////////////////FOOD LIST LAYOUT////////////////////
+		////////////////////////////////////////////////////////
          
 		TableView table2 = new TableView();
 		table2.setEditable(true);
