@@ -1073,15 +1073,25 @@ public class Main extends Application {
 		chooseLayout.getChildren().add(addMealButton);
 		addMealButton.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
-				String newMealName = newMealF.getText();
-				boolean contains = false;
-				for (Object meal : mealArray)
-					if (((MealItem)meal).getName().equals(newMealName))
-						contains = true;
-				if (!contains)
-					mealArray.add(new MealItem(newMealF.getText(),new ArrayList<FoodItem>()));
-				newMealF.clear();
+				 if (newMealF.getText().isEmpty())
+				 {
+				    	Alert alert = new Alert(AlertType.INFORMATION);
+				    	alert.setTitle("Error");
+				    	alert.setHeaderText("Please enter text for a meal before adding it.");
+				    	alert.showAndWait();
+				 }
+				 else {
+					String newMealName = newMealF.getText();
+					boolean contains = false;
+					for (Object meal : mealArray)
+						if (((MealItem)meal).getName().equals(newMealName))
+							contains = true;
+					if (!contains)
+						mealArray.add(new MealItem(newMealF.getText(),new ArrayList<FoodItem>()));
+					newMealF.clear();
+				 }
 			}
+			
 		});
 		addMealButton.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 			addMealButton.setEffect(shadow);
@@ -1344,8 +1354,17 @@ public class Main extends Application {
                          * Integer.valueOf(String.valueOf(fibF1.getText())).compareTo(0) >= 0) &&
                          * fibF1.getText().matches("[0-999]+"))
                          */
-
-                        if ((!((calorieF.getText()).matches("[0-9]+")) && (!(String.valueOf(calorieF.getText()).equals(""))))
+			if (foodField.getText().isEmpty() && (fibF1.getText().isEmpty() && fatF1.getText().isEmpty() && carF.getText().isEmpty() && proteinF.getText().isEmpty() && calorieF.getText().isEmpty()))
+	                {
+	       		    	Alert alert = new Alert(AlertType.INFORMATION);
+	       		    	alert.setTitle("Error");
+	       		    	alert.setHeaderText("Please enter a food name or nutrient values" + "\n" + "before searching for a food item.");
+	       		    	alert.showAndWait();
+	       		    	primaryStage.setScene(queryScreen);
+	       			    	
+	       			    	
+	                }
+                        else if ((!((calorieF.getText()).matches("[0-9]+")) && (!(String.valueOf(calorieF.getText()).equals(""))))
                                         || (!((proteinF.getText()).matches("[0-9]+"))
                                                         && (!(String.valueOf(proteinF.getText()).equals(""))))
                                         || (!((carF.getText()).matches("[0-9]+")) && (!(String.valueOf(carF.getText()).equals(""))))
@@ -1353,9 +1372,11 @@ public class Main extends Application {
                                         || (!((fibF1.getText()).matches("[0-9]+"))
                                                         && (!(String.valueOf(fibF1.getText()).equals(""))))) {
 
-                                // implement pop up here that will show the errors
-
-                                // System.out.println("hi");
+                                Alert alert = new Alert(AlertType.INFORMATION);
+	       		    	alert.setTitle("Error");
+	       		    	alert.setHeaderText("Please enter valid, numerical values for the nutrients.");
+	       		    	alert.showAndWait();
+	       		    	primaryStage.setScene(queryScreen);
 
                         } else {
 
