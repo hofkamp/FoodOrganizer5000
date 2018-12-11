@@ -273,8 +273,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		}	
 	}
 	
 }
