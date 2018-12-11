@@ -336,6 +336,9 @@ public class Main extends Application {
 		
 		TableView table2 = new TableView();
 		table2.setEditable(true);
+		table2.getSelectionModel().setSelectionMode(
+			    SelectionMode.MULTIPLE
+			);
 		TableColumn foodCol = new TableColumn("Food");
 		foodCol.setMinWidth(200);
 		foodCol.setMaxWidth(200);
