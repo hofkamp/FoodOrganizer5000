@@ -1,18 +1,49 @@
-.root{
+/**
+ * Filename:   styleFile.css
+ * Project:    Final Project
+ * Authors:    Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
+ *
+ * Semester:   Fall 2018
+ * Course:     CS400
+ * 
+ * Due Date:   12/12/18
+ * Version:    Milestone 3
+ * 
+ * Bugs:       No known bugs exist
+ */
+ 
+ /**
+ * sets the background color
+ */
+ .root{
 	 -fx-background-color: #354653;
 }
+
+/**
+ * sets the color and font of the labels
+ */
 .root .label {
    -fx-text-fill: white;
    -fx-font-family: "Trebuchet MS";
 }
+
+/**
+ * sets the color and font color of the buttons
+ */
 .root .button {
    -fx-background-color: salmon;
    -fx-text-fill: black;
 
 }
+
+/**
+ * sets the size of the tooltips
+ */
 .root .tooltip{
 	-fx-font-size: 12;
 }
+
+
 
 
 
