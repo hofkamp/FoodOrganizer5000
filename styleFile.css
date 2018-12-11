@@ -10,5 +10,9 @@
    -fx-text-fill: black;
 
 }
+.root .tooltip{
+	-fx-font-size: 12;
+}
+
 
 
