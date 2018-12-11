@@ -1,7 +1,7 @@
 /**
  * Filename:   FoodDataADT.java
  * Project:    Final Project
- * Authors:    sapan, Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
+ * Authors:    Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
  *
  * Semester:   Fall 2018
  * Course:     CS400
