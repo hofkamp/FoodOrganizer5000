@@ -66,6 +66,9 @@ public class Main extends Application {
     
     private ObservableList<MealItem> mealArray =  FXCollections.observableArrayList();
     private MealItem tempMeal;
+	
+    //creates the fadeTransition 
+    private FadeTransition fadeOut = new FadeTransition(Duration.millis(3000));
     
 	public static void main(String[] args) {
 		launch(args);
@@ -1775,122 +1778,156 @@ public class Main extends Application {
         queryLayout.getChildren().add(title4);
         queryLayout.setAlignment(title4, Pos.TOP_LEFT);
 		
-		////////////////////HOME LAYOUT/////////////////////////
-		//exit Button
+		
+		
+ 	        ////////////////////////////////////////////////////////
+		//////////////////// HOME LAYOUT ///////////////////////
+       	        ////////////////////////////////////////////////////////
+        
+		//Quit Button
 		Button exitBtn = new Button("Quit");
 		exitBtn.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent event) {
+				//if the button is clicked, quit the program
 				System.exit(0);
 			}
 		});
+		//creates an back shadow effect if the mouse is over the button
 		exitBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 			exitBtn.setEffect(shadow);
 		});
 		exitBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 			exitBtn.setEffect(null);
 		});
+		
+		//adds the quit button to the homeLayout and formats it
 		exitBtn.setFont(Font.font("Arial", FontWeight.BOLD,20));
 		exitBtn.setTranslateX(-10);
 		exitBtn.setTranslateY(10);
 		homeLayout.getChildren().add(exitBtn);
 		homeLayout.setAlignment(exitBtn, Pos.TOP_RIGHT);
 		
-		//title Label
+		
+		//Title Label
 		Label title = new Label("Food Organizer 5000");
 		title.setFont(Font.font("Cambria", 70));
-		//title.setTranslateX(50);
 		title.setTranslateY(50);
 		homeLayout.getChildren().add(title);
 		homeLayout.setAlignment(title, Pos.TOP_CENTER);
 		
-		//meal List Button
+		
+		//Meal List Button
 		Button mealBtn = new Button("View Meal List");
 		mealBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				//if the button is clicked, load the mealScreen
 				primaryStage.setScene(mealScreen);
 			}
 		});
+		//creates an back shadow effect if the mouse is over the button
 		mealBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 			mealBtn.setEffect(shadow);
 		});
 		mealBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 			mealBtn.setEffect(null);
 		});
+		
+		//adds the Meal List Button to the homeLayout and formats it
 		mealBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 		mealBtn.setTranslateX(100);
-		mealBtn.setTranslateY(-50);
-		mealBtn.setMinSize(300, 150);
-		mealBtn.setMaxSize(300,150);
+ 		mealBtn.setTranslateY(-50);
+ 		mealBtn.setMinSize(300, 150);
+ 		mealBtn.setMaxSize(300,150);
 		homeLayout.getChildren().add(mealBtn);
 		homeLayout.setAlignment(mealBtn, Pos.CENTER_LEFT);
 		
-		//food List Button
+		
+		//Food List Button
 		Button foodBtn = new Button("View Food List");
 		foodBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				//if the button is clicked, load the foodScreen
 				primaryStage.setScene(foodScreen);
 			}
 		});
+		//creates an back shadow effect if the mouse is over the button
 		foodBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 			foodBtn.setEffect(shadow);
 		});
 		foodBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 			foodBtn.setEffect(null);
 		});
+		
+		//add the Food List Button to the homeLayout and formats it
 		foodBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 		foodBtn.setTranslateX(-100);
-		foodBtn.setTranslateY(-50);
-		//foodBtn.setTranslateX(30);
-		foodBtn.setMinSize(300, 150);
-		foodBtn.setMaxSize(300, 150);
+ 		foodBtn.setTranslateY(-50);
+ 		foodBtn.setMinSize(300, 150);
+ 		foodBtn.setMaxSize(300, 150);
 		homeLayout.getChildren().add(foodBtn);
 		homeLayout.setAlignment(foodBtn, Pos.CENTER_RIGHT);
 		
-		//add Food Button
+		
+		//Add Food Button
 		Button addBtn = new Button("Add Food Item(s)");
 		addBtn.wrapTextProperty().setValue(true);
 		addBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				//if the button is clicked, load the addScreen
 				primaryStage.setScene(addScreen);
 			}
 		});
+		//creates an back shadow effect if the mouse is over the button
 		addBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 			addBtn.setEffect(shadow);
 		});
 		addBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 			addBtn.setEffect(null);
 		});
+		
+		//adds the Add Food Button to the homeLayout and formats it
 		addBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 		addBtn.setTranslateX(-100);
-		addBtn.setTranslateY(-100);
-		addBtn.setMinSize(300, 150);
-		addBtn.setMaxSize(300, 150);
+ 		addBtn.setTranslateY(-100);
+ 		addBtn.setMinSize(300, 150);
+ 		addBtn.setMaxSize(300, 150);
 		homeLayout.getChildren().add(addBtn);
 		homeLayout.setAlignment(addBtn, Pos.BOTTOM_RIGHT);
 		
-		//query Button
+		
+		//Query Button
 		Button queryBtn = new Button("Search For Food");
 		queryBtn.setOnAction(new EventHandler<ActionEvent>() {
 			public void handle(ActionEvent event) {
+				//if the button is clicked, load the queryScreen
 				primaryStage.setScene(queryScreen);
 			}
 		});
+		//creates an back shadow effect if the mouse is over the button
 		queryBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
 			queryBtn.setEffect(shadow);
 		});
 		queryBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
 			queryBtn.setEffect(null);
 		});
+		
+		//adds the Query Button to the homeLayout and formats it
 		queryBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 		queryBtn.setTranslateY(-100);
 		queryBtn.setTranslateX(100);
-		queryBtn.setMinSize(300, 150);
-		queryBtn.setMaxSize(300, 150);
+ 		queryBtn.setMinSize(300, 150);
+ 		queryBtn.setMaxSize(300, 150);
 		homeLayout.getChildren().add(queryBtn);
 		homeLayout.setAlignment(queryBtn, Pos.BOTTOM_LEFT);
 		primaryStage.setScene(homeScreen);
 		
-		////////////////// CSS STUFF ///////////////////
+		
+		
+		//////////////////////////////////////////
+		////////////////// CSS ///////////////////
+		//////////////////////////////////////////
+		
+		//adds the screens to the style sheet
 		homeScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		foodScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		queryScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
@@ -1899,24 +1936,34 @@ public class Main extends Application {
 		chooseScreen.getStylesheets().add(getClass().getResource("../styleFile.css").toExternalForm());
 		
 		
-		/////////////////END ALL THIS STUFF////////////
+		
+		///////////////////////////////////////////////
+		/////////////////// END ///////////////////////
+		///////////////////////////////////////////////
+		
 		primaryStage.show();
 		
 	}
 	
-	private FadeTransition fadeOut = new FadeTransition(
-	        Duration.millis(3000)
-	    );
+	
+	/**
+     * formats and makes the tool tip
+     * 
+     * @param final Node node
+     * @param final Tooltip tooltip
+     */
 	public static void bindTooltip(final Node node, final Tooltip tooltip){
-		   node.setOnMouseMoved(new EventHandler<MouseEvent>(){
+		  
+		//if the mouse is over the button, the tool tip appeares
+			node.setOnMouseMoved(new EventHandler<MouseEvent>(){
 		      @Override  
 		      public void handle(MouseEvent event) {
 		         // +15 moves the tooltip 15 pixels below the mouse cursor;
-		         // if you don't change the y coordinate of the tooltip, you
-		         // will see constant screen flicker
 		         tooltip.show(node, event.getScreenX(), event.getScreenY() + 15);
 		      }
 		   });  
+			
+	    //when the mouse moves outside the button, hide the tool tip
 		   node.setOnMouseExited(new EventHandler<MouseEvent>(){
 		      @Override
 		      public void handle(MouseEvent event){
@@ -1924,6 +1971,4 @@ public class Main extends Application {
 		      }
 		   });
 		}
-
-
 }
