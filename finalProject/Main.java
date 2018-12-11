@@ -887,6 +887,7 @@ public class Main extends Application {
 					foodItems.add(food);
 					foodTableItem tableFood = new foodTableItem(food);
 					tableItems.add(tableFood);
+					table2.setItems(foodList);
 				}
 								
 				table2.getSortOrder().add(foodCol);
