@@ -60,8 +60,9 @@ public class Main extends Application {
     private MealItem chosenMeal = null;
     private boolean queryOn = false;
     private FoodItem temp;
-    private ObservableList mealArray =  FXCollections.observableArrayList();
+    private ObservableList<MealItem> mealArray =  FXCollections.observableArrayList();
     private File selectedFile;
+    private MealItem tempMeal;
 
     
 	public static void main(String[] args) {
@@ -320,6 +321,32 @@ public class Main extends Application {
         });
         chooseMeal1.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
             chooseMeal1.setEffect(null);
+        });
+		
+	Button clearMeal = new Button("Clear Meal");
+		clearMeal.setFont(Font.font("Arial", FontWeight.SEMI_BOLD, 30));
+		clearMeal.setMinSize(150, 50);
+		clearMeal.setTranslateX(-300);
+        clearMeal.setTranslateY(-50);  
+        mealLayout.getChildren().add(clearMeal);       
+        mealLayout.setAlignment(clearMeal, Pos.BOTTOM_RIGHT);
+        clearMeal.setOnAction(new EventHandler<ActionEvent>(){
+            public void handle(ActionEvent event) {
+            	//System.out.println(mealArray.toString());
+            	for(int i = 0; i < mealArray.size(); i++) {
+            		if(tempMeal.getName().compareTo(mealArray.get(i).getName()) == 0)
+            			mealArray.remove(i);
+            	}
+            	mealArray.remove(tempMeal.getName());
+            	//System.out.println(mealArray.toString());
+            	primaryStage.setScene(mealScreen);
+            }
+        });
+        clearMeal.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+            clearMeal.setEffect(shadow);
+        });
+        clearMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+            clearMeal.setEffect(null);
         });
 		
 	
@@ -1362,7 +1389,7 @@ public class Main extends Application {
             	public void handle(ActionEvent event) {
                 	chosenMeal = (MealItem)chooseTable.getSelectionModel().getSelectedItem();
                 if (chosenMeal != null) {
-                    System.out.println(chosenMeal.getName());
+                    currentMeal.setText(chosenMeal.getName());
                     primaryStage.setScene(foodScreen);
                 }
             }
