@@ -226,6 +226,13 @@ public class Main extends Application {
 		mealLayout.setAlignment(table, Pos.TOP_LEFT);
 		
 		
+		Label instr = new Label("Click on Meal to Analyze");
+		instr.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		instr.setTranslateX(75);
+		instr.setTranslateY(120);
+		mealLayout.getChildren().add(instr);
+		mealLayout.setAlignment(instr, Pos.TOP_LEFT);
+		
 		// meal Button
 		Button foodBtn1 = new Button("Food List");
 		foodBtn1.setOnAction(new EventHandler<ActionEvent>() {
@@ -1721,8 +1728,10 @@ public class Main extends Application {
 			mealBtn.setEffect(null);
 		});
 		mealBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-		mealBtn.setTranslateX(30);
-		mealBtn.setMinSize(250, 250);
+		mealBtn.setTranslateX(100);
+		mealBtn.setTranslateY(-50);
+		mealBtn.setMinSize(300, 150);
+		mealBtn.setMaxSize(300,150);
 		homeLayout.getChildren().add(mealBtn);
 		homeLayout.setAlignment(mealBtn, Pos.CENTER_LEFT);
 		
@@ -1740,10 +1749,13 @@ public class Main extends Application {
 			foodBtn.setEffect(null);
 		});
 		foodBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
+		foodBtn.setTranslateX(-100);
+		foodBtn.setTranslateY(-50);
 		//foodBtn.setTranslateX(30);
-		foodBtn.setMinSize(250, 250);
+		foodBtn.setMinSize(300, 150);
+		foodBtn.setMaxSize(300, 150);
 		homeLayout.getChildren().add(foodBtn);
-		homeLayout.setAlignment(foodBtn, Pos.CENTER);
+		homeLayout.setAlignment(foodBtn, Pos.CENTER_RIGHT);
 		
 		//add Food Button
 		Button addBtn = new Button("Add Food Item(s)");
@@ -1760,11 +1772,12 @@ public class Main extends Application {
 			addBtn.setEffect(null);
 		});
 		addBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
-		addBtn.setTranslateX(-30);
-		addBtn.setMinSize(250, 250);
-		addBtn.setMaxSize(250, 250);
+		addBtn.setTranslateX(-100);
+		addBtn.setTranslateY(-100);
+		addBtn.setMinSize(300, 150);
+		addBtn.setMaxSize(300, 150);
 		homeLayout.getChildren().add(addBtn);
-		homeLayout.setAlignment(addBtn, Pos.CENTER_RIGHT);
+		homeLayout.setAlignment(addBtn, Pos.BOTTOM_RIGHT);
 		
 		//query Button
 		Button queryBtn = new Button("Search For Food");
@@ -1781,10 +1794,11 @@ public class Main extends Application {
 		});
 		queryBtn.setFont(Font.font("Arial", FontWeight.BOLD, 30));
 		queryBtn.setTranslateY(-100);
-		queryBtn.setMinSize(850, 50);
+		queryBtn.setTranslateX(100);
+		queryBtn.setMinSize(300, 150);
+		queryBtn.setMaxSize(300, 150);
 		homeLayout.getChildren().add(queryBtn);
-		homeLayout.setAlignment(queryBtn, Pos.BOTTOM_CENTER);
-		//Scene homeScreen = new Scene(homeLayout, 900, 600);
+		homeLayout.setAlignment(queryBtn, Pos.BOTTOM_LEFT);
 		primaryStage.setScene(homeScreen);
 		
 		////////////////// CSS STUFF ///////////////////
