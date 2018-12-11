@@ -389,22 +389,70 @@ public class Main extends Application {
 		foodLayout.getChildren().add(table2);
 		foodLayout.setAlignment(table2, Pos.TOP_LEFT);
 		
+		Label fileL = new Label("File Name:");
+		fileL.setFont(Font.font("Arial", FontWeight.BOLD,20));
+		fileL.setTranslateX(25);
+		fileL.setTranslateY(-20);
+		//fileL.setMinSize(160, 50);
+		//save.setMaxSize(100, 50); 
+		foodLayout.getChildren().add(fileL); 
+		foodLayout.setAlignment(fileL, Pos.BOTTOM_LEFT);
+
+		TextField fileField = new TextField();
+		fileField.setTranslateX(135);
+		fileField.setTranslateY(-15);
+		fileField.setMinSize(550, 30);
+		fileField.setMaxSize(550, 30);
+		foodLayout.getChildren().add(fileField);
+		foodLayout.setAlignment(fileField, Pos.BOTTOM_LEFT);
+
+		Button save2 = new Button("Save to current file");
+		save2.setOnAction(new EventHandler<ActionEvent>() {
+			public void handle(ActionEvent event) {
+				foodData.saveFoodItems(filePath);
+			}
+		});
+		save2.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
+			save2.setEffect(shadow);
+		});
+		save2.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
+			save2.setEffect(null);
+		});
+		save2.setFont(Font.font("Arial", FontWeight.BOLD,15));
+
+		save2.setTranslateX(-25);
+		save2.setTranslateY(185);
+		save2.setMinSize(160, 60);
+		save2.setMaxSize(160, 60);
+		//save.setMaxSize(100, 50); 
+		foodLayout.getChildren().add(save2); 
+		foodLayout.setAlignment(save2, Pos.CENTER_RIGHT);
+
+
 		// Save button 
 		Button save = new Button("Save");
 		save.setOnAction(new EventHandler<ActionEvent>(){
-            public void handle(ActionEvent event) {
-               foodData.saveFoodItems("savedFile.txt");
-            }
-        });
+			public void handle(ActionEvent event) {
+				if(fileField.getText().isEmpty())
+					foodData.saveFoodItems("newFile.csv");
+				else {
+					if(fileField.getText().contains(".csv"))
+						foodData.saveFoodItems(fileField.getText());
+					else
+						foodData.saveFoodItems(fileField.getText() + ".csv");
+				}
+			}
+		});
 		save.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
-		        save.setEffect(shadow);
-		    });
+			save.setEffect(shadow);
+		});
 		save.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
-		        save.setEffect(null);
-		    });
+			save.setEffect(null);
+		});
 		save.setFont(Font.font("Arial", FontWeight.BOLD,20));
+
 		save.setTranslateX(-25);
-		save.setTranslateY(-125);
+		save.setTranslateY(260);
 		save.setMinSize(160, 50);
 		//save.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(save); 
@@ -451,7 +499,7 @@ public class Main extends Application {
 		    });
 		enter2.setFont(Font.font("Arial", FontWeight.BOLD,20));
 		enter2.setTranslateX(-25);
-		enter2.setTranslateY(200);
+		enter2.setTranslateY(-125);
 		enter2.setMinSize(160, 50);
 		//enter2.setMaxSize(100, 50); 
 		foodLayout.getChildren().add(enter2); 
@@ -508,28 +556,7 @@ public class Main extends Application {
 		filterBox.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		filterBox.setTranslateX(-25);
 		filterBox.setTranslateY(-15);
-		//foodLayout.getChildren().add(filterBox);
-		//foodLayout.setAlignment(filterBox, Pos.CENTER_RIGHT);
-			
 		
-//		// addToMeal button
-//        Button addToMeal = new Button("Add to meal");
-//        addToMeal.setFont(Font.font("Arial", FontWeight.BOLD,20));
-//        addToMeal.setTranslateX(-600);
-//        addToMeal.setTranslateY(-15);
-//        addToMeal.setMinSize(50, 20);
-//        addToMeal.setMaxSize(160, 50);     
-//        foodLayout.getChildren().add(addToMeal);       
-//        foodLayout.setAlignment(addToMeal, Pos.BOTTOM_RIGHT);
-//        addToMeal.setOnAction(new EventHandler<ActionEvent>(){
-//            public void handle(ActionEvent event) {
-//                FoodItem foodForMeal = (FoodItem)table2.getSelectionModel().getSelectedItem();
-//                if (foodForMeal != null) {
-//                    System.out.println(foodForMeal.getName());
-//                    //chosenMeal.getIngredients().add(foodForMeal);
-//                }
-//            }
-//        });
 		
 		 Label currentMealText = new Label("Adding to This Meal:");
 	        currentMealText.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -668,7 +695,6 @@ public class Main extends Application {
 		foodLayout.getChildren().add(title1);
 		foodLayout.setAlignment(title1, Pos.TOP_LEFT);
 		//foodScreen = new Scene(foodLayout, 900, 600);
-
 		////////////////////ADD FOOD LAYOUT/////////////////////
 		//file name input
 		Button fileButton = new Button("Choose a file...");
