@@ -1,5 +1,5 @@
 /**
- * Filename:   FoodItem.java
+ * Filename:   FoodData.java
  * Project:    Final Project
  * Authors:    Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
  *
