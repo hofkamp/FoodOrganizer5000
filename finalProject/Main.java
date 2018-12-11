@@ -867,7 +867,7 @@ public class Main extends Application {
 				Double fatT = Double.parseDouble(fatF.getText());
 				Double proteinT = Double.parseDouble(proF.getText());
 				Double fiberT = Double.parseDouble(fibF.getText());
-				FoodData data = new FoodData();
+				
 
 				if(!nameT.isEmpty()) {
 					FoodItem food = new FoodItem(nameT.hashCode()+ "", nameT);
@@ -876,7 +876,7 @@ public class Main extends Application {
 					food.addNutrient("fat", fatT);
 					food.addNutrient("protein", proteinT);
 					food.addNutrient("fiber", fiberT);	
-					data.addFoodItem(food);
+					foodData.addFoodItem(food);
 					foodItems.add(food);
 					foodTableItem tableFood = new foodTableItem(food);
 					tableItems.add(tableFood);
