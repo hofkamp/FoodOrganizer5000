@@ -9,7 +9,7 @@ public class foodTableItem {
 	private String name;
 	private String id;
 	private String calories;
-	private String carbohydrates;
+	private String carbohydrate;
 	private String fat;
 	private String fiber;
 	private String protein; 
@@ -19,7 +19,7 @@ public class foodTableItem {
 		this.name = food.getName();
 		this.id = food.getID();
 		this.calories = food.getNutrientValue("calories") + "";
-		this.carbohydrates = food.getNutrientValue("carbohydrate") + "";
+		this.carbohydrate = food.getNutrientValue("carbohydrate") + "";
 		this.fat = food.getNutrientValue("fat") + "";
 		this.fiber = food.getNutrientValue("fiber") + "";
 		this.protein = food.getNutrientValue("protein") + "";
@@ -54,12 +54,12 @@ public class foodTableItem {
 		this.calories = calories;
 	}
 
-	public String getCarbohydrates() {
-		return carbohydrates;
+	public String getCarbohydrate() {
+		return carbohydrate;
 	}
 
-	public void setCarbohydrates(String carbohydrates) {
-		this.carbohydrates = carbohydrates;
+	public void setCarbohydrate(String carbohydrate) {
+		this.carbohydrate = carbohydrate;
 	}
 
 	public String getFat() {

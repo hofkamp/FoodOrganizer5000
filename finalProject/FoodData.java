@@ -63,19 +63,30 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			//split the string in to an array of values using the comma as a delimiter
      
         			
-        			String[] foodArray = line.split(",", 12);
+        			String[] foodArray = line.split(",", -1);
         			if(foodArray[0].compareTo("") == 0)
         				break;
+        			if (foodArray.length != 12)
+        				continue;
         			
         			FoodItem food = new FoodItem(foodArray[0], foodArray[1]);
         			
         			//add the nutrients to the food object
-        			
+        			if (!foodArray[2].equals("calories"))
+        				continue;
         			food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3])); //calories
+        			if (!foodArray[4].equals("fat"))
+        				continue;
         			food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5])); //fat
+        			if (!foodArray[6].equals("carbohydrate"))
+        				continue;
         			food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7])); //carb
+        			if (!foodArray[8].equals("fiber"))
+        				continue;
         			food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9])); //fiber
-        			food.addNutrient(foodArray[10], Double.parseDouble(foodArray[11])); //protein 
+        			if (!foodArray[10].equals("protein"))
+        				continue;
+        			food.addNutrient(foodArray[10], Double.parseDouble(foodArray[11])); //protein  
         			
         			indexes.get("calories").insert(Double.parseDouble(foodArray[3]), food);
         			indexes.get("fat").insert(Double.parseDouble(foodArray[5]), food);
