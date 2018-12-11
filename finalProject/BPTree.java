@@ -1,3 +1,16 @@
+/**
+ * Filename:   BPTree.java
+ * Project:    Final Project
+ * Authors:    sapan, Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
+ *
+ * Semester:   Fall 2018
+ * Course:     CS400
+ * 
+ * Due Date:   12/12/18
+ * Version:    Milestone 3
+ * 
+ * Bugs:       No known bugs exist
+ */
 package finalProject;
 import java.util.ArrayList;
 import java.util.Arrays;
