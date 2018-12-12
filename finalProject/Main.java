@@ -260,7 +260,9 @@ public class Main extends Application {
 		table.setOnMouseClicked((new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
-				 tempMeal = (MealItem)table.getSelectionModel().getSelectedItem();
+				if(mealArray.size()!=0) {
+				if(table.getSelectionModel().getSelectedItem() != null) {
+					 tempMeal = (MealItem)table.getSelectionModel().getSelectedItem();
 	 	 			
 				 //sets the instance labels to the values from the selected meal
 				 	tempName.setText(tempMeal.getName());
@@ -271,6 +273,8 @@ public class Main extends Application {
 	 	 			tempFib.setText(tempMeal.getFib() +"");
 	 	 			ObservableList tempList = FXCollections.observableArrayList(tempMeal.getIngredients());
 	 	 			ingrList.setItems(tempList);
+					}
+				}
 			}
 		}));
 		
