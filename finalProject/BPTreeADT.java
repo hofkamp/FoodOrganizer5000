@@ -1,7 +1,7 @@
 /**
  * Filename:   BPTreeADT.java
  * Project:    Final Project
- * Authors:    Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
+ * Authors:    sapan
  *
  * Semester:   Fall 2018
  * Course:     CS400
