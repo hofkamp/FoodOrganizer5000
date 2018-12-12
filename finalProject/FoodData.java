@@ -72,8 +72,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
      */
     @Override
     public void loadFoodItems(String filePath) {
+    		boolean skippedLine = false;
         Path pathToFile = Paths.get(filePath);
-        boolean skippedLine = false;
         //create a buffered reader using try with resources
         try{
         	BufferedReader reader = Files.newBufferedReader(pathToFile);	
@@ -88,46 +88,47 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			//breaks if the ID is empty
         			if(foodArray[0].compareTo("") == 0)
         				break;
-        			if (foodArray.length != 12) {
-        			    skippedLine = true;
-        			    line = reader.readLine();
-        			    continue;
-        			}
         			
+        			if (foodArray.length != 12) {
+        				skippedLine = true;
+        				line = reader.readLine();
+        				continue;
+        			}
         			//creates a food item with the passed in name and ID
         			FoodItem food = new FoodItem(foodArray[0], foodArray[1]);
         			
         			//add the nutrients to the food object and checks to make sure the line is valid
-                    if (!foodArray[2].equals("calories")) {
-                        skippedLine = true;
-                        line = reader.readLine();
-                        continue;
-                    }
-                    food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3])); //calories
-                    if (!foodArray[4].equals("fat")){
-                        skippedLine = true;
-                        line = reader.readLine();
-                        continue;
-                    }
-                    food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5])); //fat
-                    if (!foodArray[6].equals("carbohydrate")){
-                        skippedLine = true;
-                        line = reader.readLine();
-                        continue;
-                    }
-                    food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7])); //carb
-                    if (!foodArray[8].equals("fiber")){
-                        skippedLine = true;
-                        line = reader.readLine();
-                        continue;
-                    }
-                    food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9])); //fiber
-                    if (!foodArray[10].equals("protein")){
-                        skippedLine = true;
-                        line = reader.readLine();
-                        continue;
-                    } 
-        			
+        			 if (!foodArray[2].equals("calories")) {
+                         skippedLine = true;
+                         line = reader.readLine();
+                         continue;
+                     }
+                     food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3])); //calories
+                     if (!foodArray[4].equals("fat")){
+                         skippedLine = true;
+                         line = reader.readLine();
+                         continue;
+                     }
+                     food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5])); //fat
+                     if (!foodArray[6].equals("carbohydrate")){
+                         skippedLine = true;
+                         line = reader.readLine();
+                         continue;
+                     }
+                     food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7])); //carb
+                     if (!foodArray[8].equals("fiber")){
+                         skippedLine = true;
+                         line = reader.readLine();
+                         continue;
+                     }
+                     food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9])); //fiber
+                     if (!foodArray[10].equals("protein")){
+                         skippedLine = true;
+                         line = reader.readLine();
+                         continue;
+                     } 
+                     food.addNutrient(foodArray[10], Double.parseDouble(foodArray[11]));
+                     
         			//adds the nutrients to the HashMap and updates foodItemList
         			indexes.get("calories").insert(Double.parseDouble(foodArray[3]), food);
         			indexes.get("fat").insert(Double.parseDouble(foodArray[5]), food);
@@ -139,11 +140,27 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			line = reader.readLine();     	
         		}
         		
-        		
+        		//if lines were skipped, print one message
+        		//if no lines were skipped, print a success message
+        		if(skippedLine == false) {
+        			Alert alert = new Alert(AlertType.INFORMATION);
+	    			alert.setTitle("Success");
+	    			alert.setHeaderText("File Imported");
+	    			alert.showAndWait();
+        		}
+        		else {
+        			Alert alert = new Alert(AlertType.INFORMATION);
+	    			alert.setTitle("Invalid Lines");
+	    			alert.setHeaderText("The selected file was read but there were invalid lines." + "\n Invalid lines were skipped.");
+	    			alert.showAndWait();
+        		}
         	
-        		
+        	//if something fails, print a fail message
         } catch (Exception e) {
-
+        		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Failure");
+			alert.setHeaderText("Invalid File." + "\n The file was not read.");
+			alert.showAndWait();
 		}
     }
 
@@ -255,6 +272,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		
 		//loop through foodItemList
 		for(int i = 0; i<foodItemList.size();i++) {
+			
 			//create a String array to store the food name, ID and nutrients
 			String[] object = new String[12];
 			String name = foodItemList.get(i).getName();
@@ -314,8 +332,19 @@ public class FoodData implements FoodDataADT<FoodItem> {
 				writer.write(food[0] + "," + food[1] + "," + food[2] +  "," + food[3] + "," + food[4] + "," + food[5] + "," + food[6] +  "," + food[7] + "," + food[8] + "," + food[9] + "," + food[10] + "," + food[11]);
 				writer.write("\n");
 			}
+			//if the file is saved correcctly, print a success message
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Success");
+			alert.setHeaderText("File Saved to " + filename);
+			alert.showAndWait();
 			writer.close();
+			
+		 	//if something fails, print a fail message
 		} catch (IOException e) {
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Fail");
+			alert.setHeaderText("Invalid File." + "\n The file was not saved.");
+			alert.showAndWait();
 		}
 		
 	}
