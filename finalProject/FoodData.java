@@ -1,4 +1,5 @@
-* Filename:   FoodItem.java
+/**
+ * Filename:   FoodItem.java
  * Project:    Final Project
  * Authors:    Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
  *
@@ -117,22 +118,14 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			indexes.get("protein").insert(Double.parseDouble(foodArray[11]), food);
         			
         			foodItemList.add(food);
-        			line = reader.readLine();      			
+        			line = reader.readLine();     	
         		}
         		
-        		//display a pop up if loaded successfully
-        		Alert alert = new Alert(AlertType.INFORMATION);
-    			alert.setTitle("Success");
-    			alert.setHeaderText("File Imported");
-    			alert.showAndWait();
+        		
         	
         		
         } catch (Exception e) {
-        	//display a pop up if an error is caught while trying to load
-        		Alert alert = new Alert(AlertType.INFORMATION);
-			alert.setTitle("Error");
-			alert.setHeaderText("File Did Not Import" + "\nInvalid File");
-			alert.showAndWait();
+
 		}
     }
 
@@ -245,12 +238,22 @@ public class FoodData implements FoodDataADT<FoodItem> {
 		//loop through foodItemList
 		for(int i = 0; i<foodItemList.size();i++) {
 			//create a String array to store the food name, ID and nutrients
-			String[] object = new String[3];
+			String[] object = new String[12];
 			String name = foodItemList.get(i).getName();
 			String ID = foodItemList.get(i).getID();
 			object[0] = ID;
 			object[1] = name;
-			object[2] = foodItemList.get(i).getNutrients().toString();
+			object[2] = "calories";
+			object[3] = String.valueOf(foodItemList.get(i).getNutrientValue("calories"));
+			object[4] =  "fat";
+			object[5] = String.valueOf(foodItemList.get(i).getNutrientValue("fat"));
+			object[6] = "carbohydrate";
+			object[7] = String.valueOf(foodItemList.get(i).getNutrientValue("carbohydrate"));
+			object[8] = "fiber";
+			object[9] = String.valueOf(foodItemList.get(i).getNutrientValue("fiber"));
+			object[10] = "protein";
+			object[11] = String.valueOf(foodItemList.get(i).getNutrientValue("protein"));
+			
 
 			temp.add(object);
 			sorter.add(name.toLowerCase());
@@ -264,10 +267,20 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			for(int j = 0; j<temp.size();j++) {
 				//matchup the sorted names with their ID and nutrients and add it to an output
 				if(name.toLowerCase().equals(temp.get(j)[1].toLowerCase())) {
-					String[] object = new String[3];
+					String[] object = new String[12];
 					object[0] = temp.get(j)[0];
 					object[1] = name;
 					object[2] = temp.get(j)[2];
+					object[3] = temp.get(j)[3];
+					object[4] = temp.get(j)[4];
+					object[5] = temp.get(j)[5];
+					object[6] = temp.get(j)[6];
+					object[7] = temp.get(j)[7];
+					object[8] = temp.get(j)[8];
+					object[9] = temp.get(j)[9];
+					object[10] = temp.get(j)[10];
+					object[11] = temp.get(j)[11];
+					
 					output.add(object);
 					//remove the object once added to handle duplicates
 					temp.remove(j);
@@ -280,12 +293,11 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			//write the foodItems to a file
 			FileWriter writer = new FileWriter(filename);
 			for(String[] food: output) {
-				writer.write(food[0] + "," + food[1] + "," + food[2]);
+				writer.write(food[0] + "," + food[1] + "," + food[2] +  "," + food[3] + "," + food[4] + "," + food[5] + "," + food[6] +  "," + food[7] + "," + food[8] + "," + food[9] + "," + food[10] + "," + food[11]);
 				writer.write("\n");
 			}
 			writer.close();
 		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		
 	}
