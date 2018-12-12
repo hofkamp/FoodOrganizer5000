@@ -435,7 +435,14 @@ public class Main extends Application {
         mealLayout.setAlignment(clearMeal, Pos.BOTTOM_RIGHT);
         clearMeal.setOnAction(new EventHandler<ActionEvent>(){
              public void handle(ActionEvent event) {
-            	 	//if the button is clicked, remove the selected meal from the Meal List            	
+            	 	//if the button is clicked, remove the selected meal from the Meal List
+		if (tempName.getText().isEmpty())
+    		{
+    			Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Error");
+    		    	alert.setHeaderText("Please choose a meal before clicking 'Clear Meal'.");
+    		    	alert.showAndWait();
+    		}
              	for(int i = 0; i < mealArray.size(); i++) {
              		if(tempMeal.getName().compareTo(mealArray.get(i).getName()) == 0)
              			mealArray.remove(i);
@@ -455,6 +462,8 @@ public class Main extends Application {
          clearMeal.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
              clearMeal.setEffect(shadow);
          });
+	
+		
          clearMeal.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) -> {
              clearMeal.setEffect(null);
          });
@@ -951,6 +960,9 @@ public class Main extends Application {
 	                public void handle(final ActionEvent e) {
 	                	//if the file Button is selected, load a file chooser and pass the selected file to a variable
 	                	FileChooser fileChooser = new FileChooser();
+				fileChooser.getExtensionFilters().addAll(
+	                		new FileChooser.ExtensionFilter("CSV Files", "*.csv")
+	                	);
 	            		File selectedFile = fileChooser.showOpenDialog(null);
 	            		
 	            	if (selectedFile != null) {
@@ -1044,6 +1056,17 @@ public class Main extends Application {
 		entrBtn.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) ->{
 			entrBtn.setEffect(shadow);
 		});
+		
+		entrBtn.setOnAction((event) -> {
+			 if (foodF.getText().isEmpty())
+			 {
+			    	Alert alert = new Alert(AlertType.INFORMATION);
+			    	alert.setTitle("Error");
+			    	alert.setHeaderText("Please enter a food name with nutrient values," + "\n" + "or a file name, before adding 				a food item.");
+			    	alert.showAndWait();
+			 }
+		});
+		
 		entrBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) ->{
 			entrBtn.setEffect(null);
 		});
