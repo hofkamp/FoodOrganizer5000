@@ -73,6 +73,7 @@ public class FoodData implements FoodDataADT<FoodItem> {
     @Override
     public void loadFoodItems(String filePath) {
         Path pathToFile = Paths.get(filePath);
+        boolean skippedLine = false;
         //create a buffered reader using try with resources
         try{
         	BufferedReader reader = Files.newBufferedReader(pathToFile);	
@@ -87,28 +88,45 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			//breaks if the ID is empty
         			if(foodArray[0].compareTo("") == 0)
         				break;
-        			if (foodArray.length != 12)
-        				continue;
+        			if (foodArray.length != 12) {
+        			    skippedLine = true;
+        			    line = reader.readLine();
+        			    continue;
+        			}
         			
         			//creates a food item with the passed in name and ID
         			FoodItem food = new FoodItem(foodArray[0], foodArray[1]);
         			
         			//add the nutrients to the food object and checks to make sure the line is valid
-        			if (!foodArray[2].equals("calories"))
-        				continue;
-        			food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3])); //calories
-        			if (!foodArray[4].equals("fat"))
-        				continue;
-        			food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5])); //fat
-        			if (!foodArray[6].equals("carbohydrate"))
-        				continue;
-        			food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7])); //carb
-        			if (!foodArray[8].equals("fiber"))
-        				continue;
-        			food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9])); //fiber
-        			if (!foodArray[10].equals("protein"))
-        				continue;
-        			food.addNutrient(foodArray[10], Double.parseDouble(foodArray[11])); //protein  
+                    if (!foodArray[2].equals("calories")) {
+                        skippedLine = true;
+                        line = reader.readLine();
+                        continue;
+                    }
+                    food.addNutrient(foodArray[2], Double.parseDouble(foodArray[3])); //calories
+                    if (!foodArray[4].equals("fat")){
+                        skippedLine = true;
+                        line = reader.readLine();
+                        continue;
+                    }
+                    food.addNutrient(foodArray[4], Double.parseDouble(foodArray[5])); //fat
+                    if (!foodArray[6].equals("carbohydrate")){
+                        skippedLine = true;
+                        line = reader.readLine();
+                        continue;
+                    }
+                    food.addNutrient(foodArray[6], Double.parseDouble(foodArray[7])); //carb
+                    if (!foodArray[8].equals("fiber")){
+                        skippedLine = true;
+                        line = reader.readLine();
+                        continue;
+                    }
+                    food.addNutrient(foodArray[8], Double.parseDouble(foodArray[9])); //fiber
+                    if (!foodArray[10].equals("protein")){
+                        skippedLine = true;
+                        line = reader.readLine();
+                        continue;
+                    } 
         			
         			//adds the nutrients to the HashMap and updates foodItemList
         			indexes.get("calories").insert(Double.parseDouble(foodArray[3]), food);
