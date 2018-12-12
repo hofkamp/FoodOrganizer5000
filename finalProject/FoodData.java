@@ -1,5 +1,4 @@
-/**
- * Filename:   FoodData.java
+* Filename:   FoodItem.java
  * Project:    Final Project
  * Authors:    Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
  *
@@ -23,6 +22,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  * This class represents the backend for managing all 
@@ -117,9 +119,20 @@ public class FoodData implements FoodDataADT<FoodItem> {
         			foodItemList.add(food);
         			line = reader.readLine();      			
         		}
+        		
+        		//display a pop up if loaded successfully
+        		Alert alert = new Alert(AlertType.INFORMATION);
+    			alert.setTitle("Success");
+    			alert.setHeaderText("File Imported");
+    			alert.showAndWait();
         	
+        		
         } catch (Exception e) {
-			e.printStackTrace();
+        	//display a pop up if an error is caught while trying to load
+        		Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Error");
+			alert.setHeaderText("File Did Not Import" + "\nInvalid File");
+			alert.showAndWait();
 		}
     }
 
@@ -273,7 +286,8 @@ public class FoodData implements FoodDataADT<FoodItem> {
 			writer.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	
+		}
+		
 	}
 	
 }
