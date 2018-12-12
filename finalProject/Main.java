@@ -1060,15 +1060,6 @@ public class Main extends Application {
 					entrBtn.setEffect(shadow);
 				});
 				
-				entrBtn.setOnAction((event) -> {
-					 if (foodF.getText().isEmpty())
-					 {
-					    	Alert alert = new Alert(AlertType.INFORMATION);
-					    	alert.setTitle("Error");
-					    	alert.setHeaderText("Please enter a food name with nutrient values," + "\n" + "or a file name, before adding 				a food item.");
-					    	alert.showAndWait();
-					 }
-				});
 				
 				entrBtn.addEventHandler(MouseEvent.MOUSE_EXITED, (MouseEvent e) ->{
 					entrBtn.setEffect(null);
