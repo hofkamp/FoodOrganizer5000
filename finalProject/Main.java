@@ -51,6 +51,11 @@ import javafx.beans.binding.Bindings;
 
 enum NUTRIENTS {Cal,Carb,Fat,Pro,Fib};
 
+/**
+ * This class
+ * 
+ * @authors  Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
+ */
 public class Main extends Application {
 	
 	//fields
@@ -66,14 +71,24 @@ public class Main extends Application {
     
     private ObservableList<MealItem> mealArray =  FXCollections.observableArrayList();
     private MealItem tempMeal;
-	
-    //creates the fadeTransition 
-    private FadeTransition fadeOut = new FadeTransition(Duration.millis(3000));
     
+    //creates the fadeTransition 
+  	private FadeTransition fadeOut = new FadeTransition(Duration.millis(3000));
+    
+  	 /**
+     * This method launches the program
+     * @param String[] args
+     */
 	public static void main(String[] args) {
 		launch(args);
 	}
 	
+	
+	 /**
+     * This method creates the stages and GUI layout for the Main
+     * It loads all layouts and creates the functionality for the buttons and lists
+     * @param Stage primaryStage
+     */
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Food Organizer 5000");
 		BorderPane borderPane = new BorderPane();
@@ -444,13 +459,13 @@ public class Main extends Application {
              clearMeal.setEffect(null);
          });
          
-	 //creates a tool tip to inform the user what the button does
+         //creates a tool tip to inform the user what the button does
          Tooltip x = new Tooltip("Remove the selected meal from the meal list");
          bindTooltip(clearMeal, t);
          
          
          
-       		////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////
 		////////////////////FOOD LIST LAYOUT////////////////////
 		////////////////////////////////////////////////////////
          
@@ -641,7 +656,9 @@ public class Main extends Application {
                                         s = "Filter Status: OFF";
                                 return s;
                         }));
+
                        table2.setItems(foodList);
+                       
                 }
         });
         unfilter.addEventHandler(MouseEvent.MOUSE_ENTERED, (MouseEvent e) -> {
@@ -807,7 +824,7 @@ public class Main extends Application {
 		foodLayout.getChildren().add(title1);
 		foodLayout.setAlignment(title1, Pos.TOP_LEFT);
 		//foodScreen = new Scene(foodLayout, 900, 600);
-
+		
 		
 		
 		////////////////////////////////////////////////////////
@@ -928,6 +945,7 @@ public class Main extends Application {
 		addLayout.setAlignment(fibNum, Pos.CENTER_LEFT);
 		
 		
+		
 		fileButton.setOnAction(
 	            new EventHandler<ActionEvent>() {
 	                public void handle(final ActionEvent e) {
@@ -962,15 +980,40 @@ public class Main extends Application {
 		Button entrBtn = new Button("ENTER");
 		entrBtn.setOnAction(new EventHandler<ActionEvent>(){
 			public void handle(ActionEvent e) {
-				//if the enter button is clicked, load the input from the text field to variables
-				String nameT = foodF.getText();
-				Double carbsT = Double.parseDouble(carbF.getText());
-				Double caloriesT = Double.parseDouble(calF.getText());
-				Double fatT = Double.parseDouble(fatF.getText());
-				Double proteinT = Double.parseDouble(proF.getText());
-				Double fiberT = Double.parseDouble(fibF.getText());
 				
-				if(!nameT.isEmpty()) {
+				//adds a pop up if any of the input text is empty 
+				if (foodF.getText().isEmpty() || carbF.getText().isEmpty() || calF.getText().isEmpty() || fatF.getText().isEmpty() || proF.getText().isEmpty() || fibF.getText().isEmpty())
+	                {
+						Alert alert = new Alert(AlertType.INFORMATION);
+						alert.setTitle("Error");
+						alert.setHeaderText("Please enter a food name or nutrient values" + "\n" + "before adding a food item.");
+						alert.showAndWait();
+
+	       			    	
+	                }
+				
+				//adds a pop up if any of the values for any nutrient is not numeric
+				  else if ((!((carbF.getText()).matches("[0-9]+")) && (!(String.valueOf(carbF.getText()).equals(""))))
+                          || (!((calF.getText()).matches("[0-9]+")) && (!(String.valueOf(calF.getText()).equals(""))))
+                          || (!((fatF.getText()).matches("[0-9]+")) && (!(String.valueOf(fatF.getText()).equals(""))))
+                          || (!((proF.getText()).matches("[0-9]+")) && (!(String.valueOf(proF.getText()).equals(""))))
+                          || (!((fibF.getText()).matches("[0-9]+")) && (!(String.valueOf(fibF.getText()).equals(""))))) {
+
+					  			Alert alert = new Alert(AlertType.INFORMATION);
+					  			alert.setTitle("Error");
+					  			alert.setHeaderText("Please enter valid, numerical values for the nutrients.");
+					  			alert.showAndWait();
+				  }
+				
+				  else {
+					//load the input from the text field to variables
+					String nameT = foodF.getText();
+					Double carbsT = Double.parseDouble(carbF.getText());
+					Double caloriesT = Double.parseDouble(calF.getText());
+					Double fatT = Double.parseDouble(fatF.getText());
+					Double proteinT = Double.parseDouble(proF.getText());
+					Double fiberT = Double.parseDouble(fibF.getText());
+						
 					//add the inputs to a foodItem and load it to the table
 					FoodItem food = new FoodItem(nameT.hashCode()+ "", nameT);
 					food.addNutrient("carbohydrate", carbsT);
@@ -983,17 +1026,18 @@ public class Main extends Application {
 					foodTableItem tableFood = new foodTableItem(food);
 					tableItems.add(tableFood);
 					table2.setItems(foodList);
+					
+					//sort the table, clear the text fields and load the foodScreen
+					table2.getSortOrder().add(foodCol);
+					carbF.clear();  
+					calF.clear(); 
+					fatF.clear(); 
+					proF.clear(); 
+					fibF.clear(); 
+					foodF.clear(); 
+					primaryStage.setScene(foodScreen);
 				}
 				
-				//sort the table, clear the text fields and load the foodScreen
-				table2.getSortOrder().add(foodCol);
-				carbF.clear();  
-				calF.clear(); 
-				fatF.clear(); 
-				proF.clear(); 
-				fibF.clear(); 
-				foodF.clear(); 
-				primaryStage.setScene(foodScreen);
 			}
 		});
 		//creates an back shadow effect if the mouse is over the button
@@ -1279,7 +1323,9 @@ public class Main extends Application {
 
 		
 		
+		/////////////////////////////////////////////////////////
 		//////////////////// QUERY LAYOUT////////////////////////
+		/////////////////////////////////////////////////////////
 
 		Label leftText = new Label("Search by nutritional facts:");
 		Label rightText = new Label("Search for a food item:");
@@ -1514,17 +1560,18 @@ public class Main extends Application {
                          * Integer.valueOf(String.valueOf(fibF1.getText())).compareTo(0) >= 0) &&
                          * fibF1.getText().matches("[0-999]+"))
                          */
-			if (foodField.getText().isEmpty() && (fibF1.getText().isEmpty() && fatF1.getText().isEmpty() && carF.getText().isEmpty() && proteinF.getText().isEmpty() && calorieF.getText().isEmpty()))
-	                {
-	       		    	Alert alert = new Alert(AlertType.INFORMATION);
-	       		    	alert.setTitle("Error");
-	       		    	alert.setHeaderText("Please enter a food name or nutrient values" + "\n" + "before searching for a food item.");
-	       		    	alert.showAndWait();
-	       		    	primaryStage.setScene(queryScreen);
-	       			    	
-	       			    	
-	                }
-                        else if ((!((calorieF.getText()).matches("[0-9]+")) && (!(String.valueOf(calorieF.getText()).equals(""))))
+
+                			if (foodField.getText().isEmpty() && (fibF1.getText().isEmpty() && fatF1.getText().isEmpty() && carF.getText().isEmpty() && proteinF.getText().isEmpty() && calorieF.getText().isEmpty()))
+                			{
+                				Alert alert = new Alert(AlertType.INFORMATION);
+                				alert.setTitle("Error");
+                				alert.setHeaderText("Please enter a food name or nutrient values" + "\n" + "before searching for a food item.");
+                				alert.showAndWait();
+                				primaryStage.setScene(queryScreen);
+ 	       			    	
+ 	       			    	
+                			}
+                         else if ((!((calorieF.getText()).matches("[0-9]+")) && (!(String.valueOf(calorieF.getText()).equals(""))))
                                         || (!((proteinF.getText()).matches("[0-9]+"))
                                                         && (!(String.valueOf(proteinF.getText()).equals(""))))
                                         || (!((carF.getText()).matches("[0-9]+")) && (!(String.valueOf(carF.getText()).equals(""))))
@@ -1532,11 +1579,11 @@ public class Main extends Application {
                                         || (!((fibF1.getText()).matches("[0-9]+"))
                                                         && (!(String.valueOf(fibF1.getText()).equals(""))))) {
 
-                                Alert alert = new Alert(AlertType.INFORMATION);
-	       		    	alert.setTitle("Error");
-	       		    	alert.setHeaderText("Please enter valid, numerical values for the nutrients.");
-	       		    	alert.showAndWait();
-	       		    	primaryStage.setScene(queryScreen);
+                        	 Alert alert = new Alert(AlertType.INFORMATION);
+      	       		    	alert.setTitle("Error");
+      	       		    	alert.setHeaderText("Please enter valid, numerical values for the nutrients.");
+      	       		    	alert.showAndWait();
+      	       		    	primaryStage.setScene(queryScreen);                                
 
                         } else {
 
@@ -1868,11 +1915,11 @@ public class Main extends Application {
         queryLayout.getChildren().add(title4);
         queryLayout.setAlignment(title4, Pos.TOP_LEFT);
 		
-		
-		
- 	        ////////////////////////////////////////////////////////
+        
+        
+        ////////////////////////////////////////////////////////
 		//////////////////// HOME LAYOUT ///////////////////////
-       	        ////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////
         
 		//Quit Button
 		Button exitBtn = new Button("Quit");
