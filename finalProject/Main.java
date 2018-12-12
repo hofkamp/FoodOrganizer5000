@@ -52,6 +52,10 @@ import javafx.beans.binding.Bindings;
 enum NUTRIENTS {Cal,Carb,Fat,Pro,Fib};
 
 /**
+ * * This class creates the  javaFx screen, creates the mealList, foodList, query, addFood, and chooseMeal scenes
+ * entities are created and added to the scenes, and the  scenes are all linked. There are popups for errors. This
+ * displays the screen and lets users add food items, remove food items, create meals, analyze meals, and search for 
+ * food by nutrients and by name. 
  * 
  * @authors  Thomas Antonacci, Sally Gerich, Kelsey Hickok, William Hofkamp, Apostolos Velliotis
  */
